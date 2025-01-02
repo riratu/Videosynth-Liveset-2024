@@ -24,6 +24,14 @@ var spawnCirleSpeed = 0.1
 var spawnRadius
 let lastParticleSpawned = 0
 
+//Webmidi
+/* PREFS */
+let midiDeviceIn = 1 // [ID] or "device name"
+let midiDeviceOut = 1 // [ID] or "device name"
+let midiThru = false // optionally pass all in -> out
+
+let midiInput, midiOutput, midiMsg = {}
+
 let currentSliderNo = 0
 
 let higlightColor = "lightgreen"
@@ -32,8 +40,8 @@ let mic
 let divs = []
 let checkboxes = []
 
-let sliders = {}
-let sliderNames = {
+var sliders = {}
+var sliderNames = {
     "zoomSpeed": 0.2,
     "translateX": 0.5,
     "translateY": 0.5,
@@ -57,7 +65,7 @@ let sliderNames = {
     "bgTransparency": 0.5,
 };
 
-let sliderKeys = Object.keys(sliderNames);
+var sliderKeys = Object.keys(sliderNames);
 
 function setup() {
 
@@ -80,9 +88,10 @@ function setup() {
         particles.push(createVector(random(-maxSpawnRandSize, maxSpawnRandSize), random(-maxSpawnRandSize, maxSpawnRandSize)));
     }
 
-
     strokeWeight(1.5)
     clear();
+
+    setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
 }
 
 function draw() {
@@ -304,4 +313,173 @@ function startAudio() {
     context.resume().then(() => {
         console.log('AudioContext resumed');
     });
+}
+
+
+//Midi-------------------------------------
+
+
+
+function noteOn(note) {
+    console.log(note)
+    // use note.type, .channel, .name, .number, .octave, .velocity
+    let x = map(note.number, 0, 128, 0, width)
+    let h = map(note.velocity, 0, 128, 0, height)
+    //console.log(note)
+    switch(note.number){
+        case 36: beat = 1;
+            break;
+        //console.log(note)
+        case 37: beat2 = 1;
+            break;
+        case 38: beat3 = 1;
+            break;
+        case 39: beat4 = 0.01;
+            console.log("4")
+            break;
+    }
+}
+
+function noteOff(note) {
+    console.log(note)
+    switch(note){
+        case 36: //beat = 1;
+            break;
+        //console.log(note)
+        case 37: //beat2 = 1;
+            break;
+        case 38: //beat3 = 1;
+            break;
+        case 39: beat4 = 0.0;
+            break;
+    }
+    // use note.type, .channel, .name, .number, .octave, .velocity
+}
+
+function pitchBend(pitch) {
+    // use pitch.type, .channel, .value
+    console.log("pitch")
+}
+
+function controlChange(control) {
+    // use control.type, .channel, .controllerNumber, .controllerName, .value
+    //console.log(control.controller.number)
+
+    sliderNo = control.controller.number
+
+    slider = sliders[sliderKeys[sliderNo]]
+    console.log(sliderNo)
+    //console.log(sliderKeys[sliderNo])
+    if (slider){
+        slider.elt.value = control.value
+    }
+}
+
+
+
+function mousePressed() {
+    // example of sending midi note
+    sendNote(1, "C", 3, 1000, 127); // channel, note, octave, duration, velocity
+}
+
+function sendNote(channel, note, octave, duration, velocity) {
+}
+
+function parseMidi(mm) {
+    //print(mm)
+    if(mm.note != undefined) {
+        switch (mm.note.type) {
+            case 'noteon':
+                noteOn(mm.note)
+                break;
+            case 'noteoff':
+                noteOff(mm.note)
+                break;
+        }
+    } else if(mm.pitch != undefined) {
+        pitchBend(mm.pitch)
+    } else if(mm.control != undefined) {
+        controlChange(mm.control)
+    }
+}
+
+function setupMidi(idIn, idOut) {
+    WebMidi.enable(function(err) {
+        if(err) {
+            console.log("WebMidi could not be enabled.", err);
+        }
+
+        // Print to console available MIDI in/out id/names
+        WebMidi.inputs.forEach(function(element, c) {
+            print("in  \[" + c + "\] " + element.name)
+        });
+        WebMidi.outputs.forEach(function(element, c) {
+            print("out \[" + c + "\] " + element.name)
+        });
+
+        // assign in channel:
+        if(typeof idIn === 'number') {
+            midiInput = WebMidi.inputs[idIn]
+        } else {
+            midiInput = WebMidi.getInputByName(idIn)
+        }
+
+        if(typeof idOut === 'number') {
+            midiOutput = WebMidi.outputs[idOut]
+        } else {
+            midiOutput - WebMidi.getOutputByName(idOut)
+        }
+
+        midiInput.addListener('midimessage', 'all', function(e) {
+            if(midiThru) {
+                if(e.data.length == 3) {
+                    midiOutput.send(e.data[0], [e.data[1], e.data[2]])
+                } else {
+                    midiOutput.send(e.data[0])
+                }
+            }
+            midiMsg = {}
+            midiMsg.data = e.data
+            midiMsg.timestamp = e.timestamp
+            // parseMidi(midiMsg) // optionally send raw only
+        })
+
+        // noteOn
+        midiInput.addListener('noteon', "all", function(e) {
+            let note = {
+                type: 'noteon'
+            }
+            note.channel = e.channel
+            note.number = e.note.number
+            note.name = e.note.name
+            note.octave = e.note.octave
+            note.velocity = floor(127 * e.velocity)
+
+            midiMsg.note = note
+            parseMidi(midiMsg)
+        })
+
+        // noteOff
+        // midiInput.addListener('noteoff', "all", function(e) {
+        // 	let note = {
+        // 		type: 'noteoff'
+        // 	}
+        // 	note.channel = e.channel
+        // 	note.number = e.note.number
+        // 	note.name = e.note.name
+        // 	note.octave = e.note.octave
+        // 	note.velocity = 0
+
+        // 	midiMsg.note = note
+        // 	parseMidi(midiMsg)
+        // })
+
+        // pitchBend
+        midiInput.addListener('pitchbend', "all", function(e) { console.log(control)})
+
+        // controlChange
+        midiInput.addListener('controlchange', "all", function(e) {
+            controlChange(e)
+        })
+    })
 }
