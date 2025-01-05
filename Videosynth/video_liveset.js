@@ -17,12 +17,14 @@ let curlNoiseScale
 let maxNoiseTimeScale = 0.051
 var maxSpawnRadius = 500
 var maxSpawnCirleSpeed = 0.01
+let maxStokeWeight = 40
 
 //Technicalities
 
 var spawnCirleSpeed = 0.1
 var spawnRadius
 let lastParticleSpawned = 0
+var spawnCircleAngle = 0
 
 //Webmidi
 /* PREFS */
@@ -46,33 +48,30 @@ var sliderNames = {
     "translateX": 0.5,
     "translateY": 0.5,
     "strokeHueStart": 0.5,
-    "strokeSatStart": 0,
     "strokeHueTravel": 0.5,
+    "strokeSatStart": 0,
     "strokeSatTravel": 0.5,
+    "bgTransparency": 0.5,
     "particleReducer": 1,
+    "stokeWeight": 2,
     "pointAlpha": 1,
-    "ellipseSize": 0.1,
-    "ellipseAlpha": 1,
-    "linesTransparency": 0,
-    "curlFactor": 0.5,
-    "curlNoiseScale": 0.1,
-    "noiseTimeScale": 0.1,
     "particleMoveSpeed": 0.5,
-    "spawnRandomnessSize": 1,
+    "ellipseAlpha": 1,
     "spawnRate": 0.1,
+    "linesTransparency": 0,
+    "curlNoiseScale": 0.1,
+    "ellipseSize": 0.1,
+    "noiseTimeScale": 0.1,
+    "spawnRandomnessSize": 1,
     "spawnRadius": 0.5,
     "spawnCirleSpeed": 0.1,
-    "bgTransparency": 0.5,
+    "curlFactor": 0.5,
+
 };
 
 var sliderKeys = Object.keys(sliderNames);
 
 function setup() {
-
-    let startButton = createButton('Start Audio');
-    startButton.mousePressed(startAudio);
-    startButton.position(10, 10)//
-
     mic = new p5.AudioIn()
     mic.start()
     mic.amp(10)
@@ -83,7 +82,8 @@ function setup() {
     colorMode(HSB, 1)
 
     maxSpawnRandSize = width / 2
-    createSliders()
+    createInterface()
+
     for (let i = 0; i < particleArrayLength; i++) {
         particles.push(createVector(random(-maxSpawnRandSize, maxSpawnRandSize), random(-maxSpawnRandSize, maxSpawnRandSize)));
     }
@@ -126,6 +126,7 @@ function draw() {
     spawnRadius = sliders["spawnRadius"].value()
     spawnCirleSpeed = sliders["spawnCirleSpeed"].value()
     let pointAlpha = sliders["pointAlpha"].value()
+    let stokeWeight =  sliders["stokeWeight"].value()
     let particleNo = Math.floor((particleArrayLength -1) * sliders["particleReducer"].value()) + 1
 
     let lineModulo = Math.floor(particleNo / 200)
@@ -141,6 +142,8 @@ function draw() {
         let hue = (strokeHueStart + (strokeHueTravel * i)) % 1
         let sat = (strokeSatStart + (strokeSatTravel * i))
 
+        strokeWeight(0.3 + stokeWeight * maxStokeWeight)
+
 
         let p = particles[i];
         if (pointAlpha > 0.05){
@@ -149,7 +152,7 @@ function draw() {
         }
 
 
-        if (sliders["ellipseSize"].value() > 0.1) {
+        if (sliders["ellipseSize"].value() > 0.01) {
             if (i % 5 == 0){
                 stroke(hue, sat, sliders["ellipseAlpha"].value())
                 ellipse(p.x, p.y, ellipseSize)
@@ -216,9 +219,9 @@ function spawnParticle(p){
     p.y = random(-spawnRandSize, spawnRandSize);
 
     //Add some circular movement
-    angle = millis() * spawnCirleSpeed * maxSpawnCirleSpeed
-    p.x += cos(angle) * spawnRadius * maxSpawnRadius
-    p.y += sin(angle) * spawnRadius * maxSpawnRadius
+    spawnCircleAngle +=  spawnCirleSpeed * maxSpawnCirleSpeed
+    p.x += cos(spawnCircleAngle) * spawnRadius * maxSpawnRadius
+    p.y += sin(spawnCircleAngle) * spawnRadius * maxSpawnRadius
 }
 
 function keyPressed(){                      
@@ -233,8 +236,8 @@ function keyPressed(){
 
     if (key === "m"){
         console.log("Toggle Menu")
-        document.getElementById('sliderContainer').style.display =
-            document.getElementById('sliderContainer').style.display === 'none' ? '' : 'none';
+        document.getElementById('menuContainer').style.display =
+            document.getElementById('menuContainer').style.display === 'none' ? '' : 'none';
     }
 
     if (sliderKeys[key] === undefined) return
@@ -260,34 +263,37 @@ function mouseWheel(event) {
     slider.value(newValue);
 }
 
-function createSliders() {
-
-    let yPos = 20;
+function createInterface() {
 
     let i = 0
     // Create sliders for all controls in the list
-    let containerDif = createDiv("The Sliders")
-    containerDif.position(20, 20).style('background-color', "lightgrey");
-    containerDif.id("sliderContainer")
+
+    let menuContainer = createDiv("<h3>The Sliders</h3>")
+    menuContainer.id("menuContainer")
+    menuContainer.position(20, 20).style('background-color', "lightgrey");
+
+    let startButton = createButton('Start Audio');
+    startButton.mousePressed(startAudio);
+    startButton.parent(menuContainer)
+    
+    let sliderContaier = createDiv("")
+    sliderContaier.id("sliderContainer")
+    sliderContaier.parent(menuContainer)
 
     for (let slider in sliderNames) {
 
         let sliderName = slider;
-        divs[sliderName] = createDiv(`<p>${sliderName}</p>`)
-        divs[sliderName].parent(containerDif)
+        divs[sliderName] = createDiv(`<p>${i} ${sliderName}</p>`)
+        divs[sliderName].parent(sliderContaier)
 
         checkboxes[sliderName] = createCheckbox()
         checkboxes[sliderName].style('display', "inline");
         checkboxes[sliderName].parent(divs[sliderName])
 
-        //div[sliderName].position(20, yPos);
-        //yPos += 20;
-
         sliders[sliderName] = createSlider(0, 1, sliderNames[sliderName], 0)
         sliders[sliderName].parent(divs[sliderName]);
 
         i++
-        //yPos += 20;  // Move down for the next slider
     }
 }
 
