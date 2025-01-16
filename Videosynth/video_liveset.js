@@ -53,7 +53,7 @@ var sliderNames = {
     "strokeSatTravel": 0.5,
     "bgTransparency": 0.5,
     "particleReducer": 1,
-    "stokeWeight": 2,
+    "stokeWeight": 0.05,
     "pointAlpha": 1,
     "particleMoveSpeed": 0.5,
     "ellipseAlpha": 1,
@@ -62,11 +62,17 @@ var sliderNames = {
     "curlNoiseScale": 0.1,
     "ellipseSize": 0.1,
     "noiseTimeScale": 0.1,
-    "spawnRandomnessSize": 1,
+    "spawnRandomnessSizeX": 1,
     "spawnRadius": 0.5,
     "spawnCirleSpeed": 0.1,
     "curlFactor": 0.5,
-
+    "spawnRandomnessSizeY": 0.5,
+    "spawnOffsetX": 0.5,
+    "spawnOffsetY": 0.5,
+    "img1Alpha": 0,
+    "img2Alpha": 0,
+    "img3Alpha": 0,
+    "img4Alpha": 0
 };
 
 var sliderKeys = Object.keys(sliderNames);
@@ -108,12 +114,12 @@ function draw() {
     curlFactor = sliders["curlFactor"].value()
     curlNoiseScale = sliders["curlNoiseScale"].value()
 
-    checkBeat()
-    if (beat) {
-        newSeed += random(0.5)
-    }
-    currentSeed += (newSeed - currentSeed) * 0.02
-    noiseSeed(currentSeed);
+    // checkBeat()
+    // if (beat) {
+    //     newSeed += random(0.5)
+    // }
+    // currentSeed += (newSeed - currentSeed) * 0.02
+    // noiseSeed(currentSeed);
 
     background(0, sliders["bgTransparency"].value());
 
@@ -152,7 +158,7 @@ function draw() {
         }
 
 
-        if (sliders["ellipseSize"].value() > 0.01) {
+        if (sliders["ellipseSize"].value() > 0.02) {
             if (i % 5 == 0){
                 stroke(hue, sat, sliders["ellipseAlpha"].value())
                 ellipse(p.x, p.y, ellipseSize)
@@ -165,7 +171,6 @@ function draw() {
            //ich will aber nur 500 davon, auch wenn das array 10000 lang ist.
 
             //sie sollen gleich verteilt sein. also wenn es 1000 sind wäre es 1000 % 2. bei 2000 % 4 mache es allgemein
-
            
             if (i % lineModulo === 0){
                 let lastIndex = (i + 2) % particleNo;
@@ -192,6 +197,23 @@ function draw() {
             }
         }
 
+        if (i % 100 == 0 && sliders["img1Alpha"].value() > 0.1){
+            tint(255, sliders["img1Alpha"].value())
+            image(img, p.x, p.y, 200, 200);
+        }
+        if (i % 70 == 0 && sliders["img2Alpha"].value() > 0.1){
+            tint(255, sliders["img2Alpha"].value())
+            image(img, p.x, p.y, 200, 200);
+        }
+        if (i % 80 == 0 && sliders["img3Alpha"].value() > 0.1){
+            tint(255, sliders["img3Alpha"].value())
+            image(img, p.x, p.y, 200, 200);
+        }
+        if (i % 90 == 0 && sliders["img4Alpha"].value() > 0.1){
+            tint(255, sliders["img4Alpha"].value())
+            image(img, p.x, p.y, 200, 200);
+        }
+
         let n = noise(p.x * maxNoiseScale * curlNoiseScale, p.y * maxNoiseScale * curlNoiseScale, frameCount * (sliders["noiseTimeScale"].value() * maxNoiseTimeScale));
         let b = TAU * n * ((p.x / (width / 2)) - 0.5) * curlFactor;
         let a = TAU * n * ((p.y / (height / 2)));
@@ -212,16 +234,24 @@ function draw() {
 }
 
 function spawnParticle(p){
-    spawnRandSize = maxSpawnRandSize * sliders["spawnRandomnessSize"].value()
+    spawnRandSizeX = maxSpawnRandSize * sliders["spawnRandomnessSizeX"].value()
+    spawnRandSizeY = maxSpawnRandSize * sliders["spawnRandomnessSizeY"].value()
+
+    spawnOffsetX = (sliders["spawnOffsetX"].value() - 0.5) * width
+    spawnOffsetY = (sliders["spawnOffsetY"].value() - 0.5)  * height
 
     //Just the randomness size
-    p.x = random(-spawnRandSize, spawnRandSize);
-    p.y = random(-spawnRandSize, spawnRandSize);
+    p.x = random(-spawnRandSizeX, spawnRandSizeX) + spawnOffsetX;
+    p.y = random(-spawnRandSizeY, spawnRandSizeY) + spawnOffsetY;
 
     //Add some circular movement
     spawnCircleAngle +=  spawnCirleSpeed * maxSpawnCirleSpeed
     p.x += cos(spawnCircleAngle) * spawnRadius * maxSpawnRadius
     p.y += sin(spawnCircleAngle) * spawnRadius * maxSpawnRadius
+}
+
+function preload(){
+    img = loadImage('img/1814.png');
 }
 
 function keyPressed(){                      
