@@ -8,7 +8,7 @@ currentSeed = 0
 newSeed = 0
 maxSpeed = 5
 maxCurlFactor = 50
-maxZoomSpeed = 0.1
+maxZoomSpeed = 0.05
 maxSpawnRandSize = 0
 maxTranslationSpeed = 20
 maxEllipseSize = 150
@@ -18,6 +18,7 @@ let maxNoiseTimeScale = 0.051
 var maxSpawnRadius = 500
 var maxSpawnCirleSpeed = 0.01
 let maxStokeWeight = 40
+var maxSpawnOffsetMultiplier = 40
 
 //Technicalities
 
@@ -62,20 +63,26 @@ var sliderNames = {
     "curlNoiseScale": 0.1,
     "ellipseSize": 0.1,
     "noiseTimeScale": 0.1,
-    "spawnRandomnessSizeX": 1,
-    "spawnRadius": 0.5,
+    "spawnRandomnessSizeX": 0,
+    "spawnRadius": 0,
     "spawnCirleSpeed": 0.1,
     "curlFactor": 0.5,
-    "spawnRandomnessSizeY": 0.5,
+    "spawnRandomnessSizeY": 0   ,
     "spawnOffsetX": 0.5,
     "spawnOffsetY": 0.5,
     "img1Alpha": 0,
     "img2Alpha": 0,
     "img3Alpha": 0,
-    "img4Alpha": 0
+    "img4Alpha": 0,
+    "spawnOffsetMultiplierX": 0.5,
+    "spawnOffsetMultiplierY": 0,
+    "spawnOffsetMultiplierCircle": 0.5
 };
 
 var sliderKeys = Object.keys(sliderNames);
+var sliderValues = []
+
+
 
 function setup() {
     mic = new p5.AudioIn()
@@ -87,7 +94,7 @@ function setup() {
 
     colorMode(HSB, 1)
 
-    maxSpawnRandSize = width / 2
+    maxSpawnRandSize = width / 16
     createInterface()
 
     for (let i = 0; i < particleArrayLength; i++) {
@@ -107,7 +114,6 @@ function draw() {
 
     const slider = sliders[sliderKeys[currentSliderNo]]
     let newValue = micLevel
-    newValue = constrain(newValue, 0, 1);
 
     translate(width / 2, height / 2)
 
@@ -137,26 +143,27 @@ function draw() {
 
     let lineModulo = Math.floor(particleNo / 200)
 
-    let spawnRate = sliders["spawnRate"].value() * particleArrayLength / 10
+    let spawnRate = 1 + (sliders["spawnRate"].value() * particleArrayLength / 20)
 
     for (let i = 0; i < spawnRate; i++) {
         lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
-        spawnParticle(particles[lastParticleSpawned])
+        //console.log(lastParticleSpawned)
+        spawnParticle(particles[lastParticleSpawned], i, spawnRate)
     }
 
     for (let i = 0; i < particleNo; i++) {
-        let hue = (strokeHueStart + (strokeHueTravel * i)) % 1
-        let sat = (strokeSatStart + (strokeSatTravel * i))
+        currentP = i + lastParticleSpawned % particleNo
+
+        let hue = (strokeHueStart + (strokeHueTravel * currentP)) % 1
+        let sat = (strokeSatStart + (strokeSatTravel * currentP))
 
         strokeWeight(0.3 + stokeWeight * maxStokeWeight)
-
 
         let p = particles[i];
         if (pointAlpha > 0.05){
             stroke(hue , sat, pointAlpha)
             point(p.x, p.y);
         }
-
 
         if (sliders["ellipseSize"].value() > 0.02) {
             if (i % 5 == 0){
@@ -180,9 +187,12 @@ function draw() {
                 let lineDist = 50
                 let foundLines = 0
 
+                // let otherIndex = (i + 20) % particleNo
+                // line(p.x, p.y, particles[otherIndex].x, particles[otherIndex].y)
+
                 for (let ii = 1; 1 < 20; ii++){
 
-                    let otherIndex = ii % particleArrayLength
+                    let otherIndex = (i + ii ) % particleNo
 
                     if (abs(particles[otherIndex].x - p.x) < lineDist
                         && abs(particles[otherIndex].y - p.y) < lineDist){
@@ -219,6 +229,7 @@ function draw() {
         let a = TAU * n * ((p.y / (height / 2)));
         p.x += cos(a) * maxSpeed * sliders["particleMoveSpeed"].value();
         p.y += sin(b) * maxSpeed * sliders["particleMoveSpeed"].value();
+        p.y += sin(b) * maxSpeed * sliders["particleMoveSpeed"].value();
 
         p.x += (p.x) * maxZoomSpeed * sliders["zoomSpeed"].value()
         p.y += (p.y) * maxZoomSpeed * sliders["zoomSpeed"].value()
@@ -233,12 +244,18 @@ function draw() {
     }
 }
 
-function spawnParticle(p){
+function spawnParticle(p, i, spawnRate){
     spawnRandSizeX = maxSpawnRandSize * sliders["spawnRandomnessSizeX"].value()
     spawnRandSizeY = maxSpawnRandSize * sliders["spawnRandomnessSizeY"].value()
 
     spawnOffsetX = (sliders["spawnOffsetX"].value() - 0.5) * width
     spawnOffsetY = (sliders["spawnOffsetY"].value() - 0.5)  * height
+
+    correctionX = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierX"].value()
+    correctionY = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierY"].value()
+
+    spawnOffsetX += (i * sliders["spawnOffsetMultiplierX"].value() * maxSpawnOffsetMultiplier) - correctionX
+    spawnOffsetY += (i * sliders["spawnOffsetMultiplierY"].value() * maxSpawnOffsetMultiplier) - correctionY
 
     //Just the randomness size
     p.x = random(-spawnRandSizeX, spawnRandSizeX) + spawnOffsetX;
@@ -246,8 +263,9 @@ function spawnParticle(p){
 
     //Add some circular movement
     spawnCircleAngle +=  spawnCirleSpeed * maxSpawnCirleSpeed
-    p.x += cos(spawnCircleAngle) * spawnRadius * maxSpawnRadius
-    p.y += sin(spawnCircleAngle) * spawnRadius * maxSpawnRadius
+    iOfset = sliders["spawnOffsetMultiplierCircle"].value() * i * maxSpawnOffsetMultiplier
+    p.x += cos(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOfset)
+    p.y += sin(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOfset)
 }
 
 function preload(){
@@ -322,9 +340,14 @@ function createInterface() {
 
         sliders[sliderName] = createSlider(0, 1, sliderNames[sliderName], 0)
         sliders[sliderName].parent(divs[sliderName]);
+        sliders[sliderName].elt.addEventListener('input', updateSliderValue(sliderName));
 
         i++
     }
+}
+
+function updateSliderValue(sliderName){
+    sliderValues[sliderName] = sliders["zoomSpeed"].value()
 }
 
 function mouseReleased() {
@@ -361,27 +384,22 @@ function noteOn(note) {
     // use note.type, .channel, .name, .number, .octave, .velocity
     let x = map(note.number, 0, 128, 0, width)
     let h = map(note.velocity, 0, 128, 0, height)
-    //console.log(note)
     switch(note.number){
         case 36: beat = 1;
             break;
-        //console.log(note)
         case 37: beat2 = 1;
             break;
         case 38: beat3 = 1;
             break;
         case 39: beat4 = 0.01;
-            console.log("4")
             break;
     }
 }
 
 function noteOff(note) {
-    console.log(note)
     switch(note){
         case 36: //beat = 1;
             break;
-        //console.log(note)
         case 37: //beat2 = 1;
             break;
         case 38: //beat3 = 1;
@@ -394,7 +412,6 @@ function noteOff(note) {
 
 function pitchBend(pitch) {
     // use pitch.type, .channel, .value
-    console.log("pitch")
 }
 
 function controlChange(control) {
@@ -404,8 +421,6 @@ function controlChange(control) {
     sliderNo = control.controller.number
 
     slider = sliders[sliderKeys[sliderNo]]
-    console.log(sliderNo)
-    //console.log(sliderKeys[sliderNo])
     if (slider){
         slider.elt.value = control.value
     }
