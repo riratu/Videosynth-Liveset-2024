@@ -173,12 +173,6 @@ function draw() {
         }
 
         if (linesTransparency) {
-            
-           //ich habe 10000 items im array.
-           //ich will aber nur 500 davon, auch wenn das array 10000 lang ist.
-
-            //sie sollen gleich verteilt sein. also wenn es 1000 sind wäre es 1000 % 2. bei 2000 % 4 mache es allgemein
-           
             if (i % lineModulo === 0){
                 let lastIndex = (i + 2) % particleNo;
                 //strokeWeight(5)
@@ -186,9 +180,6 @@ function draw() {
                 
                 let lineDist = 50
                 let foundLines = 0
-
-                // let otherIndex = (i + 20) % particleNo
-                // line(p.x, p.y, particles[otherIndex].x, particles[otherIndex].y)
 
                 for (let ii = 1; 1 < 20; ii++){
 
@@ -238,9 +229,6 @@ function draw() {
         p.x += ((sliders["translateX"].value() - 0.5) * maxTranslationSpeed)
         p.y += ((sliders["translateY"].value() - 0.5) * maxTranslationSpeed)
 
-        // if (!onScreen(p)) {
-        //     spawnParticle(p)
-        // }
     }
 }
 
@@ -273,7 +261,6 @@ function preload(){
 }
 
 function keyPressed(){                      
-
 
         console.log(key)
     if (key == " "){
@@ -374,11 +361,7 @@ function startAudio() {
     });
 }
 
-
 //Midi-------------------------------------
-
-
-
 function noteOn(note) {
     console.log(note)
     // use note.type, .channel, .name, .number, .octave, .velocity
@@ -515,11 +498,6 @@ function setupMidi(idIn, idOut) {
         // 	let note = {
         // 		type: 'noteoff'
         // 	}
-        // 	note.channel = e.channel
-        // 	note.number = e.note.number
-        // 	note.name = e.note.name
-        // 	note.octave = e.note.octave
-        // 	note.velocity = 0
 
         // 	midiMsg.note = note
         // 	parseMidi(midiMsg)
