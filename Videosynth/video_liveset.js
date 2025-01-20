@@ -18,7 +18,7 @@ let maxNoiseTimeScale = 0.051
 var maxSpawnRadius = 500
 var maxSpawnCirleSpeed = 0.01
 let maxStokeWeight = 40
-var maxSpawnOffsetMultiplier = 40
+//var maxSpawnOffsetMultiplier = 10
 
 //Technicalities
 
@@ -167,7 +167,7 @@ function setup() {
         sliderValues[k] = sliderNames[k].default
     })
 
-    maxSpawnRandSize = width / 16
+    maxSpawnRandSize = width / 2
     createInterface()
 
     for (let i = 0; i < particleArrayLength; i++) {
@@ -181,8 +181,6 @@ function setup() {
 }
 
 function draw() {
-
-    //console.log( sliderValues["zoomSpeed"])
 
     //Test Performance of certain things
     //testPerformance();
@@ -205,16 +203,11 @@ function draw() {
     // }
     // currentSeed += (newSeed - currentSeed) * 0.02
     // noiseSeed(currentSeed);
-  // if (sliderValues.bgTransparency === 0){
-  //     alert("eins")
+  // if (frameCount % 100 === 0){
+  //     console.log(typeof sliderValues.bgTransparency)
+  //     console.log(sliderValues.bgTransparency == 0)
+  //     console.log(sliderValues.bgTransparency)
   // }
-
-  //if (typeof sliderValues.bgTransparency === "string")
-  if (frameCount % 100 === 0){
-      console.log(typeof sliderValues.bgTransparency)
-      console.log(sliderValues.bgTransparency == 0)
-      console.log(sliderValues.bgTransparency)
-  }
 
     background(0, sliderValues.bgTransparency);
 
@@ -227,7 +220,7 @@ function draw() {
 
     let lineModulo = Math.floor(particleNo / 200)
 
-    let spawnRate = 1 + (sliders["spawnRate"].value() * particleArrayLength / 20)
+    let spawnRate = 1 + (sliders["spawnRate"].value() * particleArrayLength / 40)
 
     for (let i = 0; i < spawnRate; i++) {
         lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
@@ -305,13 +298,14 @@ function draw() {
         }
 
         let n = noise(p.x * maxNoiseScale * curlNoiseScale, p.y * maxNoiseScale * curlNoiseScale, frameCount * (sliders["noiseTimeScale"].value() * maxNoiseTimeScale));
-        let b = TAU * n * ((p.x / (width / 2)) - 0.5) * curlFactor;
-        let a = TAU * n * ((p.y / (height / 2)));
+        let b = TAU * n * (p.x / (width / 2) * curlFactor);
+        let a = TAU * n * ((p.y / (height / 2) + 1) * curlFactor);
+
         p.x += cos(a) * sliderNames.particleMoveSpeed.max * sliderValues["particleMoveSpeed"]
         p.y += sin(b) * sliderNames.particleMoveSpeed.max * sliderValues["particleMoveSpeed"]
 
-        p.x += (p.x) * maxZoomSpeed * sliderValues["zoomSpeed"]
-        p.y += (p.y) * maxZoomSpeed * sliderValues["zoomSpeed"]
+        p.x += (p.x) * ((maxZoomSpeed * sliderValues["zoomSpeed"]) - (maxZoomSpeed / 2))
+        p.y += (p.y) * ((maxZoomSpeed * sliderValues["zoomSpeed"]) - (maxZoomSpeed / 2))
 
         //Translation
         p.x += ((sliders["translateX"].value() - 0.5) * maxTranslationSpeed)
@@ -321,12 +315,13 @@ function draw() {
 }
 
 function spawnParticle(p, i, spawnRate){
-    spawnRandSizeX = maxSpawnRandSize * sliders["spawnRandomnessSizeX"].value()
-    spawnRandSizeY = maxSpawnRandSize * sliders["spawnRandomnessSizeY"].value()
+    spawnRandSizeX = maxSpawnRandSize * sliderValues.spawnRandomnessSizeX
+    spawnRandSizeY = maxSpawnRandSize * sliderValues.spawnRandomnessSizeY
 
     spawnOffsetX = (sliders["spawnOffsetX"].value() - 0.5) * width
     spawnOffsetY = (sliders["spawnOffsetY"].value() - 0.5)  * height
 
+    maxSpawnOffsetMultiplier = width / spawnRate
     correctionX = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierX"].value()
     correctionY = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierY"].value()
 
@@ -355,7 +350,6 @@ function keyPressed(){
     const sceneKeys = ["Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "è", "Y"];
 
     if (sceneKeys.includes(key.toUpperCase())) {
-
         if (key === key.toUpperCase()) {
             console.log("save")
             saveScene(key);
@@ -399,10 +393,10 @@ function mouseWheel(event) {
 
 function saveScene(key){
     existing = localStorage.getItem("sliderScene" + key)
-    if (!existing){
-        console.log("Already existing " + key)
-        return
-    }
+    // if (existing){
+    //     console.log("Already existing " + key)
+    //     return
+    // }
     console.log("Save Scene " + key)
     let string = JSON.stringify(sliderValues)
     localStorage.setItem("sliderScene" + key, string)
