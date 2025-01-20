@@ -17,33 +17,50 @@
             margin: 0;
             background-color: black;
             font-family: Caprasimo;
-            color: grey;
             display: flex;
+            font-family: "Helvetica Neue";
+
         }
         p {
             margin-top: 0px;
             margin-bottom: 0px;
         }
         div {
-            padding: 5px;
+            padding: 0px;
         }
         main {
+
+
+        }
+
+        .slider-entity {
+            background-color: rgba(0, 0, 0, 0.05);
+            margin-top: 2px;
+            padding: 2px;
+            padding-bottom: 0px;
+            border-radius: 5px;
+        }
+
+        #all-the-sliders {
             display: flex;
             flex-flow: row wrap;
             height: auto;
-            background-color: darkgrey;
             padding: 5px;
             width: 100%;
             box-sizing: border-box;
         }
 
         .scene {
-            padding: 10px;
-            width: 400px;
-            margin: 10px;
+            padding: 5px;
+            width: 180px;
+            margin: 2px;
             border-radius: 2px;
             box-sizing: border-box;
             position: relative;
+        }
+
+        h3 {
+            margin: 0px;
         }
 
         /*@font-face {*/
@@ -61,6 +78,7 @@
 
 <body>
 <main>
+    <div id="all-the-sliders"></div>
 </main>
 </body>
 

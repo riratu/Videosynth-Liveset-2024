@@ -1,8 +1,10 @@
 let sounds = []
 var slider = []
 let folderColors = {
-   "1": "lightblue",
-    "2": "lightgreen"
+   "01": "lightblue",
+    "02": "lightgreen",
+    "03": "LightSkyBlue",
+    "04": "lightyellow"
 }
 
 //Webmidi
@@ -33,23 +35,19 @@ function setup() {
     let offset = 0
     for (let i = 0; i < soundsFiles.length; i++) {
         sounds[i].loop();
-        sounds[i].rate(1); // Slightly vary the speed for each loop
-
-        stroke(255)
-        fill(255)
-        fill(255)
-
+        sounds[i].rate(1);
 
         let folderName = soundsFiles[i].split('/')[0]
         if  (folderName !== lastFolder){
             lastFolder = folderName
-            //offset += 40
             containerDiv = createDiv("<h3>" + folderName + "</h3>")
 
-            let bgColor = folderColors[folderName] ?? "lightgray"
+            let bgColor = folderColors[folderName] ?? "#555"
 
             containerDiv.style('background-color', bgColor);
             containerDiv.addClass('scene');
+            sliderContainer = document.getElementById("all-the-sliders")
+            containerDiv.parent(sliderContainer)
            // containerDiv.position(20, offset + 10)
 
         }
@@ -57,8 +55,8 @@ function setup() {
         offset += 40
 
         let div = createDiv(`<p>c${i} | ${soundsFiles[i].split('/')[1]}</p>`)
-        //div.position(20, offset + 10)
         div.parent(containerDiv)
+        div.addClass('slider-entity')
 
         slider[i] = createSlider(0, 1, 0, 0)
         //slider[i].position(20, offset + 25)
