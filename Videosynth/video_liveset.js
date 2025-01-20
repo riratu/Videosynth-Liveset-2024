@@ -6,12 +6,12 @@ currentSeed = 0
 
 // Max Values for Sliders
 newSeed = 0
-maxSpeed = 5
+
 maxCurlFactor = 50
 maxZoomSpeed = 0.05
 maxSpawnRandSize = 0
 maxTranslationSpeed = 20
-maxEllipseSize = 150
+
 let maxNoiseScale = 0.2
 let curlNoiseScale
 let maxNoiseTimeScale = 0.051
@@ -29,7 +29,7 @@ var spawnCircleAngle = 0
 
 //Webmidi
 /* PREFS */
-let midiDeviceIn = 1 // [ID] or "device name"
+let midiDeviceIn = "USB MIDI ADC 64"// [ID] or "device name"
 let midiDeviceOut = 1 // [ID] or "device name"
 let midiThru = false // optionally pass all in -> out
 
@@ -43,46 +43,115 @@ let mic
 let divs = []
 let checkboxes = []
 
-var sliders = {}
+var sliders = []
 var sliderNames = {
-    "zoomSpeed": 0.2,
-    "translateX": 0.5,
-    "translateY": 0.5,
-    "strokeHueStart": 0.5,
-    "strokeHueTravel": 0.5,
-    "strokeSatStart": 0,
-    "strokeSatTravel": 0.5,
-    "bgTransparency": 0.5,
-    "particleReducer": 1,
-    "stokeWeight": 0.05,
-    "pointAlpha": 1,
-    "particleMoveSpeed": 0.5,
-    "ellipseAlpha": 1,
-    "spawnRate": 0.1,
-    "linesTransparency": 0,
-    "curlNoiseScale": 0.1,
-    "ellipseSize": 0.1,
-    "noiseTimeScale": 0.1,
-    "spawnRandomnessSizeX": 0,
-    "spawnRadius": 0,
-    "spawnCirleSpeed": 0.1,
-    "curlFactor": 0.5,
-    "spawnRandomnessSizeY": 0   ,
-    "spawnOffsetX": 0.5,
-    "spawnOffsetY": 0.5,
-    "img1Alpha": 0,
-    "img2Alpha": 0,
-    "img3Alpha": 0,
-    "img4Alpha": 0,
-    "spawnOffsetMultiplierX": 0.5,
-    "spawnOffsetMultiplierY": 0,
-    "spawnOffsetMultiplierCircle": 0.5
+    "zoomSpeed": {
+        description: "",
+        default: 0.5,
+        max: 0.05,
+        min: 0.01,
+    },
+    "translateX": {
+        default: 0.5,
+        max: 5
+    },
+    "translateY": {
+        default: 0.5,
+        max:5
+    },
+    "strokeHueStart":  {
+        default: 0.5,
+    },
+    "strokeHueTravel": {
+        default: 0.5,
+    },
+    "strokeSatStart":  {
+        default: 0,
+    },
+    "strokeSatTravel":  {
+        default: 0.5,
+    },
+    "bgTransparency":  {
+        default: 0.5,
+    },
+    "particleReducer": {
+        default: 1,
+    },
+    "stokeWeight":  {
+        default: 0.05,
+    },
+    "pointAlpha":  {
+        default: 1,
+    },
+    "particleMoveSpeed":  {
+        default: 0.5,
+        max: 5
+    },
+    "ellipseAlpha": {
+        default: 1,
+    },
+    "spawnRate":  {
+        default: 0.1,
+    },
+    "linesTransparency":  {
+        default: 0,
+    },
+    "curlNoiseScale":  {
+        default: 0.1,
+    },
+    "ellipseSize":  {
+        default: 0.1,
+        max: 150
+    },
+    "noiseTimeScale": {
+        default: 0.1
+    },
+    "spawnRandomnessSizeX":  {
+        default: 0,
+    },
+    "spawnRadius": {
+        default: 0,
+    },
+    "spawnCirleSpeed": {
+        default: 0.1,
+    },
+    "curlFactor": {
+        default: 0.5,
+    },
+    "spawnRandomnessSizeY": {
+        default: 0,
+    },
+    "spawnOffsetX": {
+        default: 0.5,
+    },
+    "spawnOffsetY": {
+        default: 0.5,
+    },
+    "img1Alpha": {
+        default: 0,
+    },
+    "img2Alpha": {
+        default: 0,
+    },
+    "img3Alpha": {
+        default: 0,
+    },
+    "img4Alpha": {
+        default: 0,
+    },
+    "spawnOffsetMultiplierX": {
+        default: 0.5
+    },
+    "spawnOffsetMultiplierY": {
+        default: 0,
+    },
+    "spawnOffsetMultiplierCircle": {
+        default: 0,
+    },
 };
 
 var sliderKeys = Object.keys(sliderNames);
-var sliderValues = []
-
-
+var sliderValues = {}
 
 function setup() {
     mic = new p5.AudioIn()
@@ -93,6 +162,10 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
 
     colorMode(HSB, 1)
+
+    Object.keys(sliderNames).forEach(k => {
+        sliderValues[k] = sliderNames[k].default
+    })
 
     maxSpawnRandSize = width / 16
     createInterface()
@@ -108,11 +181,17 @@ function setup() {
 }
 
 function draw() {
+
+    //console.log( sliderValues["zoomSpeed"])
+
+    //Test Performance of certain things
+    //testPerformance();
+
     //frameRate(1)
 
     let micLevel = mic.getLevel()
 
-    const slider = sliders[sliderKeys[currentSliderNo]]
+    //const slider = sliders[sliderKeys[currentSliderNo]]
     let newValue = micLevel
 
     translate(width / 2, height / 2)
@@ -126,18 +205,23 @@ function draw() {
     // }
     // currentSeed += (newSeed - currentSeed) * 0.02
     // noiseSeed(currentSeed);
+  // if (sliderValues.bgTransparency === 0){
+  //     alert("eins")
+  // }
 
-    background(0, sliders["bgTransparency"].value());
+  //if (typeof sliderValues.bgTransparency === "string")
+  if (frameCount % 100 === 0){
+      console.log(typeof sliderValues.bgTransparency)
+      console.log(sliderValues.bgTransparency == 0)
+      console.log(sliderValues.bgTransparency)
+  }
 
-    let ellipseSize = sliders["ellipseSize"].value() * maxEllipseSize
-    let strokeHueStart = sliders["strokeHueStart"].value()
-    let strokeSatStart = sliders["strokeSatStart"].value()
-    let strokeHueTravel = (sliders["strokeHueTravel"].value() - 0.5) / 5000
-    let strokeSatTravel = (sliders["strokeSatTravel"].value() - 0.5) / 5000
-    let linesTransparency = sliders["linesTransparency"].value()
+    background(0, sliderValues.bgTransparency);
+
+    let strokeHueTravel = (sliderValues.strokeHueTravel - 0.5) / 5000
+    let strokeSatTravel = (sliderValues.strokeSatTravel - 0.5) / 5000
     spawnRadius = sliders["spawnRadius"].value()
     spawnCirleSpeed = sliders["spawnCirleSpeed"].value()
-    let pointAlpha = sliders["pointAlpha"].value()
     let stokeWeight =  sliders["stokeWeight"].value()
     let particleNo = Math.floor((particleArrayLength -1) * sliders["particleReducer"].value()) + 1
 
@@ -150,33 +234,38 @@ function draw() {
         //console.log(lastParticleSpawned)
         spawnParticle(particles[lastParticleSpawned], i, spawnRate)
     }
-
     for (let i = 0; i < particleNo; i++) {
         currentP = i + lastParticleSpawned % particleNo
 
-        let hue = (strokeHueStart + (strokeHueTravel * currentP)) % 1
-        let sat = (strokeSatStart + (strokeSatTravel * currentP))
+        let hue = (sliderValues.strokeHueStart + (strokeHueTravel * currentP)) % 1
+        let sat = (sliderValues.strokeSatStart + (strokeSatTravel * currentP))
 
         strokeWeight(0.3 + stokeWeight * maxStokeWeight)
 
         let p = particles[i];
-        if (pointAlpha > 0.05){
-            stroke(hue , sat, pointAlpha)
+        if (sliderValues.pointAlpha > 0.05){
+            // if (i % 1000 == 0){
+            //     console.log("p alpha " + sliderValues.pointAlpha)
+            // }
+            let alpha =  sliderValues.pointAlpha
+            //console.log(alpha)
+            stroke(hue , sat, 1, alpha)
             point(p.x, p.y);
         }
 
-        if (sliders["ellipseSize"].value() > 0.02) {
+        if (sliderValues.ellipseSize > 0.02) {
             if (i % 5 == 0){
-                stroke(hue, sat, sliders["ellipseAlpha"].value())
-                ellipse(p.x, p.y, ellipseSize)
+                //console.log(sliderValues.ellipseAlpha)
+                stroke(hue, sat, 1, sliderValues.ellipseAlpha)
+                //console.log(ellipseAlphatest)
+                ellipse(p.x, p.y, sliderNames.ellipseSize.max * sliderValues.ellipseSize)
             }
         }
 
-        if (linesTransparency) {
+        if (sliderValues.linesTransparency > 0.05) {
             if (i % lineModulo === 0){
-                let lastIndex = (i + 2) % particleNo;
-                //strokeWeight(5)
-                stroke(hue, sat, 1, linesTransparency)
+                //let lastIndex = (i + 2) % particleNo;
+                stroke(hue, sat, 1, sliderValues.linesTransparency)
                 
                 let lineDist = 50
                 let foundLines = 0
@@ -218,12 +307,11 @@ function draw() {
         let n = noise(p.x * maxNoiseScale * curlNoiseScale, p.y * maxNoiseScale * curlNoiseScale, frameCount * (sliders["noiseTimeScale"].value() * maxNoiseTimeScale));
         let b = TAU * n * ((p.x / (width / 2)) - 0.5) * curlFactor;
         let a = TAU * n * ((p.y / (height / 2)));
-        p.x += cos(a) * maxSpeed * sliders["particleMoveSpeed"].value();
-        p.y += sin(b) * maxSpeed * sliders["particleMoveSpeed"].value();
-        p.y += sin(b) * maxSpeed * sliders["particleMoveSpeed"].value();
+        p.x += cos(a) * sliderNames.particleMoveSpeed.max * sliderValues["particleMoveSpeed"]
+        p.y += sin(b) * sliderNames.particleMoveSpeed.max * sliderValues["particleMoveSpeed"]
 
-        p.x += (p.x) * maxZoomSpeed * sliders["zoomSpeed"].value()
-        p.y += (p.y) * maxZoomSpeed * sliders["zoomSpeed"].value()
+        p.x += (p.x) * maxZoomSpeed * sliderValues["zoomSpeed"]
+        p.y += (p.y) * maxZoomSpeed * sliderValues["zoomSpeed"]
 
         //Translation
         p.x += ((sliders["translateX"].value() - 0.5) * maxTranslationSpeed)
@@ -251,7 +339,7 @@ function spawnParticle(p, i, spawnRate){
 
     //Add some circular movement
     spawnCircleAngle +=  spawnCirleSpeed * maxSpawnCirleSpeed
-    iOfset = sliders["spawnOffsetMultiplierCircle"].value() * i * maxSpawnOffsetMultiplier
+    iOfset = sliderValues.spawnOffsetMultiplierCircle * i * maxSpawnOffsetMultiplier
     p.x += cos(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOfset)
     p.y += sin(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOfset)
 }
@@ -263,6 +351,19 @@ function preload(){
 function keyPressed(){                      
 
         console.log(key)
+
+    const sceneKeys = ["Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "è", "Y"];
+
+    if (sceneKeys.includes(key.toUpperCase())) {
+
+        if (key === key.toUpperCase()) {
+            console.log("save")
+            saveScene(key);
+        } else {
+            loadScene(key.toUpperCase());
+        }
+    }
+
     if (key == " "){
         console.log("Shuffle!")
         shuffleSliders()
@@ -284,8 +385,6 @@ function keyPressed(){
 }
 
 function shuffleSliders() {
-    sliders
-
     for (let key in sliders) {
         sliders[key].value(random(0, 1))
     }
@@ -297,6 +396,38 @@ function mouseWheel(event) {
     newValue = constrain(newValue, slider.elt.min, slider.elt.max);
     slider.value(newValue);
 }
+
+function saveScene(key){
+    existing = localStorage.getItem("sliderScene" + key)
+    if (!existing){
+        console.log("Already existing " + key)
+        return
+    }
+    console.log("Save Scene " + key)
+    let string = JSON.stringify(sliderValues)
+    localStorage.setItem("sliderScene" + key, string)
+}
+
+function loadScene(key) {
+    try {
+        $values = localStorage.getItem("sliderScene" + key)
+        if ($values !== undefined && $values !== null) {
+            sliderValues = JSON.parse($values)
+        }
+    } catch {
+        console.log("No valid Scene Data")
+    }
+    console.log("Load Scene " + key)
+
+    Object.keys(sliderNames).forEach(k => {
+       if (sliderValues[k] !== null && sliderValues[k] !== undefined){
+           sliders[k].elt.value = sliderValues[k]
+       }
+    })
+
+}
+
+
 
 function createInterface() {
 
@@ -325,16 +456,18 @@ function createInterface() {
         checkboxes[sliderName].style('display', "inline");
         checkboxes[sliderName].parent(divs[sliderName])
 
-        sliders[sliderName] = createSlider(0, 1, sliderNames[sliderName], 0)
+        sliders[sliderName] = createSlider(0, 1, sliderNames[sliderName].default, 0)
+        sliders[sliderName].id(sliderName)
         sliders[sliderName].parent(divs[sliderName]);
-        sliders[sliderName].elt.addEventListener('input', updateSliderValue(sliderName));
+        sliders[sliderName].elt.addEventListener('input', updateSliderValue);
 
         i++
     }
 }
 
-function updateSliderValue(sliderName){
-    sliderValues[sliderName] = sliders["zoomSpeed"].value()
+function updateSliderValue(evt){
+   // console.log("update " + evt.target.id + " " + evt.target.value)
+   sliderValues[evt.target.id] = Number(evt.target.value)
 }
 
 function mouseReleased() {
@@ -343,6 +476,17 @@ function mouseReleased() {
 
 function onScreen(v) {
     return v.x >= -width / 2 && v.x <= width / 2 && v.y >= -height / 2 && v.y <= height / 2;
+}
+
+function testPerformance() {
+    background(0)
+    color(1)
+    stroke(1)
+    text(frameRate(), 10, 10)
+    for (i = 0; i < 100000000; i++) {
+        eums = sliderNames.spawnOffsetMultiplierCircle.default
+    }
+    return
 }
 
 function checkBeat() {
@@ -362,40 +506,6 @@ function startAudio() {
 }
 
 //Midi-------------------------------------
-function noteOn(note) {
-    console.log(note)
-    // use note.type, .channel, .name, .number, .octave, .velocity
-    let x = map(note.number, 0, 128, 0, width)
-    let h = map(note.velocity, 0, 128, 0, height)
-    switch(note.number){
-        case 36: beat = 1;
-            break;
-        case 37: beat2 = 1;
-            break;
-        case 38: beat3 = 1;
-            break;
-        case 39: beat4 = 0.01;
-            break;
-    }
-}
-
-function noteOff(note) {
-    switch(note){
-        case 36: //beat = 1;
-            break;
-        case 37: //beat2 = 1;
-            break;
-        case 38: //beat3 = 1;
-            break;
-        case 39: beat4 = 0.0;
-            break;
-    }
-    // use note.type, .channel, .name, .number, .octave, .velocity
-}
-
-function pitchBend(pitch) {
-    // use pitch.type, .channel, .value
-}
 
 function controlChange(control) {
     // use control.type, .channel, .controllerNumber, .controllerName, .value
@@ -403,112 +513,14 @@ function controlChange(control) {
 
     sliderNo = control.controller.number
 
+    if (control.controller.number == 30){
+        alert("foundthe30")
+    }
+
     slider = sliders[sliderKeys[sliderNo]]
     if (slider){
         slider.elt.value = control.value
+        sliderValues[sliderKeys[sliderNo]] = control.value
     }
 }
 
-
-
-function mousePressed() {
-    // example of sending midi note
-    sendNote(1, "C", 3, 1000, 127); // channel, note, octave, duration, velocity
-}
-
-function sendNote(channel, note, octave, duration, velocity) {
-}
-
-function parseMidi(mm) {
-    //print(mm)
-    if(mm.note != undefined) {
-        switch (mm.note.type) {
-            case 'noteon':
-                noteOn(mm.note)
-                break;
-            case 'noteoff':
-                noteOff(mm.note)
-                break;
-        }
-    } else if(mm.pitch != undefined) {
-        pitchBend(mm.pitch)
-    } else if(mm.control != undefined) {
-        controlChange(mm.control)
-    }
-}
-
-function setupMidi(idIn, idOut) {
-    WebMidi.enable(function(err) {
-        if(err) {
-            console.log("WebMidi could not be enabled.", err);
-        }
-
-        // Print to console available MIDI in/out id/names
-        WebMidi.inputs.forEach(function(element, c) {
-            print("in  \[" + c + "\] " + element.name)
-        });
-        WebMidi.outputs.forEach(function(element, c) {
-            print("out \[" + c + "\] " + element.name)
-        });
-
-        // assign in channel:
-        if(typeof idIn === 'number') {
-            midiInput = WebMidi.inputs[idIn]
-        } else {
-            midiInput = WebMidi.getInputByName(idIn)
-        }
-
-        if(typeof idOut === 'number') {
-            midiOutput = WebMidi.outputs[idOut]
-        } else {
-            midiOutput - WebMidi.getOutputByName(idOut)
-        }
-
-        midiInput.addListener('midimessage', 'all', function(e) {
-            if(midiThru) {
-                if(e.data.length == 3) {
-                    midiOutput.send(e.data[0], [e.data[1], e.data[2]])
-                } else {
-                    midiOutput.send(e.data[0])
-                }
-            }
-            midiMsg = {}
-            midiMsg.data = e.data
-            midiMsg.timestamp = e.timestamp
-            // parseMidi(midiMsg) // optionally send raw only
-        })
-
-        // noteOn
-        midiInput.addListener('noteon', "all", function(e) {
-            let note = {
-                type: 'noteon'
-            }
-            note.channel = e.channel
-            note.number = e.note.number
-            note.name = e.note.name
-            note.octave = e.note.octave
-            note.velocity = floor(127 * e.velocity)
-
-            midiMsg.note = note
-            parseMidi(midiMsg)
-        })
-
-        // noteOff
-        // midiInput.addListener('noteoff', "all", function(e) {
-        // 	let note = {
-        // 		type: 'noteoff'
-        // 	}
-
-        // 	midiMsg.note = note
-        // 	parseMidi(midiMsg)
-        // })
-
-        // pitchBend
-        midiInput.addListener('pitchbend', "all", function(e) { console.log(control)})
-
-        // controlChange
-        midiInput.addListener('controlchange', "all", function(e) {
-            controlChange(e)
-        })
-    })
-}
