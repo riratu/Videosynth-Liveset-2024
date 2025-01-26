@@ -23,9 +23,14 @@ let midiDeviceOut = 1 // [ID] or "device name"
 let midiThru = false // optionally pass all in -> out
 let midiInput, midiOutput, midiMsg = {}
 
+let soundFileDir = "sounds/compressed/"
+
 function preload() {
+    soundsFiles.sort()
     for (let i = 0; i < soundsFiles.length; i++) {
-        sounds[i] = loadSound("soundsMp3/" + soundsFiles[i].replace('.wav', '.mp3'));
+        console.log(soundsFiles[0])
+        //console.log(soundFileDir + soundsFiles[i])
+        sounds[i] = loadSound(soundFileDir + soundsFiles[i]);
         // sounds[i] = loadSound("sounds/" + soundsFiles[i]);
     }
 }
@@ -51,13 +56,11 @@ function setup() {
         } else {
             sounds[i].loop();
         }
-        //sounds[i].rate(1);
+       // sounds[i].rate(1);
 
         let folderName = soundsFiles[i].split('/')[0]
         if  (folderName !== lastFolder){
-           console.log(slidersinCurrentScene)
             if (slidersinCurrentScene.length > 0){
-                console.log("push " + slidersinCurrentScene)
                 sliderNosByScenes.push(slidersinCurrentScene)
                 slidersinCurrentScene = []
             }
@@ -101,6 +104,14 @@ function startAudio() {
     context.resume().then(() => {
         console.log('AudioContext resumed');
     });
+
+    // sounds[0].loop();
+    // for (let i = 1; i < soundsFiles.length; i++) {
+    //     console.log(i)
+    //     console.log(sounds[i])
+    //         //sounds[i].syncedStart(sounds[0]);
+    //     sounds[i].loop()
+    // }
 }
 
 function updateSound() {
@@ -114,23 +125,22 @@ function controlChange(control) {
     // use control.type, .channel, .currentSliderNo, .controllerName, .value
     //console.log(control.controller.number)
 
-    currentSliderNo = control.controller.number
-    currentSlider = slider[currentSliderNo]
+    controllerNo = control.controller.number
+    currentSlider = slider[controllerNo]
     if (currentSlider){
         currentSlider.elt.value = control.value
         updateSound()
     }
 }
 
-function highlightSelectedSlider(sceneNo, sliderNo) {
+function highlightSelectedSlider(sceneNo, sliderNoInScene) {
     //console.log(slidersinScene)
-    newSliderNo = sliderNosByScenes[sceneNo][sliderNo]
+    newSliderNo = sliderNosByScenes[sceneNo][sliderNoInScene]
     newSlider = slider[newSliderNo]
-    if (newSlider) {
+    if (undefined !== newSliderNo) {
         lastSlider = slider[currentSliderNo]
+        console.log("Remove Class from " + currentSliderNo)
         currentSliderNo = newSliderNo
-        console.log("Slider No " + currentSliderNo)
-        console.log("Remove Class from " + lastSlider)
         lastSlider.parent().classList.remove("red")
         newSlider.parent().classList.add("red")
         console.log("Select Slider " + currentSliderNo)
@@ -139,7 +149,7 @@ function highlightSelectedSlider(sceneNo, sliderNo) {
 
 function keyPressed(){
 
-     console.log(key)
+    //console.log(key)
 
     //Select the current Ramp Time
     let rampTimeMap = { "A": 1,  "S": 4, "D": 8, "F": 16, "G": 32 }
@@ -149,7 +159,10 @@ function keyPressed(){
         return
     }
 
-    let sceneMap =  { "Q": 0, "W": 1, "E": 2, "R": 3, "T": 4, "Z": 5, "U": 6, "I": 7, "O": 8, "P": 9 }
+    let sceneMap =  {
+        "Q": 0, "W": 1, "E": 2, "R": 3, "T": 4, "Z": 5, "U": 6, "I": 7, "O": 8, "P": 9,
+        "1": 10, "2": 11, "3": 12, "4": 13, "5": 14, "6": 15, "7": 16, "8": 17, "9": 18, "0": 19
+    }
     if (sceneMap[key] !== undefined){
         sceneNo = sceneMap[key]
         console.log("Change Scene to " + sceneMap[key])
@@ -162,6 +175,45 @@ function keyPressed(){
     if (sliderMap[key] !== undefined){
         currentSliderInScene = (sliderMap[key])
         highlightSelectedSlider(sceneNo, sliderMap[key]);
+        return
+    }
+
+    if (key == "ArrowDown"){
+        console.log("SCIS OLD " + currentSliderInScene)
+        if (undefined !== sliderNosByScenes[sceneNo][currentSliderInScene + 1]){
+            currentSliderInScene ++
+            console.log("SCIS NEW" + currentSliderInScene)
+            highlightSelectedSlider(sceneNo, currentSliderInScene);
+        }
+        return
+    }
+
+    if (key == "ArrowUp"){
+        console.log("SCIS OLD " + currentSliderInScene)
+        if (currentSliderInScene < 1) return
+        currentSliderInScene --
+        console.log("SCIS NEW " + currentSliderInScene)
+        highlightSelectedSlider(sceneNo, currentSliderInScene);
+        return
+    }
+
+    if (key == "ArrowRight"){
+        sceneNo ++
+
+        if (undefined === sliderNosByScenes[sceneNo][currentSliderInScene]){
+            currentSliderInScene =  sliderNosByScenes[sceneNo].length -1
+        }
+
+        highlightSelectedSlider(sceneNo, currentSliderInScene);
+        return
+    }
+
+    if (key == "ArrowLeft"){
+        sceneNo --
+        if (undefined === sliderNosByScenes[sceneNo][currentSliderInScene]){
+            currentSliderInScene =  sliderNosByScenes[sceneNo].length -1
+        }
+        highlightSelectedSlider(sceneNo, currentSliderInScene);
         return
     }
 
@@ -187,8 +239,6 @@ function keyPressed(){
             controller: controller
         };
 
-        controller = 5
-
         if (undefined !== intervals[currentSliderNo]){
             console.log("Clear Interval " + currentSliderNo)
             clearInterval(intervals[currentSliderNo])
@@ -202,7 +252,8 @@ function keyPressed(){
             if (currentStep >= step) {
                 clearInterval(intervals[currentSliderNo]); // Stop the interval when done
             }
-        }, rampTime / step);
+        }, (rampTime / 100));
+
     }
     return
 }
