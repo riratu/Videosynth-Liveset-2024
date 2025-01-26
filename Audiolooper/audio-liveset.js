@@ -147,6 +147,41 @@ function highlightSelectedSlider(sceneNo, sliderNoInScene) {
     }
 }
 
+function setSliderValue(selectNo, currentSliderNo) {
+    console.log("Set value " + selectNo + " for controller " + currentSliderNo)
+
+    // Set the interval to update the value over the specified duration
+    let startValue = slider[currentSliderNo].value()
+    let endValue = selectNo / 9;
+    let step = rampTime * 100 // Number of steps for smooth transition
+    let currentStep = 0;
+
+    let controller = {
+        number: currentSliderNo
+    };
+
+    let control = {
+        value: startValue,
+        controller: controller
+    };
+
+    if (undefined !== intervals[currentSliderNo]) {
+        console.log("Clear Interval " + currentSliderNo)
+        clearInterval(intervals[currentSliderNo])
+    }
+    // Set the interval to update the value over the specified duration
+    intervals[currentSliderNo] = setInterval(() => {
+        currentStep++;
+        control.value = startValue + (endValue - startValue) * (currentStep / step);
+        controlChange(control);
+
+        if (currentStep >= step) {
+            console.log("Interval finished clear" + currentSliderNo)
+            clearInterval(intervals[currentSliderNo]); // Stop the interval when done
+        }
+    }, (rampTime / 100));
+}
+
 function keyPressed(){
 
     //console.log(key)
@@ -219,40 +254,10 @@ function keyPressed(){
 
     //Set the value for the current slider
     let valueMap = { "a": 0, "s": 1, "d": 2, "f": 3, "g": 4, "h": 5, "j": 6, "k": 7, "l": 8, "ö": 9 }
-    let selectNo = valueMap[key]
-    if (undefined !== selectNo){
+    let newValue = valueMap[key]
+    if (undefined !== newValue){
         //Set the Slider Value
-        console.log("Set value " + selectNo + " for controller " + currentSliderNo)
-
-        // Set the interval to update the value over the specified duration
-        let startValue = slider[currentSliderNo].value()
-        let endValue = selectNo / 9;
-        let step = rampTime * 100 // Number of steps for smooth transition
-        let currentStep = 0;
-
-        let controller = {
-            number: currentSliderNo
-        };
-
-        let control = {
-            value: startValue,
-            controller: controller
-        };
-
-        if (undefined !== intervals[currentSliderNo]){
-            console.log("Clear Interval " + currentSliderNo)
-            clearInterval(intervals[currentSliderNo])
-        }
-        // Set the interval to update the value over the specified duration
-        intervals[currentSliderNo] = setInterval(() => {
-            currentStep++;
-            control.value = startValue + (endValue - startValue) * (currentStep / step);
-            controlChange(control);
-
-            if (currentStep >= step) {
-                clearInterval(intervals[currentSliderNo]); // Stop the interval when done
-            }
-        }, (rampTime / 100));
+        setSliderValue(newValue, currentSliderNo);
 
     }
     return
