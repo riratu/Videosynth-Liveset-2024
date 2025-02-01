@@ -1,3 +1,5 @@
+
+let noSound = false
 let sounds = []
 var slider = []
 let folderColors = {
@@ -24,18 +26,33 @@ let midiThru = false // optionally pass all in -> out
 let midiInput, midiOutput, midiMsg = {}
 
 let soundFileDir = "sounds/compressed/"
+const reverb = new Tone.Reverb(10).toDestination();
+// Create a highpass filter
+const highpass = new Tone.Filter(500, "highpass");
 
 function preload() {
+
     soundsFiles.sort()
     for (let i = 0; i < soundsFiles.length; i++) {
-        console.log(soundsFiles[0])
-        //console.log(soundFileDir + soundsFiles[i])
-        sounds[i] = loadSound(soundFileDir + soundsFiles[i]);
-        // sounds[i] = loadSound("sounds/" + soundsFiles[i]);
+        console.log(soundsFiles[i])
+        sounds[i] = new Tone.Player({
+            url: soundFileDir + soundsFiles[i],
+            loop: true
+        }).toDestination().sync().start(0);
+        sounds[i].volume.value = -150
+        sounds[i].connect(highpass)
+        sounds[i].toDestination()
     }
+    highpass.connect(reverb)
+    reverb.wet.value = 0.5; // Lower the reverb volume
 }
 
 function setup() {
+
+    Tone.Transport.loop = true;
+    Tone.Transport.loopStart = "1m";
+    Tone.Transport.loopEnd = "18m";
+
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
     setupLaunchpad()
 
@@ -44,7 +61,8 @@ function setup() {
    // startButton.position(20, 10);
     noCanvas()
 
-    reverb = new p5.Reverb();
+    // reverb = new p5.Reverb();
+
 
     let lastFolder = ""
     let containerDiv
@@ -52,13 +70,6 @@ function setup() {
     let filesInFolder = 0
     let slidersinCurrentScene = []
     for (let i = 0; i < soundsFiles.length; i++) {
-    //for (let i = 0; i < 20; i++) {
-        if (i < 0){
-            sounds[i].syncedStart(sounds[0]);
-        } else {
-            sounds[i].loop();
-        }
-       // sounds[i].rate(1);
 
         let folderName = soundsFiles[i].split('/')[0]
         if  (folderName !== lastFolder){
@@ -89,23 +100,24 @@ function setup() {
         //for (let ii = 0; ii<2;ii ++){
             slider[i] = createSlider(0, 1, 0, 0)
             //slider[i].position(20, offset + 25)
-            sounds[i].amp(0)
             slider[i].input(updateSound);
             slider[i].parent(div)
             slidersinCurrentScene.push(i)
         //}
 
-        reverb.process(sounds[i], 3, 2)
     }
     sliderNosByScenes.push(slidersinCurrentScene)
 }
 
 function startAudio() {
     // Resume or create the AudioContext
-    context = getAudioContext();
-    context.resume().then(() => {
-        console.log('AudioContext resumed');
-    });
+
+    Tone.Transport.start()
+    //
+    // context = getAudioContext();
+    // context.resume().then(() => {
+    //     console.log('AudioContext resumed');
+    // });
 
     // sounds[0].loop();
     // for (let i = 1; i < soundsFiles.length; i++) {
@@ -117,8 +129,10 @@ function startAudio() {
 }
 
 function updateSound() {
-    for (let i = 0; i < soundsFiles.length; i++) {
-        sounds[i].amp(slider[i].value());
+    if (!noSound) {
+        for (let i = 0; i < soundsFiles.length; i++) {
+           sounds[i].volume.value = Tone.gainToDb(slider[i].value())
+        }
     }
 }
 
@@ -174,6 +188,7 @@ function setSliderValue(selectNo, currentSliderNo) {
         currentStep++;
         control.value = startValue + (endValue - startValue) * (currentStep / step);
         controlChange(control);
+        WebMidi.getOutputByName(dawMidiDevice).channels[1].sendControlChange(currentSliderNo, control.value * 127)
 
         if (currentStep >= step) {
             //console.log("Interval finished clear" + currentSliderNo)

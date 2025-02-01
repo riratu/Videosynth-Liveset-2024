@@ -3,61 +3,73 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giannis AAAWESOME Audiolooper</title>
-    <script src="../../lib/p5.min.js"></script>
-    <script src="../../lib/p5.sound.min.js"></script>
-    <script src="../../shared/midizeugs.js"></script>
-    <script src="../soundsFiles.js"></script>
-    <script src="../../lib/webmidi.iife.js"></script>
+    <title>Giannis Testitesti</title>
+<!--    <script src="../../lib/p5.min.js"></script>-->
+<!--    <script src="../../lib/p5.sound.min.js"></script>-->
+<!--    <script src="../../shared/midizeugs.js"></script>-->
+<!--    <script src="../soundsFiles.js"></script>-->
+<!--    <script src="../../lib/webmidi.iife.js"></script>-->
+    <script src="../../lib/Tone.js"></script>
 
-<!--    <script src="../shared/midimapping.js"></script>-->
+    <!--    <script src="../shared/midimapping.js"></script>-->
 
 </head>
-
 <body>
 <main>
-    <div id="all-the-sliders"></div>
+<!--    <button id="startButton">Start Audio</button>-->
+<!--    <button onclick="playNote()">Click me to play note!</button>-->
+
+    <div id="content">
+        <button id="tone-play">Play</button>
+
+        <div id="tracks">
+            <div id="progress"></div>
+        </div>
+    </div>
+
     <script>
-        let kickSound, legatoSound;
-        let amplitude;
+        // set the transport
+        Tone.Transport.bpm.value = 120;
+        Tone.Transport.loop = true;
+        //Tone.Transport.loopStart = "4m";
+        Tone.Transport.loopEnd = "8m";
 
-        function preload() {
-            legatoSound = loadSound('../soundsMp3/01/tonal 3 legato.mp3');
-            kickSound = loadSound('../soundsMp3/09 techno/1 kick.mp3');
-        }
+        const kick = new Tone.Player({
+            url: "../sounds/compressed/01_Kick_mit_alles/1_beat_rolf_mit_alles.mp3",
+            loop: true
+        }).toDestination().sync().start(0);
 
-        function setup() {
-            createCanvas(400, 400);
+        const kicksd = new Tone.Player({
+            url: "../sounds/compressed/01_Kick_mit_alles/normal.mp3",
+            loop: true
+        }).toDestination().sync().start(0);
 
-            // Load sounds
+        // const kick2 = new Tone.Player({
+        //     url: "../sounds/compressed/nanoloop/1_kick_hatty6.mp3",
+        //     loop: true
+        // }).toDestination().sync().start(0);
+        //
+        const kick123 = new Tone.Player({
+            url: "../sounds/compressed/nanoloop16sek/hats2.mp3",
+            loop: true
+        }).toDestination().sync().start(0);
 
-            // Initialize amplitude object to analyze kickSound
-            amplitude = new p5.Amplitude();
+        // const kick4 = new Tone.Player({
+        //     url: "../sounds/compressed/01_Kick_mit_alles/1_beat_rolf_mit_alles.mp3",
+        //     loop: true
+        // }).toDestination().sync().start(0);
 
-            // Play background and foreground sounds
-            kickSound.loop();
-            legatoSound.loop();
+        // connect the UI with the components
+        document.getElementById("tone-play").addEventListener("click", () => Tone.Transport.start());
+        //document.querySelector("tone-play-toggle").addEventListener("stop", () => Tone.Transport.stop());
 
-            kickSound.setVolume(1); // Set background sound volume
-            legatoSound.setVolume(1);   // Start with foreground sound muted
+        // keep the playhead on track
+        // setInterval(() => {
+        //     // scale it between 0-1
+        //     const progress = (Tone.Transport.progress + 1) / 2;
+        //     document.querySelector("#progress").style = `left: ${progress*100}%`;
+        // }, 16);
 
-            setInterval(updateDuckingEffect, 2);
-        }
-
-        function updateDuckingEffect() {
-            // Get the overall amplitude of the background sound
-            let level = amplitude.getLevel();
-            console.log(level
-            )
-
-            // Adjust foreground sound volume based on the amplitude of the background sound
-            legatoSound.setVolume(1 - (level * 1.5)); // When kickSound is louder, legatoSound is quieter
-        }
-
-        function draw() {
-            background(200);
-            text('Ducking effect running outside of draw loop.', 10, 50);
-        }
     </script>
 </main>
 </body>
