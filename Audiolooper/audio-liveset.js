@@ -18,8 +18,8 @@ let intervals = []
 
 //Webmidi
 /* PREFS */
-let midiDeviceIn = 1 // [ID] or "device name"
-let midiDeviceOut = 1 // [ID] or "device name"
+let midiDeviceIn // = 1 // [ID] or "device name"
+let midiDeviceOut // = 1 // [ID] or "device name"
 let midiThru = false // optionally pass all in -> out
 let midiInput, midiOutput, midiMsg = {}
 
@@ -37,6 +37,7 @@ function preload() {
 
 function setup() {
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
+    setupLaunchpad()
 
     let startButton = createButton('Start Audio');
     startButton.mousePressed(startAudio); // Trigger start on button press
@@ -51,6 +52,7 @@ function setup() {
     let filesInFolder = 0
     let slidersinCurrentScene = []
     for (let i = 0; i < soundsFiles.length; i++) {
+    //for (let i = 0; i < 20; i++) {
         if (i < 0){
             sounds[i].syncedStart(sounds[0]);
         } else {
@@ -120,7 +122,6 @@ function updateSound() {
     }
 }
 
-
 function controlChange(control) {
     // use control.type, .channel, .currentSliderNo, .controllerName, .value
     //console.log(control.controller.number)
@@ -139,11 +140,11 @@ function highlightSelectedSlider(sceneNo, sliderNoInScene) {
     newSlider = slider[newSliderNo]
     if (undefined !== newSliderNo) {
         lastSlider = slider[currentSliderNo]
-        console.log("Remove Class from " + currentSliderNo)
+        //console.log("Remove Class from " + currentSliderNo)
         currentSliderNo = newSliderNo
         lastSlider.parent().classList.remove("red")
         newSlider.parent().classList.add("red")
-        console.log("Select Slider " + currentSliderNo)
+        //console.log("Select Slider " + currentSliderNo)
     }
 }
 
@@ -152,7 +153,7 @@ function setSliderValue(selectNo, currentSliderNo) {
 
     // Set the interval to update the value over the specified duration
     let startValue = slider[currentSliderNo].value()
-    let endValue = selectNo / 9;
+    let endValue = selectNo;
     let step = rampTime * 100 // Number of steps for smooth transition
     let currentStep = 0;
 
@@ -166,7 +167,6 @@ function setSliderValue(selectNo, currentSliderNo) {
     };
 
     if (undefined !== intervals[currentSliderNo]) {
-        console.log("Clear Interval " + currentSliderNo)
         clearInterval(intervals[currentSliderNo])
     }
     // Set the interval to update the value over the specified duration
@@ -176,7 +176,7 @@ function setSliderValue(selectNo, currentSliderNo) {
         controlChange(control);
 
         if (currentStep >= step) {
-            console.log("Interval finished clear" + currentSliderNo)
+            //console.log("Interval finished clear" + currentSliderNo)
             clearInterval(intervals[currentSliderNo]); // Stop the interval when done
         }
     }, (rampTime / 100));
@@ -257,7 +257,7 @@ function keyPressed(){
     let newValue = valueMap[key]
     if (undefined !== newValue){
         //Set the Slider Value
-        setSliderValue(newValue, currentSliderNo);
+        setSliderValue(newValue / 9, currentSliderNo);
 
     }
     return

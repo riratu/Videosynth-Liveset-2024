@@ -81,6 +81,10 @@ function setupMidi(idIn, idOut) {
         } else {
             midiOutput - WebMidi.getOutputByName(idOut)
         }
+        if (midiInput) {
+            console.log("Midi Device not found")
+            return
+        }
 
         midiInput.addListener('midimessage', 'all', function(e) {
             if(midiThru) {
