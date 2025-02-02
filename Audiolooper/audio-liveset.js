@@ -28,13 +28,12 @@ let midiInput, midiOutput, midiMsg = {}
 let soundFileDir = "sounds/compressed/"
 const reverb = new Tone.Reverb(10).toDestination();
 // Create a highpass filter
-const highpass = new Tone.Filter(500, "highpass");
+const highpass = new Tone.Filter(1000, "highpass");
 
 function preload() {
 
     soundsFiles.sort()
     for (let i = 0; i < soundsFiles.length; i++) {
-        console.log(soundsFiles[i])
         sounds[i] = new Tone.Player({
             url: soundFileDir + soundsFiles[i],
             loop: true
@@ -44,21 +43,27 @@ function preload() {
         sounds[i].toDestination()
     }
     highpass.connect(reverb)
-    reverb.wet.value = 0.5; // Lower the reverb volume
+    reverb.wet.value = 0.3; // Lower the reverb volume
 }
 
 function setup() {
 
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = "1m";
-    Tone.Transport.loopEnd = "18m";
+    Tone.Transport.loopEnd = "8m";
 
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
     setupLaunchpad()
 
     let startButton = createButton('Start Audio');
     startButton.mousePressed(startAudio); // Trigger start on button press
-   // startButton.position(20, 10);
+
+    let stopButton = createButton('Stop Audio');
+    stopButton.mousePressed(() => {Tone.Transport.stop()}); // Trigger start on button press
+
+    let zeroButton = createButton('Set Zero');
+    zeroButton.mousePressed(setZero);
+
     noCanvas()
 
     // reverb = new p5.Reverb();
@@ -131,8 +136,15 @@ function startAudio() {
 function updateSound() {
     if (!noSound) {
         for (let i = 0; i < soundsFiles.length; i++) {
-           sounds[i].volume.value = Tone.gainToDb(slider[i].value())
+           sounds[i].volume.value = Tone.gainToDb((slider[i].value() * 0.7))
         }
+    }
+}
+
+function setZero(){
+    for (let i = 0; i < soundsFiles.length; i++) {
+        sounds[i].volume.value = Tone.gainToDb(0)
+        slider[i].elt.value = 0
     }
 }
 

@@ -64,7 +64,6 @@ function setupMidi(idIn, idOut) {
         // Print to console available MIDI in/out id/names
         WebMidi.inputs.forEach(function(element, c) {
             print("in  \[" + c + "\] " + element.name)
-            console.log(element.name)
         });
         WebMidi.outputs.forEach(function(element, c) {
             print("out \[" + c + "\] " + element.name)
@@ -83,7 +82,7 @@ function setupMidi(idIn, idOut) {
             midiOutput - WebMidi.getOutputByName(idOut)
         }
         if (!midiInput) {
-            console.log("Midi Device not found")
+            console.log("Midi Device " + idOut + " not found")
             return
         }
 
