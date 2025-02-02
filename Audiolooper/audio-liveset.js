@@ -112,10 +112,15 @@ function setup() {
     sliderNosByScenes.push(slidersinCurrentScene)
 }
 
-function startAudio() {
+function toggleAudio() {
     // Resume or create the AudioContext
-
+    const status = Tone.Transport.state;
+if (status === "started"){
+    Tone.Transport.stop()
+} else {
     Tone.Transport.start()
+}
+
     //
     // context = getAudioContext();
     // context.resume().then(() => {
@@ -206,7 +211,11 @@ function setSliderValue(selectNo, currentSliderNo) {
 
 function keyPressed(){
 
-    //console.log(key)
+    console.log(key)
+
+    if (key == "Tab") {
+        toggleAudio()
+    }
 
     //Select the current Ramp Time
     let rampTimeMap = { "A": 1,  "S": 4, "D": 8, "F": 16, "G": 32 }
@@ -217,7 +226,7 @@ function keyPressed(){
     }
 
     let columnMap =  {
-        "Q": 0, "W": 1, "E": 2, "R": 3, "T": 4, "Z": 5, "U": 6, "I": 7, "O": 8, "P": 9,
+        "q": 0, "w": 1, "e": 2, "r": 3,
     }
     if (columnMap[key] !== undefined){
         selectedColumn = columnMap[key]
@@ -240,7 +249,7 @@ function keyPressed(){
 
 
     //Select the current slider
-    let sliderMap = { "q": 0, "w": 1, "e": 2, "r": 3, "t": 4, "z": 5, "u": 6, "i": 7, "o": 8, "p": 9 }
+    let sliderMap = {  "u": 0, "i": 1, "o": 2, "p": 3 }
     if (sliderMap[key] !== undefined){
         currentSliderInScene = (sliderMap[key])
         highlightSelectedSlider(sceneNo, sliderMap[key]);
