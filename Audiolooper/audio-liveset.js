@@ -2,15 +2,24 @@
 let noSound = false
 let sounds = []
 var slider = []
-let folderColors = {
-   "01": "lightblue",
-    "02": "lightgreen",
-    "03": "LightSkyBlue",
-    "04": "lightyellow"
-}
+let folderColors = [
+   "lightblue",
+    "lightgreen",
+    "LightSkyBlue",
+    "lightyellow",
+    "beige",
+    "azure",
+    "ghostWhite",
+    "lavenderBlush",
+    "Linen",
+    "SteelBlue"
+]
 
 let mode = "slider"
 let sceneNo = 0
+let selectedRow = 0
+let selectedColumn = 0
+let columnNo = 4
 let currentSliderNo = 0
 let currentSliderInScene = 0
 let sliderNosByScenes = []
@@ -50,30 +59,19 @@ function setup() {
 
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = "1m";
-    Tone.Transport.loopEnd = "8m";
+    Tone.Transport.bpm.value = 120;
+    Tone.Transport.loopEnd = "32m";
 
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
     setupLaunchpad()
-
-    let startButton = createButton('Start Audio');
-    startButton.mousePressed(startAudio); // Trigger start on button press
-
-    let stopButton = createButton('Stop Audio');
-    stopButton.mousePressed(() => {Tone.Transport.stop()}); // Trigger start on button press
-
-    let zeroButton = createButton('Set Zero');
-    zeroButton.mousePressed(setZero);
-
     noCanvas()
-
-    // reverb = new p5.Reverb();
-
 
     let lastFolder = ""
     let containerDiv
     let offset = 0
     let filesInFolder = 0
     let slidersinCurrentScene = []
+    let folderNo = 0
     for (let i = 0; i < soundsFiles.length; i++) {
 
         let folderName = soundsFiles[i].split('/')[0]
@@ -86,14 +84,14 @@ function setup() {
             lastFolder = folderName
             containerDiv = createDiv("<h3>" + folderName + "</h3>")
 
-            let bgColor = folderColors[folderName] ?? "#555"
+            let bgColor = folderColors[folderNo] ?? "#555"
 
             containerDiv.style('background-color', bgColor);
             containerDiv.addClass('scene');
             sliderContainer = document.getElementById("all-the-sliders")
             containerDiv.parent(sliderContainer)
            // containerDiv.position(20, offset + 10)
-
+            folderNo ++
         }
 
         offset += 40
@@ -161,16 +159,13 @@ function controlChange(control) {
 }
 
 function highlightSelectedSlider(sceneNo, sliderNoInScene) {
-    //console.log(slidersinScene)
     newSliderNo = sliderNosByScenes[sceneNo][sliderNoInScene]
     newSlider = slider[newSliderNo]
     if (undefined !== newSliderNo) {
         lastSlider = slider[currentSliderNo]
-        //console.log("Remove Class from " + currentSliderNo)
         currentSliderNo = newSliderNo
         lastSlider.parent().classList.remove("red")
         newSlider.parent().classList.add("red")
-        //console.log("Select Slider " + currentSliderNo)
     }
 }
 
@@ -200,7 +195,7 @@ function setSliderValue(selectNo, currentSliderNo) {
         currentStep++;
         control.value = startValue + (endValue - startValue) * (currentStep / step);
         controlChange(control);
-        WebMidi.getOutputByName(dawMidiDevice).channels[1].sendControlChange(currentSliderNo, control.value * 127)
+        //WebMidi.getOutputByName(dawMidiDevice).channels[1].sendControlChange(currentSliderNo, control.value * 127)
 
         if (currentStep >= step) {
             //console.log("Interval finished clear" + currentSliderNo)
@@ -221,16 +216,28 @@ function keyPressed(){
         return
     }
 
-    let sceneMap =  {
+    let columnMap =  {
         "Q": 0, "W": 1, "E": 2, "R": 3, "T": 4, "Z": 5, "U": 6, "I": 7, "O": 8, "P": 9,
-        "1": 10, "2": 11, "3": 12, "4": 13, "5": 14, "6": 15, "7": 16, "8": 17, "9": 18, "0": 19
     }
-    if (sceneMap[key] !== undefined){
-        sceneNo = sceneMap[key]
-        console.log("Change Scene to " + sceneMap[key])
+    if (columnMap[key] !== undefined){
+        selectedColumn = columnMap[key]
+        sceneNo = selectedColumn + (selectedRow * columnNo)
+        console.log("Change Scene to " + columnMap[key])
         highlightSelectedSlider(sceneNo, 0);
         return
     }
+
+    let rowMap =  {
+        "1": 1, "2": 2, "3": 3, "4": 4, "5": 4, "6": 7, "7": 8, "8": 9, "9":10, "0": 11
+    }
+    if (rowMap[key] !== undefined){
+        selectedRow = rowMap[key] - 1
+        sceneNo = selectedColumn + (selectedRow * 4)
+        console.log("Change Scene to " + columnMap[key])
+        highlightSelectedSlider(sceneNo, 0);
+        return
+    }
+
 
     //Select the current slider
     let sliderMap = { "q": 0, "w": 1, "e": 2, "r": 3, "t": 4, "z": 5, "u": 6, "i": 7, "o": 8, "p": 9 }
