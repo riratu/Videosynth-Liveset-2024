@@ -32,7 +32,6 @@
         }
 
         input[type="range"] {
-            width: 100%;
             margin-bottom: -2px;
             display: block;
         }
@@ -45,6 +44,7 @@
             border-radius: 5px;
             overflow: hidden;
             white-space: nowrap;
+            width: 100%;
         }
 
         #all-the-sliders {
@@ -88,6 +88,10 @@
             padding: 4px;
             gap: 10px;
         }
+
+        .mainSliders{
+            width: 150px;
+        }
     </style>
 </head>
 <script src="audio-liveset.js"></script>
@@ -98,6 +102,14 @@
     <div id="mainButtons">
         <button onclick="toggleAudio()">Toggle Audio</button>
         <button onclick="setZero()">Zero All</button>
+
+        <label for="sidechain-slider">Sidechain Ratio: </label>
+        <input type="range" class="mainSliders" id="sidechain-slider" min="0" max="10" step="0.1" value="2">
+        <span id="ratio-value"></span>
+        <label for="sidechain-release">Sidechain Ratio: </label>
+        <input type="range" class="mainSliders" id="sidechain-release" min="0" max="3" step="0.1" value="2">
+        <span id="release-value">2</span>
+
     </div>
     <div id="all-the-sliders">
 

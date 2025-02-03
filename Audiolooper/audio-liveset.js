@@ -24,7 +24,7 @@ let currentSliderNo = 0
 let currentSliderInScene = 0
 let sliderNosByScenes = []
 let rampTime = 1
-let lastSlider = null
+let lastSlider = 0
 let intervals = []
 
 //Webmidi
@@ -35,27 +35,71 @@ let midiThru = false // optionally pass all in -> out
 let midiInput, midiOutput, midiMsg = {}
 
 let soundFileDir = "sounds/compressed/"
-const reverb = new Tone.Reverb(10).toDestination();
+//const reverb = new Tone.Reverb(10).toDestination();
 // Create a highpass filter
 const highpass = new Tone.Filter(1000, "highpass");
 
+//Signal Loudness to Sidechain
+const drumGroup = new Tone.Gain(1.5)
+
+//This group will be ducking
+const sidechainGroup = new Tone.Gain(0.01).toDestination()
+
+let sideChainRatio = 6
+let sideChainReleaseTime = 2
+const negate = new Tone.Multiply(-sideChainRatio)
+const follower = new Tone.Follower(sideChainReleaseTime)
+
 function preload() {
+    // Flip the values and shift them up by the max value of the sidechain signal
+
+
+    //Make it 1, when there is no Signal from the Drum.
+    const shift = new Tone.Add(1)
+    const comp = new Tone.Compressor(-30, 3);
+
+    drumGroup.connect(comp).connect(follower);
+    follower.connect(new Tone.Signal()).chain(negate, shift, sidechainGroup.gain);
 
     soundsFiles.sort()
     for (let i = 0; i < soundsFiles.length; i++) {
         sounds[i] = new Tone.Player({
             url: soundFileDir + soundsFiles[i],
             loop: true
-        }).toDestination().sync().start(0);
+        }).sync().start(0);
         sounds[i].volume.value = -150
         sounds[i].connect(highpass)
-        sounds[i].toDestination()
+
+        if (i < 5){
+            sounds[i].fan(drumGroup, Tone.getDestination())
+        } else {
+            sounds[i].connect(sidechainGroup)
+        }
     }
-    highpass.connect(reverb)
-    reverb.wet.value = 0.3; // Lower the reverb volume
+    //highpass.connect(reverb)
+    //reverb.wet.value = 0.3; // Lower the reverb volume
 }
 
 function setup() {
+
+    // Ducking Control
+    const sidechainSlider = document.getElementById("sidechain-slider");
+    const ratioDisplay = document.getElementById("ratio-value");
+
+    sidechainSlider.oninput = () => {
+        const ratio = Number(sidechainSlider.value);
+        console.log(ratio)
+        negate.value = -ratio; // Update sidechain ratio
+        ratioDisplay.textContent = ratio;
+    };
+
+    const sidechainReleaseSlider = document.getElementById("sidechain-release");
+    const releaseDisplay = document.getElementById("release-value");
+
+    sidechainReleaseSlider.oninput = () => {
+        follower.smoothing = 0.1 + Number(sidechainReleaseSlider.value);
+        releaseDisplay.textContent = sidechainReleaseSlider.value;
+    };
 
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = "1m";
