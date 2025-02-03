@@ -232,6 +232,12 @@ function setZero(){
     for (let i = 0; i < soundsFiles.length; i++) {
         sounds[i].volume.value = Tone.gainToDb(0)
         slider[i].elt.value = 0
+
+        reverbGains[i].volume.value = Tone.gainToDb(defaultReverbGain)
+        reverbSlider[i].elt.value = defaultReverbGain
+
+        fx2Slider[i].elt.value = 0
+        fx2Gains[i].volume.value = Tone.gainToDb(0)
     }
 }
 
