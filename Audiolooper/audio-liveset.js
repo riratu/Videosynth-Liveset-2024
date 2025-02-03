@@ -2,6 +2,7 @@
 let noSound = false
 let sounds = []
 var slider = []
+var reverbSlider = []
 let folderColors = [
    "lightblue",
     "lightgreen",
@@ -15,6 +16,7 @@ let folderColors = [
     "SteelBlue"
 ]
 
+let simpleMode = false
 let mode = "slider"
 let sceneNo = 0
 let selectedRow = 0
@@ -26,6 +28,7 @@ let sliderNosByScenes = []
 let rampTime = 1
 let lastSlider = 0
 let intervals = []
+let reverbGains = []
 
 //Webmidi
 /* PREFS */
@@ -35,9 +38,20 @@ let midiThru = false // optionally pass all in -> out
 let midiInput, midiOutput, midiMsg = {}
 
 let soundFileDir = "sounds/compressed/"
-//const reverb = new Tone.Reverb(10).toDestination();
 // Create a highpass filter
-const highpass = new Tone.Filter(1000, "highpass");
+const highpass = new Tone.Filter(500, "highpass");
+
+var defaultReverbGain = 0.1
+const reverbFx = new Tone.Reverb(15).toDestination();
+reverbFx.wet.value = 1;
+
+let fx2Gains = []
+let fx2Slider = []
+let fx2 = new Tone.PingPongDelay({
+    delayTime: "16n",
+    feedback: 0.6,
+    wet: 1,
+}).toDestination();
 
 //Signal Loudness to Sidechain
 const drumGroup = new Tone.Gain(1.5)
@@ -47,6 +61,8 @@ const sidechainGroup = new Tone.Gain(0.01).toDestination()
 
 let sideChainRatio = 6
 let sideChainReleaseTime = 2
+
+// Invert Signal for Sidechain
 const negate = new Tone.Multiply(-sideChainRatio)
 const follower = new Tone.Follower(sideChainReleaseTime)
 
@@ -61,6 +77,8 @@ function preload() {
     drumGroup.connect(comp).connect(follower);
     follower.connect(new Tone.Signal()).chain(negate, shift, sidechainGroup.gain);
 
+    highpass.connect(reverbFx)
+
     soundsFiles.sort()
     for (let i = 0; i < soundsFiles.length; i++) {
         sounds[i] = new Tone.Player({
@@ -68,7 +86,13 @@ function preload() {
             loop: true
         }).sync().start(0);
         sounds[i].volume.value = -150
-        sounds[i].connect(highpass)
+
+        defaultGain = Tone.gainToDb(defaultReverbGain)
+        reverbGains[i] = new Tone.Channel({ volume: defaultGain }).connect(highpass)
+        fx2Gains[i] = new Tone.Channel({ volume: -100 }).connect(fx2)
+
+        sounds[i].connect(reverbGains[i])
+        sounds[i].connect(fx2Gains[i])
 
         if (i < 5){
             sounds[i].fan(drumGroup, Tone.getDestination())
@@ -76,8 +100,6 @@ function preload() {
             sounds[i].connect(sidechainGroup)
         }
     }
-    //highpass.connect(reverb)
-    //reverb.wet.value = 0.3; // Lower the reverb volume
 }
 
 function setup() {
@@ -134,7 +156,6 @@ function setup() {
             containerDiv.addClass('scene');
             sliderContainer = document.getElementById("all-the-sliders")
             containerDiv.parent(sliderContainer)
-           // containerDiv.position(20, offset + 10)
             folderNo ++
         }
 
@@ -145,15 +166,34 @@ function setup() {
         div.addClass('slider-entity')
 
         //for (let ii = 0; ii<2;ii ++){
+            slidersinCurrentScene.push(i)
+
             slider[i] = createSlider(0, 1, 0, 0)
-            //slider[i].position(20, offset + 25)
             slider[i].input(updateSound);
             slider[i].parent(div)
-            slidersinCurrentScene.push(i)
-        //}
 
+        if (!simpleMode){
+            reverbSlider[i] = createSlider(0, 1, 0, 0)
+            reverbSlider[i].input(() => updateReverb(i));
+            reverbSlider[i].elt.value = defaultReverbGain
+            reverbSlider[i].parent(div)
+
+            fx2Slider[i] = createSlider(0, 1, 0, 0)
+            fx2Slider[i].input(() => updateFx2(i));
+            fx2Slider[i].parent(div)
+        }
     }
     sliderNosByScenes.push(slidersinCurrentScene)
+}
+
+function updateReverb(i){
+    const newValue = Number(reverbSlider[i].elt.value) * 4
+    reverbGains[i].volume.value = Tone.gainToDb(newValue)
+}
+
+function updateFx2(i){
+    const newValue = Number(fx2Slider[i].elt.value)
+    fx2Gains[i].volume.value = Tone.gainToDb(newValue)
 }
 
 function toggleAudio() {
