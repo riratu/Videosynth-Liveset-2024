@@ -37,7 +37,6 @@ function sendNote(channel, note, octave, duration, velocity) {
 }
 
 function parseMidi(mm) {
-    //print(mm)
     if(mm.note != undefined) {
         switch (mm.note.type) {
             case 'noteon':
@@ -63,10 +62,10 @@ function setupMidi(idIn, idOut) {
 
         // Print to console available MIDI in/out id/names
         WebMidi.inputs.forEach(function(element, c) {
-            print("in  \[" + c + "\] " + element.name)
+            //print("in  \[" + c + "\] " + element.name)
         });
         WebMidi.outputs.forEach(function(element, c) {
-            print("out \[" + c + "\] " + element.name)
+            //print("out \[" + c + "\] " + element.name)
         });
 
         // assign in channel:

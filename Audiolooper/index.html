@@ -4,13 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giannis AAAWESOME Audiolooper</title>
-    <script src="../lib/p5.min.js"></script>
 <!--    <script src="../lib/p5.sound.min.js"></script>-->
     <script src="../shared/midizeugs.js"></script>
     <script src="soundsFiles.js"></script>
     <script src="../lib/webmidi.iife.js"></script>
     <script src="../lib/Tone.js"></script>
     <script src="../shared/launchpad_mini_controller.js"></script>
+    <link rel="stylesheet" href="sliders.css">
+<!--    <script src="../lib/p5.min.js"></script>-->
 
 <!--    <script src="../shared/midimapping.js"></script>-->
     <style>
@@ -20,6 +21,7 @@
             /*background-color: black;*/
             display: flex;
             font-family: "Helvetica Neue";
+            background-color: black;
         }
         p {
             margin-top: 0px;
@@ -31,11 +33,6 @@
         main {
         }
 
-        input[type="range"] {
-            margin-bottom: -2px;
-            display: block;
-        }
-
         .slider-entity {
             background-color: rgba(0, 0, 0, 0.09);
             margin-top: 2px;
@@ -44,7 +41,7 @@
             border-radius: 5px;
             overflow: hidden;
             white-space: nowrap;
-            width: 100%;
+            width: 95%;
         }
 
         #all-the-sliders {
@@ -54,15 +51,13 @@
             padding: 5px;
             width: 100%;
             box-sizing: border-box;
+            gap: 5px;
         }
 
         .scene {
             padding: 5px;
             width: 180px;
-            margin: 2px;
             border-radius: 2px;
-            box-sizing: border-box;
-            position: relative;
         }
 
         h3 {
@@ -82,15 +77,21 @@
         }
 
         #mainButtons {
-            width: 100px;
             display: flex;
             white-space: nowrap;
             padding: 4px;
             gap: 10px;
+            background-color: aliceblue;
+            margin: 10px;
+
         }
 
         .mainSliders{
-            width: 150px;
+            width: 100px;
+        }
+
+        .valueDisplay {
+            width: 20px;
         }
     </style>
 </head>
@@ -104,11 +105,11 @@
         <button onclick="setZero()">Zero All</button>
 
         <label for="sidechain-slider">Sidechain Ratio: </label>
-        <input type="range" class="mainSliders" id="sidechain-slider" min="0" max="10" step="0.1" value="2">
-        <span id="ratio-value"></span>
-        <label for="sidechain-release">Sidechain Ratio: </label>
-        <input type="range" class="mainSliders" id="sidechain-release" min="0" max="3" step="0.1" value="2">
-        <span id="release-value">2</span>
+        <input type="range" class="mainSliders" id="sidechain-slider" min="0" max="10" step="0.1" value="">
+        <span class="valueDisplay" id="ratio-value"></span>
+        <label for="sidechain-release">SC Release: </label>
+        <input type="range" class="mainSliders" id="sidechain-release" min="0" max="3" step="0.1" value="">
+        <span class="valueDisplay" id="release-value"></span>
 
     </div>
     <div id="all-the-sliders">
@@ -116,5 +117,6 @@
     </div>
 </main>
 </body>
+<script>setup()</script>
 
 </html>
