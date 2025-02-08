@@ -195,7 +195,7 @@ function setup() {
             slidersinCurrentScene.push(i)
 
             slider[i] = createNewSlider(0, 1, 0, 0)
-            slider[i].addEventListener("input", updateSound);
+            slider[i].addEventListener("input", () => updateSound(i));
             div.appendChild(slider[i])
 
         if (!simpleMode){
@@ -256,11 +256,11 @@ if (status === "started"){
     // }
 }
 
-function updateSound() {
+function updateSound(i) {
     if (!noSound) {
-        for (let i = 0; i < soundsFiles.length; i++) {
+        //for (let i = 0; i < soundsFiles.length; i++) {
            sounds[i].volume.value = Tone.gainToDb((slider[i].value * 0.7))
-        }
+        //}
     }
     renderLanunchpad()
 }
@@ -284,7 +284,7 @@ function controlChange(control) {
     currentSlider = slider[controllerNo]
     if (currentSlider){
         currentSlider.value = control.value
-        updateSound()
+        updateSound(controllerNo)
     }
 }
 
@@ -294,16 +294,16 @@ function highlightSelectedSlider(sceneNo, sliderNoInScene) {
     if (undefined !== newSliderNo) {
         lastSlider = slider[selection.no]
         selection.no = newSliderNo
-        lastSlider.parent().classList.remove("red")
-        newSlider.parent().classList.add("red")
+        lastSlider.parentElement.classList.remove("red");
+        newSlider.parentElement.classList.add("red");
     }
 }
 
 function setSliderValue(value, targetParameter = null) {
-    console.log("Set " + targetParameter + " " + value + " for controller ")
+    console.log("Set Controller " + targetParameter + " to value " + value)
 
     // Set the interval to update the value over the specified duration
-    let endValue = value;
+    let endValue = Number(value);
     let step = rampTime * 100 // Number of steps for smooth transition
     let currentStep = 0;
 
@@ -344,8 +344,11 @@ function setSliderValue(value, targetParameter = null) {
     }, (rampTime / 100));
 }
 
-function keyPressed(){
-    //console.log(key)
+document.addEventListener('keydown', keyPressed);
+function keyPressed(event) {
+    //console.log(event)
+
+    key = event.key
 
     if (key == "Tab") {
         toggleAudio()
@@ -430,6 +433,7 @@ function keyPressed(){
     let valueMap = { "a": 0, "s": 1, "d": 2, "f": 3, "g": 4, "h": 5, "j": 6, "k": 7, "l": 8, "ö": 9 }
     let newValue = valueMap[key]
     if (undefined !== newValue){
+        //console.log(newValue)
         //Set the Slider Value
         setSliderValue(newValue / 9, selection.no);
     }
