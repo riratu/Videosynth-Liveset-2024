@@ -4,6 +4,9 @@ beatLength = 5000
 lastBeat = 0
 currentSeed = 0
 
+let scenes = []
+let activeScene = 0
+
 // Max Values for Sliders
 newSeed = 0
 maxCurlFactor = 50
@@ -162,6 +165,10 @@ var sliderNames = {
 var sliderKeys = Object.keys(sliderNames);
 var sliderValues = {}
 
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
 function setup() {
     mic = new p5.AudioIn()
     mic.start()
@@ -187,6 +194,7 @@ function setup() {
     clear();
 
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
+
 }
 
 function draw() {
@@ -239,7 +247,6 @@ function draw() {
 
     for (let i = 0; i < spawnRate; i++) {
         lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
-        //console.log(lastParticleSpawned)
         spawnParticle(particles[lastParticleSpawned], i, spawnRate)
     }
     for (let i = 0; i < particleNo; i++) {
@@ -252,27 +259,20 @@ function draw() {
 
         let p = particles[i];
         if (sliderValues.pointAlpha > 0.05) {
-            // if (i % 1000 == 0){
-            //     console.log("p alpha " + sliderValues.pointAlpha)
-            // }
             let alpha = sliderValues.pointAlpha
-            //console.log(alpha)
             stroke(hue, sat, 1, alpha)
             point(p.x, p.y);
         }
 
         if (sliderValues.ellipseSize > 0.02) {
             if (i % 5 == 0) {
-                //console.log(sliderValues.ellipseAlpha)
                 stroke(hue, sat, 1, sliderValues.ellipseAlpha)
-                //console.log(ellipseAlphatest)
                 ellipse(p.x, p.y, sliderNames.ellipseSize.max * sliderValues.ellipseSize)
             }
         }
 
         if (sliderValues.linesTransparency > 0.05) {
             if (i % lineModulo === 0) {
-                //let lastIndex = (i + 2) % particleNo;
                 stroke(hue, sat, 1, sliderValues.linesTransparency)
 
                 let lineDist = 50
@@ -379,17 +379,13 @@ function preload() {
 
 function keyPressed() {
 
-    console.log(key)
+    const sceneKeys = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "è", "y", "a", "s", "d", "f", "g", "h", "j", "k", "l", "ö"];
 
-    const sceneKeys = ["Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "è", "Y", "A", "S", "D", "F", "G", "H", "J", "K", "L", "é"];
-
-    if (sceneKeys.includes(key.toUpperCase())) {
-        if (key === key.toUpperCase()) {
-            console.log("save")
-            saveScene(key);
-        } else {
-            loadScene(key.toUpperCase());
-        }
+    let sceneNo = sceneKeys.indexOf(key)
+    if (-1 !== sceneNo) {
+            console.log("load Scene " + sceneNo)
+            loadScene(sceneNo)
+            return
     }
 
     if (key == " ") {
@@ -427,52 +423,78 @@ function mouseWheel(event) {
 }
 
 function saveScene(key) {
-    existing = localStorage.getItem("sliderScene" + key)
+    //existing = localStorage.getItem("sliderScene" + key)
     // if (existing){
     //     console.log("Already existing " + key)
     //     return
     // }
-    console.log("Save Scene " + key)
-    let string = JSON.stringify(sliderValues)
-    localStorage.setItem("sliderScene" + key, string)
+    console.log(scenes)
+    scenes.push({ ...sliderValues })
+    let sceneNo = scenes.length
+    console.log("Save Scene " + sceneNo)
+    let string = JSON.stringify(scenes)
+    localStorage.setItem("scenes", string)
+
+    createSceneButton(sceneNo -1)
 }
 
-function loadScene(key) {
-    try {
-        $values = localStorage.getItem("sliderScene" + key)
-        if ($values !== undefined && $values !== null) {
-            sliderValues = JSON.parse($values)
-        }
-    } catch {
-        console.log("No valid Scene Data")
-    }
-    console.log("Load Scene " + key)
+function createSceneButton(sceneNo){
+    let sceneCont = document.getElementById("sceneLinkContainer")
+    let sceneLink = document.createElement("button")
+    sceneLink.onclick = () => loadScene(sceneNo);
+    sceneLink.innerHTML = `Scene ${sceneNo}`
+    sceneLink.classList.add("sceneLink")
 
+    if (sceneNo === activeScene){
+        sceneLink.classList.add("active")
+    }
+    sceneLink.id = "loadScene" + sceneNo
+    //sceneLink.innerHTML = `<button onclick="loadScene(${sceneNo})">Scene ${sceneNo}</button>`
+    sceneCont.appendChild(sceneLink)
+}
+
+function deleteScene(){
+    document.getElementById("loadScene" + activeScene).remove()
+    scenes.splice(activeScene, 1);
+    console.log("Delete Scene " + activeScene)
+    console.log(scenes)
+    let string = JSON.stringify(scenes)
+    localStorage.setItem("scenes", string)
+
+    document.querySelectorAll('.sceneLink').forEach(e => e.remove());
+    scenes.forEach((scene, i) => {
+        createSceneButton(i)
+    })
+}
+
+function loadScene(number) {
+
+    console.log("Load Scene " + number)
+    //console.log("length;") scenes.length
+    activeScene = number
+    if (!scenes[number]) { return }
+    sliderValues = scenes[number]
     Object.keys(sliderNames).forEach(k => {
         if (sliderValues[k] !== null && sliderValues[k] !== undefined) {
             sliders[k].elt.value = sliderValues[k]
         }
     })
 
+    document.querySelectorAll(".sceneLink.active").forEach(element => {
+        element.classList.remove("active");
+    });
+
+    document.getElementById("loadScene" + number).classList.add("active")
 }
 
 
 function createInterface() {
 
     let i = 0
+
+
     // Create sliders for all controls in the list
-
-    let menuContainer = createDiv("<h3>The Sliders</h3>")
-    menuContainer.id("menuContainer")
-    menuContainer.position(20, 20).style('background-color', "lightgrey");
-
-    let startButton = createButton('Start Audio');
-    startButton.mousePressed(startAudio);
-    startButton.parent(menuContainer)
-
-    let sliderContaier = createDiv("")
-    sliderContaier.id("sliderContainer")
-    sliderContaier.parent(menuContainer)
+    let sliderContaier = document.getElementById("sliderContainer")
 
     for (let slider in sliderNames) {
 
@@ -490,6 +512,16 @@ function createInterface() {
         sliders[sliderName].elt.addEventListener('input', updateSliderValue);
 
         i++
+    }
+
+    //Create the Scene Buttons
+    $values = localStorage.getItem("scenes")
+    if ($values !== undefined && $values !== null) {
+        scenes = JSON.parse($values)
+        console.log(scenes)
+        scenes.forEach((scene, i) => {
+            createSceneButton(i)
+        })
     }
 }
 
