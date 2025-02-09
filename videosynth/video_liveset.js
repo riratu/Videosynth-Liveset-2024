@@ -1,5 +1,5 @@
 let particles = [];
-const particleArrayLength = 10000
+const particleArrayLength = 100
 beatLength = 5000
 lastBeat = 0
 currentSeed = 0
@@ -185,6 +185,7 @@ function setup() {
 
     maxSpawnRandSize = width / 2
     createInterface()
+    createSceneInterface()
 
     for (let i = 0; i < particleArrayLength; i++) {
         particles.push(createVector(random(-maxSpawnRandSize, maxSpawnRandSize), random(-maxSpawnRandSize, maxSpawnRandSize)));
@@ -195,6 +196,28 @@ function setup() {
 
     setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
 
+}
+
+function createSceneInterface(){
+    $values = localStorage.getItem("scenes")
+    if ($values !== undefined && $values !== null) {
+        scenes = JSON.parse($values)
+        console.log(scenes)
+        let sceneSliderCont = document.getElementById("sceneSliderContainer")
+        scenes.forEach((scene, i) => {
+            createSceneButton(i)
+
+            let div = createDiv(`<span class="sceneSliderLabel">${i}</span>`)
+            //div.addClass("sceneSliderLabel")
+            let sceneSlider = createSlider(0, 1, 0, 0)
+            sceneSlider.id("sceneSlider" + i)
+            sceneSlider.addClass("sceneSlider")
+            sceneSlider.input(updateSceneSliders)
+            sceneSlider.parent(div);
+            div.parent(sceneSliderCont)
+
+        })
+    }
 }
 
 function draw() {
@@ -428,7 +451,6 @@ function saveScene(key) {
     //     console.log("Already existing " + key)
     //     return
     // }
-    console.log(scenes)
     scenes.push({ ...sliderValues })
     let sceneNo = scenes.length
     console.log("Save Scene " + sceneNo)
@@ -437,6 +459,14 @@ function saveScene(key) {
 
     createSceneButton(sceneNo -1)
 }
+
+function updateScene() {
+    scenes[activeScene] = { ...sliderValues }
+    console.log("Save Scene " + sceneNo)
+    let string = JSON.stringify(scenes)
+    localStorage.setItem("scenes", string)
+}
+
 
 function createSceneButton(sceneNo){
     let sceneCont = document.getElementById("sceneLinkContainer")
@@ -480,6 +510,9 @@ function loadScene(number) {
         }
     })
 
+    let div = document.getElementById("sceneSliderContainer")
+    div.classList.add("hide")
+
     document.querySelectorAll(".sceneLink.active").forEach(element => {
         element.classList.remove("active");
     });
@@ -514,15 +547,48 @@ function createInterface() {
         i++
     }
 
-    //Create the Scene Buttons
-    $values = localStorage.getItem("scenes")
-    if ($values !== undefined && $values !== null) {
-        scenes = JSON.parse($values)
-        console.log(scenes)
-        scenes.forEach((scene, i) => {
-            createSceneButton(i)
+}
+
+function updateSceneSliders(){
+    let sceneSliderValueMap =  []
+    let totalValue = 0.01
+
+    let sceneSliders = document.querySelectorAll(".sceneSlider")
+
+    sceneSliders.forEach((elem, i) =>{
+        sceneSliderValueMap[i] = elem.value
+        totalValue += Number(elem.value)
+    })
+
+    //Take the scenes and add the values of the sliders together
+
+    for (let slider in sliderNames) {
+
+        let valueFromScenes = 0
+
+        sceneSliderValueMap.forEach((value, i) => {
+            valueFromScenes += Number (scenes[i][slider] * value)
         })
+
+        if (slider == "zoomSpeed"){
+            console.log("total value " + totalValue + " velues from added " + valueFromScenes)
+        }
+
+        sliders[slider].elt.value = valueFromScenes / totalValue
     }
+
+    //
+}
+
+function sceneMixer(){
+    let div = document.getElementById("sceneSliderContainer")
+    div.classList.remove("hide")
+
+    document.querySelectorAll(".sceneLink.active").forEach(element => {
+        element.classList.remove("active");
+    });
+
+    document.getElementById("selectSceneMixer").classList.add("active")
 }
 
 function updateSliderValue(evt) {
@@ -530,9 +596,6 @@ function updateSliderValue(evt) {
     sliderValues[evt.target.id] = Number(evt.target.value)
 }
 
-function mouseReleased() {
-
-}
 
 function onScreen(v) {
     return v.x >= -width / 2 && v.x <= width / 2 && v.y >= -height / 2 && v.y <= height / 2;
