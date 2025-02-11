@@ -595,7 +595,17 @@ function updateSliderValue(evt) {
 }
 
 bc.onmessage = (event) => {
-    sliderValues[evt.target.id]
+    console.log(event)
+    let message = event.data.split(':');
+    let sliderNo = message[0]
+    let value = message[1]
+    console.log(sliderNo)
+
+
+    //console.log(message)
+    //sliderValues[evt.target.id]
+    sliders[sliderNo].evt.value = value
+
 };
 
 
