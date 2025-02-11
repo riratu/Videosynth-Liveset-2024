@@ -24,6 +24,8 @@ let rampTime = 1
 let lastSlider = 0
 let intervals = []
 
+const bc = new BroadcastChannel("sceneValues");
+
 // track: no
 //     parameters.gain
 //         slider
@@ -170,12 +172,11 @@ function setup() {
 
             lastFolder = folderName
             containerDiv = document.createElement("div")
-            containerDiv.innerHTML = "<h3>" + folderName + "</h3>";
-            containerDiv.classList.add("slider-entity");
+            containerDiv.innerHTML = "<h3 class='expert'>" + folderName + "</h3>";
 
             let bgColor = folderColors[folderNo] ?? "#555"
 
-            containerDiv.style.backgroundColor = bgColor;
+            //containerDiv.style.backgroundColor = bgColor;
             containerDiv.classList.add("scene");
 
             const sliderContainer = document.getElementById("all-the-sliders");
@@ -187,7 +188,7 @@ function setup() {
         offset += 40
 
         const div = document.createElement("div");
-        div.innerHTML = `<p>c${i} | ${soundsFiles[i].split('/')[1]}</p>`;
+        div.innerHTML = `<p class='expert'>c${i} | ${soundsFiles[i].split('/')[1]}</p>`;
         div.classList.add("slider-entity");
 
         containerDiv.appendChild(div); // Set containerDiv as the parent
@@ -201,11 +202,13 @@ function setup() {
         if (!simpleMode){
             reverbSlider[i] = createNewSlider(0, 1, 0, 0)
             reverbSlider[i].addEventListener("input", (() => updateReverb(i)))
+            reverbSlider[i].classList.add("expert")
             reverbSlider[i].value = defaultReverbGain
             div.appendChild(reverbSlider[i])
 
             fx2Slider[i] = createNewSlider(0, 1, 0, 0)
             fx2Slider[i].addEventListener("input", (() => updateFx2(i)))
+            fx2Slider[i].classList.add("expert")
             div.appendChild(fx2Slider[i])
         }
     }
@@ -262,6 +265,10 @@ function updateSound(i) {
            sounds[i].volume.value = Tone.gainToDb((slider[i].value * 0.7))
         //}
     }
+
+    //Broadcast the Values to the other thingies
+    bc.postMessage(i + ":" + slider[i].value);
+
     renderLanunchpad()
 }
 
@@ -439,7 +446,9 @@ function keyPressed(event) {
     }
     return
 }
-
+function toggleExpert() {
+    document.body.classList.toggle("show-expert");
+}
 // function selectSlider(selectNo, selection.scene){
 //
 // }

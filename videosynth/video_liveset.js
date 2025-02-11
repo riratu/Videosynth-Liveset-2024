@@ -1,5 +1,5 @@
 let particles = [];
-const particleArrayLength = 100
+const particleArrayLength = 10000
 beatLength = 5000
 lastBeat = 0
 currentSeed = 0
@@ -46,6 +46,9 @@ let divs = []
 let checkboxes = []
 let rotation = 0
 
+// Connection to a broadcast channel
+const bc = new BroadcastChannel("sceneValues");
+
 var sliders = []
 var sliderNames = {
     "zoomSpeed": {
@@ -54,24 +57,21 @@ var sliderNames = {
         max: 0.05,
         min: 0.01,
     },
-    "translateX": {
+    "moveX": {
         default: 0.5,
         max: 5
     },
-    "translateY": {
+    "moveY": {
         default: 0.5,
         max: 5
     },
-    "strokeHueStart": {
-        default: 0.5,
-    },
-    "strokeHueTravel": {
-        default: 0.5,
-    },
-    "strokeSatStart": {
+    "saturation": {
         default: 0,
     },
-    "strokeSatTravel": {
+    "color": {
+        default: 0.5,
+    },
+    "colorChange": {
         default: 0.5,
     },
     "bgTransparency": {
@@ -202,7 +202,6 @@ function createSceneInterface(){
     $values = localStorage.getItem("scenes")
     if ($values !== undefined && $values !== null) {
         scenes = JSON.parse($values)
-        console.log(scenes)
         let sceneSliderCont = document.getElementById("sceneSliderContainer")
         scenes.forEach((scene, i) => {
             createSceneButton(i)
@@ -255,8 +254,7 @@ function draw() {
 
     background(0, sliderValues.bgTransparency);
 
-    let strokeHueTravel = (sliderValues.strokeHueTravel - 0.5) / 5000
-    let strokeSatTravel = (sliderValues.strokeSatTravel - 0.5) / 5000
+    let colorChange = (sliderValues.colorChange - 0.5) / 5000
     spawnRadius = sliders["spawnRadius"].value()
     spawnCirleSpeed = sliders["spawnCirleSpeed"].value()
     let stokeWeight = sliders["stokeWeight"].value()
@@ -275,8 +273,8 @@ function draw() {
     for (let i = 0; i < particleNo; i++) {
         currentP = i + lastParticleSpawned % particleNo
 
-        let hue = (sliderValues.strokeHueStart + (strokeHueTravel * currentP)) % 1
-        let sat = (sliderValues.strokeSatStart + (strokeSatTravel * currentP))
+        let hue = (sliderValues.color + (colorChange * currentP)) % 1
+        let sat = (sliderValues.saturation)
 
         strokeWeight(0.3 + stokeWeight * maxStokeWeight)
 
@@ -366,8 +364,8 @@ function draw() {
         p.y += (p.y) * ((maxZoomSpeed * sliderValues["zoomSpeed"]) - (maxZoomSpeed / 2))
 
         //Translation
-        p.x += ((sliders["translateX"].value() - 0.5) * maxTranslationSpeed)
-        p.y += ((sliders["translateY"].value() - 0.5) * maxTranslationSpeed)
+        p.x += ((sliders["moveX"].value() - 0.5) * maxTranslationSpeed)
+        p.y += ((sliders["moveY"].value() - 0.5) * maxTranslationSpeed)
 
     }
 }
@@ -437,13 +435,13 @@ function shuffleSliders() {
     }
 }
 
-function mouseWheel(event) {
-    // Adjust the slider value based on the scroll direction
-    const slider = sliders[sliderKeys[currentSliderNo]]
-    let newValue = slider.value() - event.delta / 1000;
-    newValue = constrain(newValue, slider.elt.min, slider.elt.max);
-    slider.value(newValue);
-}
+// function mouseWheel(event) {
+//     // Adjust the slider value based on the scroll direction
+//     const slider = sliders[sliderKeys[currentSliderNo]]
+//     let newValue = slider.value() - event.delta / 1000;
+//     newValue = constrain(newValue, slider.elt.min, slider.elt.max);
+//     slider.value(newValue);
+// }
 
 function saveScene(key) {
     //existing = localStorage.getItem("sliderScene" + key)
@@ -466,7 +464,6 @@ function updateScene() {
     let string = JSON.stringify(scenes)
     localStorage.setItem("scenes", string)
 }
-
 
 function createSceneButton(sceneNo){
     let sceneCont = document.getElementById("sceneLinkContainer")
@@ -525,7 +522,6 @@ function createInterface() {
 
     let i = 0
 
-
     // Create sliders for all controls in the list
     let sliderContaier = document.getElementById("sliderContainer")
 
@@ -574,7 +570,9 @@ function updateSceneSliders(){
             console.log("total value " + totalValue + " velues from added " + valueFromScenes)
         }
 
-        sliders[slider].elt.value = valueFromScenes / totalValue
+        let newValue = valueFromScenes / totalValue
+        sliders[slider].elt.value = newValue
+        sliderValues[slider] = newValue
     }
 
     //
@@ -595,6 +593,10 @@ function updateSliderValue(evt) {
     // console.log("update " + evt.target.id + " " + evt.target.value)
     sliderValues[evt.target.id] = Number(evt.target.value)
 }
+
+bc.onmessage = (event) => {
+    sliderValues[evt.target.id]
+};
 
 
 function onScreen(v) {
