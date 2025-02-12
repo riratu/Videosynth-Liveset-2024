@@ -3,6 +3,7 @@ let noSound = false
 let sounds = []
 var slider = []
 
+let settings = {}
 let folderColors = [
    "lightblue",
     "lightgreen",
@@ -93,6 +94,14 @@ function preload() {
 }
 
 function setup() {
+    settingsfromStorage = JSON.parse(localStorage.getItem("settings"))
+    if (settingsfromStorage){ settings = settingsfromStorage }
+
+    if (settings.expertMode){
+        document.body.classList.add("show-expert")
+    }
+    console.log(settings)
+
     //Make it 1, when there is no Signal from the Drum.
     const shift = new Tone.Add(1)
     const comp = new Tone.Compressor(-30, 3);
@@ -450,13 +459,10 @@ function keyPressed(event) {
     }
     return
 }
-function toggleExpert() {
-    document.body.classList.toggle("show-expert");
-}
-// function selectSlider(selectNo, selection.scene){
-//
-// }
-// function assignValue(selectNo, selection.no){
-//
-// }
 
+function toggleExpert() {
+    settings.expertMode = document.body.classList.toggle("show-expert");
+    console.log(settings)
+
+    localStorage.setItem("settings", JSON.stringify(settings))
+}

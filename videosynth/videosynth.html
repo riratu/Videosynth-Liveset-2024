@@ -68,7 +68,7 @@
         }
 
         .hide {
-            display: none;
+            display: none !important;
         }
 
         .sceneSlider {
@@ -103,6 +103,7 @@
 <main>
     <div id="menuContainer">
         <button id="startButton" onclick="startAudio()">Start Audio</button>
+        <button id="saveButton" onclick="downloadScenes()">DownloadScenes</button>
         <div id="sceneMetaButtons">
             <button onclick="saveScene()">Save Scene</button>
             <button onclick="deleteScene()">Delete Scene</button>
