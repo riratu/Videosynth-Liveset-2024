@@ -62,10 +62,10 @@ function setupMidi(idIn, idOut) {
 
         // Print to console available MIDI in/out id/names
         WebMidi.inputs.forEach(function(element, c) {
-            //print("in  \[" + c + "\] " + element.name)
+            console.log("in  \[" + c + "\] " + element.name)
         });
         WebMidi.outputs.forEach(function(element, c) {
-            //print("out \[" + c + "\] " + element.name)
+            console.log("out  \[" + c + "\] " + element.name)
         });
 
         // assign in channel:

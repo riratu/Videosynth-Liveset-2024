@@ -25,7 +25,7 @@
         }
         #menuContainer {
             opacity: 95%;
-            height: 80%;
+            height: 90%;
             overflow: scroll;
             position: absolute;
             top: 20px;
@@ -36,14 +36,12 @@
         }
 
         #sliderContainer {
-         display: flex;
+            display: flex;
             flex-flow: column wrap;
-            height: 100%;
+            height: 85%;
             background-color: darkgrey;
             padding: 5px;
             overflow: hidden;
-            width: 600px;
-            height: 700px;
         }
         /*#sceneLinkContainer {*/
         /*    display: flex;*/
@@ -60,6 +58,7 @@
 
         #sceneSliderContainer {
             background-color: antiquewhite;
+            display: grid;
         }
 
         #sceneLinkContainer, #sceneMetaButtons {
@@ -88,6 +87,13 @@
             color: blue;
             text-decoration-line: underline;
         }
+
+        #sceneLinkContainer {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 650px;
+        }
     </style>
 </head>
 <script src="video_liveset.js"></script>
@@ -102,11 +108,15 @@
             <button onclick="deleteScene()">Delete Scene</button>
             <button onclick="updateScene()">Update Scene</button>
         </div>
+
         <div id="sceneLinkContainer">
             <button id="selectSceneMixer" class="sceneLink" onclick="sceneMixer()">Scene Mixer</button>
         </div>
-        <div class="hide" id="sceneSliderContainer">
+        <div>
             <h3>SceneSliders</h3>
+        <div class="hide" id="sceneSliderContainer">
+
+        </div>
         </div>
         <h3>The Sliders</h3>
         <div id="sliderContainer">

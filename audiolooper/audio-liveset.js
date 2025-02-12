@@ -130,7 +130,6 @@ function setup() {
 
     sidechainSlider.oninput = () => {
         const ratio = Number(sidechainSlider.value);
-        console.log(ratio)
         negate.value = -ratio; // Update sidechain ratio
         ratioDisplay.textContent = ratio;
     };
@@ -307,18 +306,20 @@ function highlightSelectedSlider(sceneNo, sliderNoInScene) {
 }
 
 function setSliderValue(value, targetParameter = null) {
+    value = Number(value)
     console.log("Set Controller " + targetParameter + " to value " + value)
-
-    // Set the interval to update the value over the specified duration
-    let endValue = Number(value);
-    let step = rampTime * 100 // Number of steps for smooth transition
-    let currentStep = 0;
 
     let sliderNumber= selection.no
 
-    if (undefined !== intervals[selection.no]) {
-        clearInterval(intervals[selection.no])
+    //If there is already an interval for this paremater, clear it
+    if(undefined !==intervals[sliderNumber + targetParameter]){
+        clearInterval(intervals[sliderNumber + targetParameter]);
     }
+
+    // Set the interval to update the value over the specified duration
+    let endValue = value;
+    let step = rampTime * 100 // Number of steps for smooth transition
+    let currentStep = 0;
 
     let parameterSlider
     let parameterGain
@@ -334,20 +335,23 @@ function setSliderValue(value, targetParameter = null) {
         parameterGain = sounds[sliderNumber]
     }
 
-    let startValue = parameterSlider.value
+    let startValue = Number(parameterSlider.value)
 
     // Set the interval to update the value over the specified duration
-    intervals[selection.no] = setInterval(() => {
+    intervals[sliderNumber + targetParameter] = setInterval(() => {
         currentStep++;
-        currentValue = startValue + (endValue - startValue) * (currentStep / step);
+        currentValue = (startValue + (endValue - startValue) * (currentStep / step));
 
-        parameterSlider.value = currentValue
-        parameterGain.volume.value = Tone.gainToDb(currentValue)
-
-        if (currentStep >= step) {
-            clearInterval(intervals[sliderNumber]); // Stop the interval when done
-            renderLanunchpad()
+        if (currentStep < step) {
+            parameterSlider.value = currentValue
+            parameterGain.volume.value = Tone.gainToDb(currentValue)
+            return
         }
+
+        clearInterval(intervals[sliderNumber + targetParameter]);
+        delete intervals[sliderNumber + targetParameter];
+
+        renderLanunchpad()
     }, (rampTime / 100));
 }
 
@@ -455,5 +459,4 @@ function toggleExpert() {
 // function assignValue(selectNo, selection.no){
 //
 // }
-
 

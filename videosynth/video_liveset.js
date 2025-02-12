@@ -184,7 +184,7 @@ function setup() {
     })
 
     maxSpawnRandSize = width / 2
-    createInterface()
+    createPropertiesSliders()
     createSceneInterface()
 
     for (let i = 0; i < particleArrayLength; i++) {
@@ -202,21 +202,23 @@ function createSceneInterface(){
     $values = localStorage.getItem("scenes")
     if ($values !== undefined && $values !== null) {
         scenes = JSON.parse($values)
-        let sceneSliderCont = document.getElementById("sceneSliderContainer")
+
         scenes.forEach((scene, i) => {
             createSceneButton(i)
-
-            let div = createDiv(`<span class="sceneSliderLabel">${i}</span>`)
-            //div.addClass("sceneSliderLabel")
-            let sceneSlider = createSlider(0, 1, 0, 0)
-            sceneSlider.id("sceneSlider" + i)
-            sceneSlider.addClass("sceneSlider")
-            sceneSlider.input(updateSceneSliders)
-            sceneSlider.parent(div);
-            div.parent(sceneSliderCont)
-
+            createSceneSliders(i)
         })
     }
+}
+
+function createSceneSliders(i) {
+    let sceneSliderCont = document.getElementById("sceneSliderContainer")
+    let div = createDiv(`<span class="sceneSliderLabel">${i}</span>`)
+    let sceneSlider = createSlider(0, 1, 0, 0)
+    sceneSlider.id("sceneSlider" + i)
+    sceneSlider.addClass("sceneSlider")
+    sceneSlider.input(updateSceneSliders)
+    sceneSlider.parent(div);
+    div.parent(sceneSliderCont)
 }
 
 function draw() {
@@ -224,7 +226,7 @@ function draw() {
     translate(width / 2, height / 2)
 
     rotation += ((sliderValues.rotation - 0.5) / 40)
-    //rotate(rotation)
+    rotate(rotation)
 
     //Test Performance of certain things
     //testPerformance();
@@ -456,6 +458,7 @@ function saveScene(key) {
     localStorage.setItem("scenes", string)
 
     createSceneButton(sceneNo -1)
+    createSceneSliders(sceneNo -1)
 }
 
 function updateScene() {
@@ -491,6 +494,7 @@ function deleteScene(){
     document.querySelectorAll('.sceneLink').forEach(e => e.remove());
     scenes.forEach((scene, i) => {
         createSceneButton(i)
+        createSceneSliders(i)
     })
 }
 
@@ -518,7 +522,7 @@ function loadScene(number) {
 }
 
 
-function createInterface() {
+function createPropertiesSliders() {
 
     let i = 0
 
@@ -574,8 +578,6 @@ function updateSceneSliders(){
         sliders[slider].elt.value = newValue
         sliderValues[slider] = newValue
     }
-
-    //
 }
 
 function sceneMixer(){
@@ -590,22 +592,15 @@ function sceneMixer(){
 }
 
 function updateSliderValue(evt) {
-    // console.log("update " + evt.target.id + " " + evt.target.value)
     sliderValues[evt.target.id] = Number(evt.target.value)
 }
 
 bc.onmessage = (event) => {
-    console.log(event)
     let message = event.data.split(':');
-    let sliderNo = message[0]
     let value = message[1]
-    console.log(sliderNo)
 
-
-    //console.log(message)
-    //sliderValues[evt.target.id]
-    sliders[sliderNo].evt.value = value
-
+    document.getElementById("sceneSlider" + message[0]).value = value
+    updateSceneSliders()
 };
 
 
@@ -644,13 +639,8 @@ function startAudio() {
 
 function controlChange(control) {
     // use control.type, .channel, .currentSliderNo, .controllerName, .value
-    //console.log(control.controller.number)
 
     currentSliderNo = control.controller.number
-
-    // if (control.controller.number == 30){
-    //     alert("foundthe30")
-    // }
 
     slider = sliders[sliderKeys[sliderNo]]
     if (slider) {
