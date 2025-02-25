@@ -74,16 +74,17 @@ function setupMidi(idIn, idOut) {
         } else {
             midiInput = WebMidi.getInputByName(idIn)
         }
+        if (!midiInput) {
+            console.log("Midi Device " + idIn + " not found")
+            return
+        }
 
         if(typeof idOut === 'number') {
             midiOutput = WebMidi.outputs[idOut]
         } else {
             midiOutput - WebMidi.getOutputByName(idOut)
         }
-        if (!midiInput) {
-            console.log("Midi Device " + idOut + " not found")
-            return
-        }
+
 
         midiInput.addListener('midimessage', 'all', function(e) {
             if(midiThru) {

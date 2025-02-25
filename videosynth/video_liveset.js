@@ -4,6 +4,8 @@ beatLength = 5000
 lastBeat = 0
 currentSeed = 0
 
+let imgs = []
+
 let scenes = []
 let activeScene = 0
 
@@ -18,7 +20,7 @@ let maxNoiseScale = 0.2
 let curlNoiseScale
 let maxNoiseTimeScale = 0.051
 var maxSpawnRadius = 500
-var maxSpawnCirleSpeed = 1
+var maxSpawnCirleSpeed = 0.05
 let maxStokeWeight = 40
 //var maxSpawnOffsetMultiplier = 10
 
@@ -32,7 +34,7 @@ var spawnCircleAngle = 0
 //Webmidi
 /* PREFS */
 let midiDeviceIn = "USB MIDI ADC 64"// [ID] or "device name"
-let midiDeviceOut = 1 // [ID] or "device name"
+let midiDeviceOut = null // [ID] or "device name"
 let midiThru = false // optionally pass all in -> out
 
 let midiInput, midiOutput, midiMsg = {}
@@ -225,8 +227,8 @@ function draw() {
 
     translate(width / 2, height / 2)
 
-    rotation += ((sliderValues.rotation - 0.5) / 40)
-    rotate(rotation)
+   // rotation += ((sliderValues.rotation - 0.5) / 40)
+    rotate(sliderValues.rotation - 0.5)
 
     //Test Performance of certain things
     //testPerformance();
@@ -258,7 +260,7 @@ function draw() {
 
     let colorChange = (sliderValues.colorChange - 0.5) / 5000
     spawnRadius = sliders["spawnRadius"].value()
-    spawnCirleSpeed = sliders["spawnCirleSpeed"].value()
+    spawnCirleSpeed = (2 ** (sliders["spawnCirleSpeed"].value() * 4)) / 8
     let stokeWeight = sliders["stokeWeight"].value()
     let particleNo = Math.floor((particleArrayLength - 1) * sliders["particleReducer"].value()) + 1
 
@@ -318,22 +320,40 @@ function draw() {
             }
         }
 
-        if (i % 100 == 0 && sliders["img1Alpha"].value() > 0.1) {
+        let fishcount = particleNo / (particleNo / 1000)
+        if (i % fishcount == 0 && sliders["img1Alpha"].value() > 0.1) {
             tint(255, sliders["img1Alpha"].value())
-            image(img, p.x, p.y, 200, 200);
+            image(imgs[4], p.x, p.y, 200, 200);
         }
-        if (i % 70 == 0 && sliders["img2Alpha"].value() > 0.1) {
+        if (i % (fishcount + 80) == 0 && sliders["img2Alpha"].value() > 0.1) {
             tint(255, sliders["img2Alpha"].value())
-            image(img, p.x, p.y, 200, 200);
+            image(imgs[5], p.x, p.y, 200, 200);
         }
-        if (i % 80 == 0 && sliders["img3Alpha"].value() > 0.1) {
+        if (i % (fishcount + 70) == 0 && sliders["img3Alpha"].value() > 0.1) {
             tint(255, sliders["img3Alpha"].value())
-            image(img, p.x, p.y, 200, 200);
+            image(imgs[2], p.x, p.y, 200, 200);
         }
-        if (i % 90 == 0 && sliders["img4Alpha"].value() > 0.1) {
+        // if (i % (fishcount + 20) == 0 && sliders["img4Alpha"].value() > 0.1) {
+        //     tint(255, sliders["img4Alpha"].value())
+        //     image(imgs[3], p.x, p.y, 200, 200);
+        // }
+        if (i % (fishcount / 2 + 100) == 0 && sliders["img4Alpha"].value() > 0.1) {
             tint(255, sliders["img4Alpha"].value())
-            image(img, p.x, p.y, 200, 200);
+            image(imgs[7], p.x, p.y, 200, 200);
         }
+        if (i % (fishcount + 5) == 0 && sliders["img4Alpha"].value() > 0.1) {
+            tint(255, sliders["img4Alpha"].value())
+            image(imgs[6], p.x, p.y, 200, 200);
+        }
+
+        // if (i % (fishcount + 90) == 0 && sliders["img4Alpha"].value() > 0.1) {
+        //     tint(255, sliders["img4Alpha"].value())
+        //     image(imgs[4], p.x, p.y, 200, 200);
+        // }
+        // if (i % (fishcount + 420) == 0 && sliders["img4Alpha"].value() > 0.1) {
+        //     tint(255, sliders["img4Alpha"].value())
+        //     image(imgs[5], p.x, p.y, 200, 200);
+        // }
 
         if (sliderValues.line2Alpha
             && i % 10 == 0
@@ -397,7 +417,14 @@ function spawnParticle(p, i, spawnRate) {
 }
 
 function preload() {
-    img = loadImage('img/1814.png');
+    imgs.push(loadImage('img/fish1.png'))
+    imgs.push(loadImage('img/fish2.png'))
+    imgs.push(loadImage('img/fish3.png'))
+    imgs.push(loadImage('img/fish4.png'))
+    imgs.push(loadImage('img/bubble1.png'))
+    imgs.push(loadImage('img/bubble2.png'))
+    imgs.push(loadImage('img/computer.png'))
+    imgs.push(loadImage('img/cloud-999.png'))
 }
 
 function keyPressed() {
@@ -519,6 +546,7 @@ function loadScene(number) {
     });
 
     document.getElementById("loadScene" + number).classList.add("active")
+
 }
 
 
@@ -570,10 +598,6 @@ function updateSceneSliders(){
             valueFromScenes += Number (scenes[i][slider] * value)
         })
 
-        if (slider == "zoomSpeed"){
-            console.log("total value " + totalValue + " velues from added " + valueFromScenes)
-        }
-
         let newValue = valueFromScenes / totalValue
         sliders[slider].elt.value = newValue
         sliderValues[slider] = newValue
@@ -596,11 +620,13 @@ function updateSliderValue(evt) {
 }
 
 bc.onmessage = (event) => {
+
     let message = event.data.split(':');
     let value = message[1]
 
     document.getElementById("sceneSlider" + message[0]).value = value
     updateSceneSliders()
+    sceneMixer()
 };
 
 
@@ -642,10 +668,10 @@ function controlChange(control) {
 
     currentSliderNo = control.controller.number
 
-    slider = sliders[sliderKeys[sliderNo]]
+    slider = sliders[sliderKeys[currentSliderNo]]
     if (slider) {
         slider.elt.value = control.value
-        sliderValues[sliderKeys[sliderNo]] = control.value
+        sliderValues[sliderKeys[currentSliderNo]] = control.value
     }
 }
 
@@ -665,4 +691,45 @@ function downloadScenes(){
             window.URL.revokeObjectURL(url);
         }, 0);
 
+}
+
+
+//Stolen from Ted Davis p5live.org
+function popStream(force){
+    let p5pop, p5popStream, p5popActive = true
+
+    icon = {}
+    icon.maximize = ""
+    newBG = "black"
+
+    if(force){
+        p5popActive = true;
+    }
+    // if(sketchLoaded && p5popActive){
+        p5popStream = document.querySelector('canvas').captureStream()
+
+        if(p5pop && !p5pop.closed){
+            p5pop.vid.srcObject = p5popStream;
+        }else{
+            // technique built upon : http://plnkr.co/edit/jDzbtPYrYItQ4peplOAN
+            let popup_html = '<!DOCTYPE html><html><head><title>P5LIVE - VISUALS STREAM</title></head><body><div id="but" style="position:fixed;right:5px;top:5px;z-index:10;border:none;color:#fff;padding:5px;font-size:16pt;cursor:pointer;opacity:.5;" onmouseenter="this.style.opacity=1;" onmouseleave="this.style.opacity=.5;" onclick="openFullscreen();" title="Fullscreen">'+icon.maximize+'</div><br><video id="vid" playsinline autoplay muted style="position:fixed;left:0;top:0;width:100vw;height:100vh;background-color:#000;"></video><script>var vid=document.getElementById("vid");document.body.style.margin="0";document.body.style.background="'+newBG+'";function openFullscreen(){if(vid.requestFullscreen) {vid.requestFullscreen(); } else if (vid.mozRequestFullScreen) { /* Firefox */ vid.mozRequestFullScreen();}else if(vid.webkitRequestFullscreen) {/* Chrome, Safari & Opera */ vid.webkitRequestFullscreen();}else if(vid.msRequestFullscreen){/* IE/Edge */ vid.msRequestFullscreen();}}<\/script><style>::-webkit-media-controls {display:none !important;}<\/style></body></html>';
+            let popup_url = URL.createObjectURL(new Blob([popup_html], {
+                type: 'text/html'
+            }));
+            p5pop = window.open(popup_url, "P5LIVE - VISUALS STREAM", 'left=0,top=0,width=0,height=0');
+            URL.revokeObjectURL(popup_url);
+            p5pop.onload = function() {
+                p5pop.vid.srcObject = p5popStream;
+                // let ctrls = p5pop.document.getElementById("controldiv");
+                // ctrls.disabled="true";
+            }
+
+            var p5popTick = setInterval(function() {
+                if (p5pop.closed) {
+                    p5popActive = false;
+                    clearInterval(p5popTick);
+                }
+            }, 500);
+        }
+    // }
 }

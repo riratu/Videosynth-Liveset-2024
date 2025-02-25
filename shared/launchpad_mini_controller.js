@@ -16,7 +16,7 @@ let currentMode = modes.overview
 function noteOn(note) {
     // use note.type, .channel, .name, .number, .octave, .velocity
 
-    //Buttons on the right as Sliders
+    //Buttons on the right on the Pad as Sliders
     if ((note.number + 8) % 16 == 0){
         vel = 7 - ((note.number -8) / 16)
         setButton(currentNote, vel / velocitySeps)
@@ -36,6 +36,7 @@ function noteOn(note) {
         currentSliderInScene = column % 4
 
         highlightSelectedSlider(sceneNo, currentSliderInScene);
+        sounds[selection.no].connect(merger, 0, 3);
 
         renderFaders()
         currentMode = modes.faders
@@ -72,13 +73,13 @@ function renderLanunchpad(){
 }
 
 function renderFaders(){
-    let velocity = slider[selection.no].value;
+    let velocity = audioTrack[selection.no].getValue();
     renderSlider(0, velocity, 4)
 
-    velocity = reverbSlider[selection.no].value;
+    velocity = reverbSlider[selection.no].getValue();
     renderSlider(2, velocity, 2)
 
-    velocity = fx2Slider[selection.no].value;
+    velocity = fx2Slider[selection.no].getValue();
     renderSlider(4, velocity, 7)
 
     function renderSlider(colOffset, velocity, colorNo) {
@@ -121,9 +122,9 @@ function renderOverview() {
     for (i = 0; i < 64; i ++) {
         let scene = Math.floor(i / 4)
         let sliderinScene = i % 4
-        currentSlider = slider[sliderNosByScenes[scene]?.[sliderinScene]] ?? null;
+        currentSlider = audioTrack[sliderNosByScenes[scene]?.[sliderinScene]] ?? null;
         if (null !== currentSlider) {
-            velocity = Number(currentSlider.value)
+            velocity = Number(currentSlider.getValue())
         } else {
             velocity = 0
         }
@@ -136,6 +137,10 @@ function renderOverview() {
 }
 
 function noteOff(note) {
+    try {
+        sounds[selection.no].disconnect(merger, 0, 3);
+    } catch (e){}
+
     if (note.number === launchPadSelect) {
 
         renderOverview()
@@ -148,18 +153,17 @@ function noteOff(note) {
 function setButton(buttonIndex, velocity) {
 
     if (!midiOutput){
-        console.log("Launchpad out not found")
         return
     }
 
     const colorMap = [0, 16, 32, 21, 21, 18, 11, 1, 2, 3];
 
     let colorIndex = Math.round(velocity * (colorMap.length - 1));
-    let midiColor = colorMap[colorIndex];
+    let midiColor = colorMap[colorIndex] / 127;
 
     midiOutput
         .channels[1]
-        .playNote(buttonIndex, { attack:  midiColor / 127});
+        .playNote(buttonIndex, { attack:  midiColor});
 }
 
 function parseMidi(mm) {
@@ -180,7 +184,8 @@ function launchpadControlChange(control){
     const controllserSplitPoint = 5
 currentControll = control.controller.number - controllerOffset
     if (currentControll >= controllserSplitPoint){
-        rampTime = 1 + Math.pow((currentControll - controllserSplitPoint), 3)
+        rampTime = Math.pow((currentControll - controllserSplitPoint), 2)
+        console.log("Set Ramp Time " + rampTime)
 
         for (i = 0; i < 4; i++){
             WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(i + controllerOffset + controllserSplitPoint, 0);
@@ -218,13 +223,6 @@ function setupLaunchpad() {
         }
 
         midiInput.addListener('midimessage', 'all', function(e) {
-            if(midiThru) {
-                if(e.data.length == 3) {
-                    midiOutput.send(e.data[0], [e.data[1], e.data[2]])
-                } else {
-                    midiOutput.send(e.data[0])
-                }
-            }
             midiMsg = {}
             midiMsg.data = e.data
             midiMsg.timestamp = e.timestamp

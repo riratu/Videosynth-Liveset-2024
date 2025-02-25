@@ -33,15 +33,16 @@
             background-color: lightgrey;
             padding: 10px;
             border-radius: 5px;
+            width: 700px;
         }
 
         #sliderContainer {
             display: flex;
             flex-flow: column wrap;
-            height: 85%;
+            height: 65%;
             background-color: darkgrey;
             padding: 5px;
-            overflow: hidden;
+            width: 600px;
         }
         /*#sceneLinkContainer {*/
         /*    display: flex;*/
@@ -103,6 +104,7 @@
 <main>
     <div id="menuContainer">
         <button id="startButton" onclick="startAudio()">Start Audio</button>
+        <button id="popStream" onclick="popStream()">Visuals Popup</button>
         <button id="saveButton" onclick="downloadScenes()">DownloadScenes</button>
         <div id="sceneMetaButtons">
             <button onclick="saveScene()">Save Scene</button>
