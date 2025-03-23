@@ -1,50 +1,50 @@
+import { audioTrack } from './audio.js';
 
-//let currentColor = 0
-let currentNote = 0
-let velocitySeps = 7
-let launchPadSelect
-
-const dawMidiDevice = "IAC-Treiber Bus 1"
+//Globals
 const launchpadDeviceName = "Launchpad Mini"
-
 const modes = Object.freeze({
     faders: "faders",
     overview: "overview"
 });
 let currentMode = modes.overview
 
+let velocitySeps = 7
+let currentNote = 0
+let launchPadSelect
+let rampTime
+let midiOutput
+
 function noteOn(note) {
     // use note.type, .channel, .name, .number, .octave, .velocity
 
     //Buttons on the right on the Pad as Sliders
     if ((note.number + 8) % 16 == 0){
-        vel = 7 - ((note.number -8) / 16)
+        let vel = 7 - ((note.number -8) / 16)
         setButton(currentNote, vel / velocitySeps)
         setSliderValue(vel / velocitySeps, selection.no);
         return
     }
 
     //Overview Section
-    if (currentMode === modes.overview){
-        launchPadSelect = note.number
-        currentNote = note.number
+    if (currentMode === modes.overview) {
+        launchPadSelect = note.number;
+        currentNote = note.number;
 
-        row = Math.floor(note.number / 16)
-        column = note.number % 16
+        let row = Math.floor(note.number / 16);
+        let column = note.number % 16;
 
-        sceneNo = row * 2 + (Math.floor(column/4))
-        currentSliderInScene = column % 4
+        // Use 8 columns to get contiguous slider indexes.
+        selectSliderByNo(row * 8 + column);
+        sounds[selection.no].connect(merger, 0, maxChannelCount - 1);
 
-        highlightSelectedSlider(sceneNo, currentSliderInScene);
-        sounds[selection.no].connect(merger, 0, 3);
-
-        renderFaders()
-        currentMode = modes.faders
-        return
+        renderFaders();
+        currentMode = modes.faders;
+        return;
     }
 
-    if (currentMode === modes.faders){
 
+    //Fader Section
+    if (currentMode === modes.faders){
         let slider0Vel = mapLaunchpadSliderToGain(note.number, 0)
         if (undefined !== slider0Vel){
             setSliderValue(slider0Vel, parameters.gain);
@@ -67,7 +67,7 @@ function noteOn(note) {
 
 }
 
-function renderLanunchpad(){
+export function renderLaunchpad(){
     if (currentMode === modes.overview) renderOverview()
     if (currentMode === modes.faders) renderFaders()
 }
@@ -89,7 +89,7 @@ function renderFaders(){
             for (let row = 0; row < 8; row++) {
 
                 let threshold = 16 - (row + (8 - col * 8));
-                let color = velocity * 16 >= threshold ? colorNo : 0;
+                let color = 1 + velocity * 16 >= threshold ? colorNo : 0;
 
                 setButton(col + colOffset + row * 16, color / 7);
             }
@@ -119,18 +119,12 @@ function mapLaunchpadSliderToGain(note, sliderNo){
 }
 
 function renderOverview() {
-    for (i = 0; i < 64; i ++) {
-        let scene = Math.floor(i / 4)
-        let sliderinScene = i % 4
-        currentSlider = audioTrack[sliderNosByScenes[scene]?.[sliderinScene]] ?? null;
-        if (null !== currentSlider) {
-            velocity = Number(currentSlider.getValue())
-        } else {
-            velocity = 0
-        }
+    for (let i = 0; i < 64; i++) {
+        let currentSlider = audioTrack[i] ?? null;
+        let velocity = currentSlider ? Number(currentSlider.getValue()) : 0;
 
-        row = Math.floor(scene / 2) * 16
-        col = sliderinScene + (scene % 2 * 4)
+        let row = Math.floor(i / 8) * 16;
+        let col = (i % 4) + ((Math.floor(i / 4) % 2) * 4);
 
         setButton(col + row, velocity);
     }
@@ -138,7 +132,7 @@ function renderOverview() {
 
 function noteOff(note) {
     try {
-        sounds[selection.no].disconnect(merger, 0, 3);
+        sounds[selection.no].disconnect(merger, 0, maxChannelCount -1);
     } catch (e){}
 
     if (note.number === launchPadSelect) {
@@ -179,22 +173,24 @@ function parseMidi(mm) {
     }
 }
 
+//Top Buttons
 function launchpadControlChange(control){
     const controllerOffset= 103
     const controllserSplitPoint = 5
-currentControll = control.controller.number - controllerOffset
+    const currentControll = control.controller.number - controllerOffset
     if (currentControll >= controllserSplitPoint){
         rampTime = Math.pow((currentControll - controllserSplitPoint), 2)
         console.log("Set Ramp Time " + rampTime)
 
-        for (i = 0; i < 4; i++){
+        for (let i = 0; i < 4; i++){
             WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(i + controllerOffset + controllserSplitPoint, 0);
         }
+        WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(control.controller.number, 5);
     }
-    WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(control.controller.number, 5);
+
 }
 
-function setupLaunchpad() {
+export function setupLaunchpad() {
     const deviceName = "Launchpad Mini"
 
     WebMidi.enable(function(err) {
@@ -202,8 +198,8 @@ function setupLaunchpad() {
             console.log("WebMidi could not be enabled.", err);
         }
 
-        midiInput = WebMidi.getInputByName(deviceName)
-        midiOutput = WebMidi.getOutputByName(deviceName)
+        let midiInput = WebMidi.getInputByName(deviceName)
+        let midiOutput = WebMidi.getOutputByName(deviceName)
 
         if (!midiInput) {
             console.log("Launchpad in not found")
@@ -223,7 +219,7 @@ function setupLaunchpad() {
         }
 
         midiInput.addListener('midimessage', 'all', function(e) {
-            midiMsg = {}
+            let midiMsg = {}
             midiMsg.data = e.data
             midiMsg.timestamp = e.timestamp
         })

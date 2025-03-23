@@ -9,7 +9,7 @@ $iterator = new RecursiveIteratorIterator(
     RecursiveIteratorIterator::LEAVES_ONLY
 );
 
-$jsFile = fopen("soundsFiles.js", "w");
+$jsFile = fopen("sounds/soundsFiles.js", "w");
 fwrite($jsFile, "let soundsFiles = [\n");
 
 foreach ($iterator as $file) {

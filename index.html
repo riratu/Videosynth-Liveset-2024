@@ -1,6 +1,73 @@
-<h1>
-<a href="audiolooper/audiolooper.html">Audio</a>
-</h1>
-<h1>
-<a href="videosynth/videosynth.html">Video</a>
-</h1>
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everything</title>
+    <script src="lib/p5.min.js"></script>
+    <script type="module" src="js/launchpad_mini_controller.js"></script>
+    <script src="lib/webmidi.iife.js"></script>
+    <script src="lib/Tone.js"></script>
+    <script src="sounds/soundsFiles.js"></script>
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/video.js"></script>
+    <script type="module" src="./js/audio.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="sliders.css">
+</head>
+</head>
+<body>
+<main>
+    <div id="helloBackground">
+        <div id="helloContainer">
+            <h1>This is about Sound</h1>
+            <p>It will load 100MB</p>
+            <h2>
+                <button id="helloClick">Load Sound</button>
+                <button id="visualsOnly">Display only Visuals</button>
+            </h2>
+        </div>
+        <div id="audio-sliders-container" class="many-sliders-container hide">
+        </div>
+        <div class="hide" id="visualsMenuContainer">
+            <div class="something">
+            </div>
+            <h3>Scenes</h3>
+            <div id="sceneMetaButtons">
+                <button onclick="saveScene()">Save Scene</button>
+                <button onclick="deleteScene()">Delete Scene</button>
+                <button onclick="updateScene()">Update Scene</button>
+                <button id="saveButton" onclick="downloadScenes()">DownloadScenes</button>
+            </div>
+            <div id="sceneLinkContainer">
+                <button id="selectSceneMixer" class="sceneLink" onclick="sceneMixer()">Scene Mixer</button>
+            </div>
+            <div>
+                <div>
+                    <h3>SceneSliders</h3>
+                    <div class="hide" id="sceneSliderContainer">
+
+                    </div>
+                </div>
+            </div>
+            <div id="sliderContainer">
+            </div>
+        </div>
+    </div>
+    <div id="mainButtons">
+        <button id="toggleExpertModeButton" onclick="toggleExpert()">Toggle Expert Mode</button>
+        <button onclick="toggleAudio()" class="expert">Toggle Audio</button>
+        <button onclick="setZero()" class="expert">Zero All</button>
+        <div class="expert">
+            <label for="sidechain-slider">Sidechain Ratio: </label>
+            <input type="range" class="mainSliders" id="sidechain-slider" min="0" max="5" step="1e-18" value="">
+            <span class="valueDisplay" id="ratio-value"></span>
+            <label for="sidechain-release">SC Release: </label>
+            <input type="range" class="mainSliders" id="sidechain-release" min="0" max="2" step="1e-18" value="">
+            <span class="valueDisplay" id="release-value"></span>
+            <button id="popStream" style="float: right">Visuals Popup</button>
+        </div>
+    </div>
+</main>
+</body>
+</html>

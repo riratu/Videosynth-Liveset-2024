@@ -39,7 +39,7 @@ h3 {
 
 #sceneSliderContainer > div {
     /*background: red;*/
-    width: 150pxm
+    width: 150px;
 }
 
 #sceneLinkContainer, #sceneMetaButtons {
@@ -109,7 +109,6 @@ main {
     border-radius: 10px;
     overflow: hidden;
     white-space: nowrap;
-    flex: 1 0 calc(25% - 20px);
 }
 
 .visual-slider-entity {
@@ -140,9 +139,10 @@ right: 0px;
 .many-sliders-container {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
     padding: 5px;
     width: 100%;
-    max-height: 100%;
+    max-height: 800px;
     max-width: 800px;
     overflow: scroll;
     padding-top: 20px;
@@ -172,6 +172,8 @@ button {
     border-radius:10px;
     padding: 10px;
     overflow-y: scroll;
+    background: rgba(0, 0, 0, 0.6);
+    /*flex-shrink: 2;*/
 }
 
 #visualsMenuContainer > div {
@@ -186,7 +188,6 @@ button {
 }
 
 .scene {
-    width: 180px;
     border-radius:10px;
     opacity: 70%;
     padding: 5px;
@@ -194,7 +195,12 @@ button {
     /*background: linear-gradient(to bottom right, #aaccff, #ffe6f2);*/
     border: 1px dotted white;
     margin-left: -1px;
-    margin-top: -1px
+    margin-top: -1px;
+    box-sizing: border-box;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*flex-wrap: wrap;*/
+    max-width: 200px;
 }
 
 body.show-expert .scene {
@@ -203,6 +209,7 @@ body.show-expert .scene {
 }
 
 /*.slider-entity :not(.show-expert) {*/
+/*.slider-entity :not(.show-expert) {*/
 /*    background-color: darkgrey !important;*/
 
 /*}*/
@@ -210,6 +217,7 @@ body.show-expert .scene {
 .scene :not(.show-expert) {
     /*background-color: magenta !important;*/
     /*background-color: darkgrey;*/
+    max-height: 150px;
 }
 
 h3 {

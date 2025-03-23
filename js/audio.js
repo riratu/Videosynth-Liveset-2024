@@ -1,11 +1,17 @@
+import {setSceneSlider} from './video.js';
+import {renderLaunchpad} from './launchpad_mini_controller.js';
 
 let noSound = false
 let sounds = []
-var slider = []
+export var audioTrack = []
+let sceneNo = 0
+var sliderNoInScene = 0
+
+const bc = new BroadcastChannel("sceneValues");
 
 let settings = {}
 let folderColors = [
-   "lightblue",
+    "lightblue",
     "lightgreen",
     "LightSkyBlue",
     "lightyellow",
@@ -24,14 +30,7 @@ let sliderNosByScenes = []
 let rampTime = 1
 let lastSlider = 0
 let intervals = []
-
-const bc = new BroadcastChannel("sceneValues");
-
-// track: no
-//     parameters.gain
-//         slider
-//         gain
-//     parameters.reverb
+let maxChannelCount
 
 let parameters = Object.freeze({
     gain: "gain",
@@ -40,20 +39,12 @@ let parameters = Object.freeze({
 })
 
 let selection = {
-        scene: 0,
-        row: 0,
-        col: 0,
-        no: 0,
-        parameter: 0
-    }
-
-//Webmidi
-/* PREFS */
-let midiDeviceIn // = 1 // [ID] or "device name"
-let midiDeviceOut // = 1 // [ID] or "device name"
-
-let midiThru = false // optionally pass all in -> out
-let midiInput, midiOutput, midiMsg = {}
+    scene: 0,
+    row: 0,
+    col: 0,
+    no: 0,
+    parameter: 0
+}
 
 let soundFileDir = "sounds/compressed/"
 
@@ -66,7 +57,7 @@ let mainGains = []
 let reverbGains = []
 var reverbSlider = []
 var defaultReverbGain = 0.1
-const reverbFx = new Tone.Reverb(15).toDestination();
+const reverbFx = new Tone.Reverb(45).toDestination();
 reverbFx.wet.value = 1;
 
 let fx2Gains = []
@@ -90,12 +81,26 @@ let sideChainReleaseTime = 1
 const negate = new Tone.Multiply(-sideChainRatio)
 const follower = new Tone.Follower(sideChainReleaseTime)
 
+let merger
 
-function setup() {
-    settingsfromStorage = JSON.parse(localStorage.getItem("settings"))
-    if (settingsfromStorage){ settings = settingsfromStorage }
+export function setupAudio() {
+    maxChannelCount = Tone.getContext().rawContext.destination.maxChannelCount;
+    Tone.getContext().rawContext.destination.channelCount = maxChannelCount;
+    Tone.getContext().rawContext.destination.channelCountMode = "explicit";
+    Tone.getContext().rawContext.destination.channelInterpretation = "discrete";
 
-    if (settings.expertMode){
+    merger = Tone.getContext().rawContext.createChannelMerger(maxChannelCount);
+    merger.channelCount = 1;
+    merger.channelCountMode = "explicit";
+    merger.channelInterpretation = "discrete";
+    merger.connect(Tone.getContext().rawContext.destination);
+
+    let settingsfromStorage = JSON.parse(localStorage.getItem("settings"))
+    if (settingsfromStorage) {
+        settings = settingsfromStorage
+    }
+
+    if (settings.expertMode) {
         document.body.classList.add("show-expert")
     }
 
@@ -119,23 +124,29 @@ function setup() {
             onload: function () {  // Callback when the sound is loaded
                 loadedCount++;
                 if (loadedCount === totalSounds) {
-                    toggleAudio(); // Start once all are loaded
+                    Tone.Transport.start()
                 }
             }
         }).sync().start(0);
         sounds[i].volume.value = 0
 
-        defaultGain = Tone.gainToDb(defaultReverbGain)
+        let defaultGain = Tone.gainToDb(defaultReverbGain)
 
-        mainGains[i] = new Tone.Channel({ volume: -140 })
-        reverbGains[i] = new Tone.Channel({ volume: defaultGain }).connect(highpass)
-        fx2Gains[i] = new Tone.Channel({ volume: -100 }).connect(fx2)
+        mainGains[i] = new Tone.Channel({volume: -140, channelCount: 2})
+        reverbGains[i] = new Tone.Channel({
+            volume: defaultGain,
+            channelCount: 2
+        }).connect(highpass)
+        fx2Gains[i] = new Tone.Channel({
+            volume: -140,
+            channelCount: 2
+        }).connect(fx2)
 
         sounds[i].connect(mainGains[i])
         mainGains[i].connect(reverbGains[i])
         mainGains[i].connect(fx2Gains[i])
 
-        if (i < 5){
+        if (i < 5) {
             mainGains[i].fan(drumGroup, Tone.getDestination())
         } else {
             mainGains[i].connect(sidechainGroup)
@@ -167,8 +178,15 @@ function setup() {
     Tone.Transport.loopEnd = "32m";
 
 
-    setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
-    setupLaunchpad()
+    //Webmidi
+    /* PREFS */
+    //  let midiDeviceIn // = 1 // [ID] or "device name"
+    //let midiDeviceOut // = 1 // [ID] or "device name"
+
+// let midiThru = false // optionally pass all in -> out
+// let midiInput, midiOutput, midiMsg = {}
+    // setupMidi(midiDeviceIn, midiDeviceOut) // deviceIn, deviceOut
+
 
     let lastFolder = ""
     let containerDiv
@@ -179,10 +197,10 @@ function setup() {
     for (let i = 0; i < soundsFiles.length; i++) {
 
         let folderName = soundsFiles[i].split('/')[0]
-        if  (folderName !== lastFolder){
-            sceneNo ++
+        if (folderName !== lastFolder) {
+            sceneNo++
 
-            if (slidersinCurrentScene.length > 0){
+            if (slidersinCurrentScene.length > 0) {
                 sliderNosByScenes.push(slidersinCurrentScene)
                 slidersinCurrentScene = []
             }
@@ -191,14 +209,10 @@ function setup() {
             containerDiv = document.createElement("div")
             containerDiv.innerHTML = "<h3 class='expert'>" + folderName + "</h3>";
 
-            let bgColor = folderColors[sceneNo] ?? "#555"
-
-            //containerDiv.style.backgroundColor = bgColor;
             containerDiv.classList.add("scene");
 
-            const sliderContainer = document.getElementById("many-sliders-container");
+            const sliderContainer = document.getElementById("audio-sliders-container");
             sliderContainer.appendChild(containerDiv);
-
 
         }
 
@@ -210,24 +224,24 @@ function setup() {
 
         containerDiv.appendChild(div); // Set containerDiv as the parent
 
-            slidersinCurrentScene.push(i)
+        slidersinCurrentScene.push(i)
 
-            slider[i] = createNewSlider(0, sceneNo)
-        sliderDomObject = slider[i].slider
+        audioTrack[i] = createNewSlider(0, sceneNo)
+        let sliderDomObject = audioTrack[i].slider
         sliderDomObject.addEventListener("input", () => updateSound(i));
-            div.appendChild(sliderDomObject)
+        div.appendChild(sliderDomObject)
 
-        if (!simpleMode){
+        if (!simpleMode) {
 
             reverbSlider[i] = createNewSlider(defaultReverbGain, sceneNo)
-            reverbSliderDomObject = reverbSlider[i].slider
+            let reverbSliderDomObject = reverbSlider[i].slider
             reverbSliderDomObject.addEventListener("input", (() => updateReverb(i)))
             reverbSliderDomObject.classList.add("expert")
             div.appendChild(reverbSliderDomObject)
 
 
             fx2Slider[i] = createNewSlider(0, sceneNo)
-            fxSliderDomObject = fx2Slider[i].slider
+            let fxSliderDomObject = fx2Slider[i].slider
             fxSliderDomObject.addEventListener("input", (() => updateFx2(i)))
             fxSliderDomObject.classList.add("expert")
             div.appendChild(fxSliderDomObject)
@@ -236,7 +250,7 @@ function setup() {
     sliderNosByScenes.push(slidersinCurrentScene)
 }
 
-function createNewSlider(value, folderNo){
+function createNewSlider(value, folderNo) {
     let slider = document.createElement("input");
     slider.type = "range";
     slider.min = 0;
@@ -244,77 +258,72 @@ function createNewSlider(value, folderNo){
     slider.value = value;
     slider.step = 1e-18;
 
-    sliderobject = {}
-    sliderobject.getValue = () => { return Number(slider.value)}
+    let sliderobject = {}
+    sliderobject.getValue = () => {
+        return Number(slider.value)
+    }
     sliderobject.slider = slider
     sliderobject.scene = folderNo
 
     return sliderobject
 }
 
-function updateReverb(i){
-    const newValue = Number(reverbSlider[i].slider.value) * 4
+function updateReverb(i) {
+    const newValue = Number(reverbSlider[i].slider.value) * 2
     reverbGains[i].volume.value = Tone.gainToDb(newValue)
 }
 
-function updateFx2(i){
+function updateFx2(i) {
     const newValue = Number(fx2Slider[i].slider.value)
     fx2Gains[i].volume.value = Tone.gainToDb(newValue)
 }
 
+Tone.Transport.scheduleRepeat((time) => {
+    // updateanimationSliders(Tone.Transport.Seconds % 10)
+}, "8n");
+
 function toggleAudio() {
     // Resume or create the AudioContext
     const status = Tone.Transport.state;
-if (status === "started"){
-    Tone.Transport.stop()
-} else {
-    Tone.Transport.start()
-}
-
-    //
-    // context = getAudioContext();
-    // context.resume().then(() => {
-    //     console.log('AudioContext resumed');
-    // });
-
-    // sounds[0].loop();
-    // for (let i = 1; i < soundsFiles.length; i++) {
-    //     console.log(i)
-    //     console.log(sounds[i])
-    //         //sounds[i].syncedStart(sounds[0]);
-    //     sounds[i].loop()
-    // }
+    if (status === "started") {
+        Tone.Transport.stop()
+    } else {
+        Tone.Transport.start()
+    }
 }
 
 function updateSound(i) {
     if (!noSound) {
-        mainGains[i].volume.value = Tone.gainToDb((slider[i].slider.value * 0.5))
+        mainGains[i].volume.value = Tone.gainToDb((audioTrack[i].slider.value * 0.5))
     }
 
     updateBroadcastChannel(i)
 
-    renderLanunchpad()
+    renderLaunchpad()
 }
 
-function updateBroadcastChannel(i){
-    if (slider[i].scene > 1) {
-        let max = 0;
-        sliderNosByScenes[slider[i].scene].forEach(
-            (index) => {
-                max = Math.max(slider[index].slider.value, max)
-            })
+function updateBroadcastChannel(i) {
+    if (audioTrack[i].scene > 1) {
+        let sum = 0;
+        let count = 0;
 
-        //Broadcast the Values to the visual thingie
-        bc.postMessage(slider[i].scene + ":" + max);
+        sliderNosByScenes[audioTrack[i].scene].forEach((index) => {
+            sum += Number(audioTrack[index].slider.value);
+            count++;
+        });
 
+        let avg = sum / count
 
+        // Broadcast the Values to the visual thingie
+        bc.postMessage(audioTrack[i].scene + ":" + avg);
+        setSceneSlider(audioTrack[i].scene, avg);
     }
 }
 
-function setZero(){
+function setZero() {
     for (let i = 0; i < soundsFiles.length; i++) {
         mainGains[i].volume.value = Tone.gainToDb(0)
-        slider[i].slider.value = 0
+        audioTrack[i].slider.value = 0
 
         reverbGains[i].volume.value = Tone.gainToDb(defaultReverbGain)
         reverbSlider[i].slider.value = defaultReverbGain
@@ -326,168 +335,200 @@ function setZero(){
 
 function controlChange(control) {
     // use control.type, .channel, .selection.no, .controllerName, .value
-    controllerNo = control.controller.number
-    currentSlider = slider[controllerNo]
-    if (currentSlider){
+    let controllerNo = control.controller.number
+    let currentSlider = audioTrack[controllerNo]
+    if (currentSlider) {
         currentSlider.value = control.value
         updateSound(controllerNo)
     }
 }
 
-function highlightSelectedSlider(sceneNo, sliderNoInScene) {
-    newSliderNo = sliderNosByScenes[sceneNo][sliderNoInScene]
-    newSlider = slider[newSliderNo]
+function selectSliderByNo(newSliderNo) {
+    let newSlider = audioTrack[newSliderNo]
     if (undefined !== newSliderNo) {
-        lastSlider = slider[selection.no]
+        lastSlider = audioTrack[selection.no]
         selection.no = newSliderNo
         lastSlider.slider.parentElement.classList.remove("red");
         newSlider.slider.parentElement.classList.add("red");
-
-        //Preview Sound
-        //sounds[selection.no].connect(Tone.Destination, 1, 2);
     }
+}
+
+function highlightSliderByScene(newSliderNo) {
+    newSliderNo = sliderNosByScenes[sceneNo][sliderNoInScene]
+    selectSliderByNumber(newSliderNo)
 }
 
 function setSliderValue(value, targetParameter = null) {
-    value = Number(value)
-    console.log("Set Controller " + targetParameter + " to value " + value)
+    value = Number(value);
+    console.log("Set Controller " + targetParameter + " to value " + value);
 
-    let sliderNumber= selection.no
+    let sliderNumber = selection.no;
 
-    //If there is already an interval for this paremater, clear it
-    if(undefined !==intervals[sliderNumber + targetParameter]){
+// Clear existing interval for this parameter
+    if (intervals[sliderNumber + targetParameter] !== undefined) {
         clearInterval(intervals[sliderNumber + targetParameter]);
     }
 
-    // Set the interval to update the value over the specified duration
     let endValue = value;
-    let step = rampTime * 100 // Number of steps for smooth transition
+    let durationMs = rampTime * 1000; // Convert seconds to milliseconds
+    let stepTime = 10; // Interval step time in milliseconds
+    let totalSteps = durationMs / stepTime;
     let currentStep = 0;
 
-    let parameterSlider
-    let parameterGain
-    //Set the destination
-    if (targetParameter === parameters.reverb){
-        parameterSlider = reverbSlider[sliderNumber]
-        parameterGain =  reverbGains[sliderNumber]
-    } else if (targetParameter === parameters.fx2){
-        parameterSlider = fx2Slider[sliderNumber]
-        parameterGain = fx2Gains[sliderNumber]
+    let parameterSlider;
+    let parameterGain;
+
+    if (targetParameter === parameters.reverb) {
+        parameterSlider = reverbSlider[sliderNumber];
+        parameterGain = reverbGains[sliderNumber];
+    } else if (targetParameter === parameters.fx2) {
+        parameterSlider = fx2Slider[sliderNumber];
+        parameterGain = fx2Gains[sliderNumber];
     } else {
-        parameterSlider =  slider[sliderNumber]
-        parameterGain = mainGains[sliderNumber]
+        parameterSlider = audioTrack[sliderNumber];
+        parameterGain = mainGains[sliderNumber];
     }
 
-    let startValue = Number(parameterSlider.getValue())
+    let startValue = Number(parameterSlider.getValue());
 
-    // Set the interval to update the value over the specified duration
     intervals[sliderNumber + targetParameter] = setInterval(() => {
         currentStep++;
-        currentValue = (startValue + (endValue - startValue) * (currentStep / step));
+        let currentValue = startValue + (endValue - startValue) * (currentStep / totalSteps);
 
-        if (currentStep < step) {
-            parameterSlider.slider.value = currentValue
-            parameterGain.volume.value = Tone.gainToDb(currentValue)
-            updateBroadcastChannel(sliderNumber)
-            return
+        if (currentStep < totalSteps) {
+            parameterSlider.slider.value = currentValue;
+            parameterGain.volume.value = Tone.gainToDb(currentValue);
+            updateBroadcastChannel(sliderNumber);
+        } else {
+            parameterSlider.slider.value = endValue;
+            parameterGain.volume.value = Tone.gainToDb(endValue);
+            clearInterval(intervals[sliderNumber + targetParameter]);
+            delete intervals[sliderNumber + targetParameter];
+            renderLanunchpad();
         }
+    }, stepTime);
 
-        clearInterval(intervals[sliderNumber + targetParameter]);
-        delete intervals[sliderNumber + targetParameter];
+    let renderInterval;
+    if (Object.keys(intervals).length > 0) {
+        renderInterval = setInterval(() => {
+            renderLanunchpad();
+            if (Object.keys(intervals).length === 0) {
+                clearInterval(renderInterval);
+            }
+        }, 200);
+    }
 
-        renderLanunchpad()
-    }, (rampTime / 100));
 }
 
-document.addEventListener('keydown', keyPressed);
-function keyPressed(event) {
+document.addEventListener('keydown', audiokeyPressed);
+
+function audiokeyPressed(event) {
     //console.log(event)
 
-    key = event.key
-
+    let key = event.key
     if (key == "Tab") {
         toggleAudio()
     }
 
     //Select the current Ramp Time
-    let rampTimeMap = { "A": 1,  "S": 4, "D": 8, "F": 16, "G": 32 }
-    if (rampTimeMap[key]){
+    let rampTimeMap = {"A": 1, "S": 4, "D": 8, "F": 16, "G": 32}
+    if (rampTimeMap[key]) {
         rampTime = Number(rampTimeMap[key])
         console.log("Ramp Time: " + rampTime + " sek")
         return
     }
 
-    let columnMap =  {
+    let columnMap = {
         "q": 0, "w": 1, "e": 2, "r": 3,
     }
-    if (columnMap[key] !== undefined){
+    if (columnMap[key] !== undefined) {
         selection.col = columnMap[key]
         selection.scene = selection.col + (selection.row * columnNo)
         console.log("Change Scene to " + columnMap[key])
-        highlightSelectedSlider(selection.scene, 0);
+        highlightSliderByScene(selection.scene, 0);
         return
     }
 
-    let rowMap =  {
-        "1": 1, "2": 2, "3": 3, "4": 4, "5": 4, "6": 7, "7": 8, "8": 9, "9":10, "0": 11
+    let rowMap = {
+        "1": 1,
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 4,
+        "6": 7,
+        "7": 8,
+        "8": 9,
+        "9": 10,
+        "0": 11
     }
-    if (rowMap[key] !== undefined){
+    if (rowMap[key] !== undefined) {
         selection.row = rowMap[key] - 1
         selection.scene = selection.col + (selection.row * 4)
         console.log("Change Scene to " + columnMap[key])
-        highlightSelectedSlider(selection.scene, 0);
+        highlightSliderByScene(selection.scene, 0);
         return
     }
 
     //Select the current slider
-    let sliderMap = {  "u": 0, "i": 1, "o": 2, "p": 3 }
-    if (sliderMap[key] !== undefined){
+    let sliderMap = {"u": 0, "i": 1, "o": 2, "p": 3}
+    if (sliderMap[key] !== undefined) {
         selection.noInSceneo = (sliderMap[key])
-        highlightSelectedSlider(selection.scene, sliderMap[key]);
+        highlightSliderByScene(selection.scene, sliderMap[key]);
         return
     }
 
-    if (key == "ArrowDown"){
-        if (undefined !== sliderNosByScenes[selection.scene][selection.noInSceneo + 1]){
-            selection.noInSceneo ++
-            highlightSelectedSlider(selection.scene, selection.noInSceneo);
+    if (key == "ArrowDown") {
+        if (undefined !== sliderNosByScenes[selection.scene][selection.noInSceneo + 1]) {
+            selection.noInSceneo++
+            highlightSliderByScene(selection.scene, selection.noInSceneo);
         }
         return
     }
 
-    if (key == "ArrowUp"){
+    if (key == "ArrowUp") {
         console.log("SCIS OLD " + selection.noInSceneo)
         if (selection.noInSceneo < 1) return
-        selection.noInSceneo --
+        selection.noInSceneo--
         console.log("SCIS NEW " + selection.noInSceneo)
-        highlightSelectedSlider(selection.scene, selection.noInSceneo);
+        highlightSliderByScene(selection.scene, selection.noInSceneo);
         return
     }
 
-    if (key == "ArrowRight"){
-        selection.scene ++
+    if (key == "ArrowRight") {
+        selection.scene++
 
-        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]){
-            selection.noInSceneo =  sliderNosByScenes[selection.scene].length -1
+        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
+            selection.noInSceneo = sliderNosByScenes[selection.scene].length - 1
         }
 
-        highlightSelectedSlider(selection.scene, selection.noInSceneo);
+        highlightSliderByScene(selection.scene, selection.noInSceneo);
         return
     }
 
-    if (key == "ArrowLeft"){
-        selection.scene --
-        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]){
-            selection.noInSceneo =  sliderNosByScenes[selection.scene].length -1
+    if (key == "ArrowLeft") {
+        selection.scene--
+        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
+            selection.noInSceneo = sliderNosByScenes[selection.scene].length - 1
         }
-        highlightSelectedSlider(selection.scene, selection.noInSceneo);
+        highlightSliderByScene(selection.scene, selection.noInSceneo);
         return
     }
 
     //Set the value for the current slider
-    let valueMap = { "a": 0, "s": 1, "d": 2, "f": 3, "g": 4, "h": 5, "j": 6, "k": 7, "l": 8, "ö": 9 }
+    let valueMap = {
+        "a": 0,
+        "s": 1,
+        "d": 2,
+        "f": 3,
+        "g": 4,
+        "h": 5,
+        "j": 6,
+        "k": 7,
+        "l": 8,
+        "ö": 9
+    }
     let newValue = valueMap[key]
-    if (undefined !== newValue){
+    if (undefined !== newValue) {
         //console.log(newValue)
         //Set the Slider Value
         setSliderValue(newValue / 9, selection.no);
@@ -498,10 +539,4 @@ function keyPressed(event) {
 function toggleExpert() {
     settings.expertMode = document.body.classList.toggle("show-expert");
     localStorage.setItem("settings", JSON.stringify(settings))
-}
-
-function helloClick(){
-    setup()
-   // toggleAudio()
-    document.getElementById("helloContainer").classList.add("hide")
 }
