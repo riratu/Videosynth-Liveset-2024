@@ -297,7 +297,7 @@ function updateSound(i) {
 }
 
 function updateBroadcastChannel(i) {
-    if (audioTrack[i].scene > 1) {
+   // if (audioTrack[i].scene > 1) {
         let sum = 0;
         let count = 0;
 
@@ -311,7 +311,7 @@ function updateBroadcastChannel(i) {
         // Broadcast the Values to the visual thingie
         bc.postMessage(audioTrack[i].scene + ":" + avg);
         setSceneSlider(audioTrack[i].scene, avg);
-    }
+   // }
 }
 
 function setZero() {

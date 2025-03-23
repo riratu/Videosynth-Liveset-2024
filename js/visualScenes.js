@@ -1,9 +1,14 @@
 import {sliderNames} from "./videoSliderNames.js";
-import { setVisualParameter } from "./video.js";
+import { setVisualParameter, paramVals, checkboxValues } from "./video.js";
 
 let sceneSliderSum = 0.01
 let activeScene = 0
 let scenes = []
+
+document.getElementById("saveSceneButton").addEventListener("click", saveScene);
+document.getElementById("deleteSceneButton").addEventListener("click", deleteScene);
+document.getElementById("updateSceneButton").addEventListener("click", updateScene);
+document.getElementById("saveButtonButton").addEventListener("click", downloadScenes);
 
 export async function createSceneInterface() {
     let scenesAsJson = localStorage.getItem("scenes");
@@ -21,8 +26,14 @@ export async function createSceneInterface() {
         }
     }
 
+    JSON.parse( localStorage.getItem("scenes"));
+
     const parsedScenes = JSON.parse(scenesAsJson);
     scenes = parsedScenes.scenes
+
+    if (!scenes){
+        throw new Error("Could not Load Scenes. Try to empty Browser Cache. All will be lost.")
+    }
     scenes.forEach((scene, i) => {
         createSceneButton(i);
         createSceneSliders(i);
@@ -51,30 +62,36 @@ function createSceneSliders(i) {
     sceneSliderCont.appendChild(div);
 }
 
-function saveScene() {
-    //existing = localStorage.getItem("sliderScene" + key)
-    // if (existing){
-    //     console.log("Already existing " + key)
-    //     return
-    // }
+function saveScene(no) {
     let newScene = {}
-    newScene["sliderValues"] = {...sliderValues}
-    newScene["anmiation"] = {...checkboxValues}
+    newScene["description"] = `Scene ${scenes.length + 1} description`
+    newScene["sliderValues"] = { ...paramVals }
+    newScene["anmiation"] = { ...checkboxValues }
     scenes.push(newScene)
+    saveScenesToLocalStorage(scenes)
+
     let sceneNo = scenes.length
     console.log("Save Scene " + sceneNo)
-    let string = JSON.stringify(scenes)
-    localStorage.setItem("scenes", string)
-
     createSceneButton(sceneNo - 1)
     createSceneSliders(sceneNo - 1)
 }
 
-function updateScene() {
-    scenes[activeScene] = {...sliderValues}
-    console.log("Save Scene " + activeScene)
-    let string = JSON.stringify(scenes)
+function saveScenesToLocalStorage(scenes){
+    let scenesForSaving = {
+        schemaVersion: "0.1",
+        date: new Date().toISOString(),
+        scenes: scenes
+    }
+
+    let string = JSON.stringify(scenesForSaving)
     localStorage.setItem("scenes", string)
+}
+
+function updateScene() {
+    scenes[activeScene].sliderValues = {...paramVals}
+    scenes[activeScene].anmiation = {...checkboxValues}
+    console.log("Save Scene " + activeScene)
+    saveScenesToLocalStorage(scenes)
 }
 
 function createSceneButton(sceneNo) {
@@ -96,9 +113,7 @@ function deleteScene() {
     document.getElementById("loadScene" + activeScene).remove()
     scenes.splice(activeScene, 1);
     console.log("Delete Scene " + activeScene)
-    console.log(scenes)
-    let string = JSON.stringify(scenes)
-    localStorage.setItem("scenes", string)
+    saveScenesToLocalStorage(scenes)
 
     document.querySelectorAll('.sceneLink').forEach(e => e.remove());
     scenes.forEach((scene, i) => {

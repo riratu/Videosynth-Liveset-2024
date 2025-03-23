@@ -3,7 +3,8 @@ import * as p5 from '../lib/p5.min.js';
 import '../lib/p5.min.js';
 
 var sliders = []
-var paramVals = {}
+export var paramVals = {}
+export var checkboxValues = {}
 
 const mainSketch = (p5) => {
 
@@ -43,7 +44,6 @@ const mainSketch = (p5) => {
 
     var sliderKeys = Object.keys(sliderNames);
 
-    var checkboxValues = {}
 
     p5.windowResized = function () {
         p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
@@ -78,7 +78,7 @@ const mainSketch = (p5) => {
 
         p5.translate(p5.width / 2, p5.height / 2)
 
-        p5.rotate(paramVals.rotation - 0.5)
+        //p5.rotate(paramVals.rotation - 0.5)
 
         curlFactor = sliders["curlFactor"].value()
         curlNoiseScale = sliders["curlNoiseScale"].value()
