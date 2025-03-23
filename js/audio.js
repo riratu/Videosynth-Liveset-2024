@@ -1,4 +1,4 @@
-import {setSceneSlider} from './video.js';
+import {setSceneSlider} from './visualScenes.js';
 import {renderLaunchpad} from './launchpad_mini_controller.js';
 
 let noSound = false
@@ -31,12 +31,6 @@ let rampTime = 1
 let lastSlider = 0
 let intervals = []
 let maxChannelCount
-
-let parameters = Object.freeze({
-    gain: "gain",
-    reverb: "reverb",
-    fx2: "fx2"
-})
 
 let selection = {
     scene: 0,
@@ -279,7 +273,7 @@ function updateFx2(i) {
 }
 
 Tone.Transport.scheduleRepeat((time) => {
-    // updateanimationSliders(Tone.Transport.Seconds % 10)
+    // animateSliders(Tone.Transport.Seconds % 10)
 }, "8n");
 
 function toggleAudio() {
@@ -343,7 +337,7 @@ function controlChange(control) {
     }
 }
 
-function selectSliderByNo(newSliderNo) {
+export function selectSliderByNo(newSliderNo) {
     let newSlider = audioTrack[newSliderNo]
     if (undefined !== newSliderNo) {
         lastSlider = audioTrack[selection.no]
@@ -355,10 +349,10 @@ function selectSliderByNo(newSliderNo) {
 
 function highlightSliderByScene(newSliderNo) {
     newSliderNo = sliderNosByScenes[sceneNo][sliderNoInScene]
-    selectSliderByNumber(newSliderNo)
+    selectSliderByNo(newSliderNo)
 }
 
-function setSliderValue(value, targetParameter = null) {
+export function setCurrentSliderValue(value, targetParameter = null) {
     value = Number(value);
     console.log("Set Controller " + targetParameter + " to value " + value);
 
@@ -378,10 +372,10 @@ function setSliderValue(value, targetParameter = null) {
     let parameterSlider;
     let parameterGain;
 
-    if (targetParameter === parameters.reverb) {
+    if (targetParameter === "reverb") {
         parameterSlider = reverbSlider[sliderNumber];
         parameterGain = reverbGains[sliderNumber];
-    } else if (targetParameter === parameters.fx2) {
+    } else if (targetParameter === "delay") {
         parameterSlider = fx2Slider[sliderNumber];
         parameterGain = fx2Gains[sliderNumber];
     } else {
@@ -404,14 +398,14 @@ function setSliderValue(value, targetParameter = null) {
             parameterGain.volume.value = Tone.gainToDb(endValue);
             clearInterval(intervals[sliderNumber + targetParameter]);
             delete intervals[sliderNumber + targetParameter];
-            renderLanunchpad();
+            renderLaunchpad();
         }
     }, stepTime);
 
     let renderInterval;
     if (Object.keys(intervals).length > 0) {
         renderInterval = setInterval(() => {
-            renderLanunchpad();
+            renderLaunchpad();
             if (Object.keys(intervals).length === 0) {
                 clearInterval(renderInterval);
             }
@@ -531,7 +525,7 @@ function audiokeyPressed(event) {
     if (undefined !== newValue) {
         //console.log(newValue)
         //Set the Slider Value
-        setSliderValue(newValue / 9, selection.no);
+        setCurrentSliderValue(newValue / 9, selection.no);
     }
     return
 }
@@ -539,4 +533,32 @@ function audiokeyPressed(event) {
 function toggleExpert() {
     settings.expertMode = document.body.classList.toggle("show-expert");
     localStorage.setItem("settings", JSON.stringify(settings))
+}
+
+export function monitorChannel(connect){
+    try {
+        if (connect) {
+            sounds[selection.no].connect(merger, 0, maxChannelCount - 1);
+        } else {
+            sounds[selection.no].disconnect(merger, 0, maxChannelCount - 1);
+        }
+    } catch (e) {
+    }
+}
+
+export function getVelFromCurrentTrack(param){
+    return getVelFromTrack(selection.no, param)
+}
+
+export function getVelFromTrack(trackNo, param = "gain"){
+    if (!audioTrack[trackNo]){
+        return
+    }
+    if (param === "gain"){
+        return Number(audioTrack[trackNo].getValue())
+    } else if (param === "delay"){
+        return Number(fx2Slider[trackNo].getValue());
+    } else if (param === "reverb"){
+        return Number(reverbSlider[trackNo].getValue());
+    }
 }

@@ -1,4 +1,4 @@
-import { audioTrack } from './audio.js';
+import { getVelFromCurrentTrack, getVelFromTrack, selectSliderByNo, setCurrentSliderValue, monitorChannel } from './audio.js';
 
 //Globals
 const launchpadDeviceName = "Launchpad Mini"
@@ -13,15 +13,13 @@ let currentNote = 0
 let launchPadSelect
 let rampTime
 let midiOutput
+let midiInput
 
 function noteOn(note) {
     // use note.type, .channel, .name, .number, .octave, .velocity
 
     //Buttons on the right on the Pad as Sliders
     if ((note.number + 8) % 16 == 0){
-        let vel = 7 - ((note.number -8) / 16)
-        setButton(currentNote, vel / velocitySeps)
-        setSliderValue(vel / velocitySeps, selection.no);
         return
     }
 
@@ -35,7 +33,8 @@ function noteOn(note) {
 
         // Use 8 columns to get contiguous slider indexes.
         selectSliderByNo(row * 8 + column);
-        sounds[selection.no].connect(merger, 0, maxChannelCount - 1);
+
+        monitorChannel(true)
 
         renderFaders();
         currentMode = modes.faders;
@@ -47,19 +46,19 @@ function noteOn(note) {
     if (currentMode === modes.faders){
         let slider0Vel = mapLaunchpadSliderToGain(note.number, 0)
         if (undefined !== slider0Vel){
-            setSliderValue(slider0Vel, parameters.gain);
+            setCurrentSliderValue(slider0Vel, "gain");
             renderFaders()
         }
 
         let slider1Vel = mapLaunchpadSliderToGain(note.number, 1)
         if (undefined !== slider1Vel){
-            setSliderValue(slider1Vel, parameters.reverb);
+            setCurrentSliderValue(slider1Vel, "reverb");
             renderFaders()
         }
 
         let slider2Vel = mapLaunchpadSliderToGain(note.number, 2)
         if (undefined !== slider2Vel){
-            setSliderValue(slider2Vel, parameters.fx2);
+            setCurrentSliderValue(slider2Vel, "delay");
             renderFaders()
         }
         return
@@ -73,13 +72,14 @@ export function renderLaunchpad(){
 }
 
 function renderFaders(){
-    let velocity = audioTrack[selection.no].getValue();
+    let velocity = getVelFromCurrentTrack("gain")
+    console.log(velocity)
     renderSlider(0, velocity, 4)
 
-    velocity = reverbSlider[selection.no].getValue();
+    velocity = getVelFromCurrentTrack("reverb")
     renderSlider(2, velocity, 2)
 
-    velocity = fx2Slider[selection.no].getValue();
+    velocity =  getVelFromCurrentTrack("delay")
     renderSlider(4, velocity, 7)
 
     function renderSlider(colOffset, velocity, colorNo) {
@@ -120,8 +120,7 @@ function mapLaunchpadSliderToGain(note, sliderNo){
 
 function renderOverview() {
     for (let i = 0; i < 64; i++) {
-        let currentSlider = audioTrack[i] ?? null;
-        let velocity = currentSlider ? Number(currentSlider.getValue()) : 0;
+        let velocity = getVelFromTrack(i)
 
         let row = Math.floor(i / 8) * 16;
         let col = (i % 4) + ((Math.floor(i / 4) % 2) * 4);
@@ -131,9 +130,7 @@ function renderOverview() {
 }
 
 function noteOff(note) {
-    try {
-        sounds[selection.no].disconnect(merger, 0, maxChannelCount -1);
-    } catch (e){}
+    monitorChannel(false)
 
     if (note.number === launchPadSelect) {
 
@@ -147,6 +144,7 @@ function noteOff(note) {
 function setButton(buttonIndex, velocity) {
 
     if (!midiOutput){
+        console.log("no out")
         return
     }
 
@@ -198,8 +196,8 @@ export function setupLaunchpad() {
             console.log("WebMidi could not be enabled.", err);
         }
 
-        let midiInput = WebMidi.getInputByName(deviceName)
-        let midiOutput = WebMidi.getOutputByName(deviceName)
+        midiInput = WebMidi.getInputByName(deviceName)
+        midiOutput = WebMidi.getOutputByName(deviceName)
 
         if (!midiInput) {
             console.log("Launchpad in not found")
@@ -226,6 +224,8 @@ export function setupLaunchpad() {
 
         // noteOn
         midiInput.addListener('noteon', "all", function(e) {
+            let midiMsg = {}
+
             let note = {
                 type: 'noteon'
             }
@@ -246,6 +246,7 @@ export function setupLaunchpad() {
         	}
 
             note.number = e.note.number
+            let midiMsg = {}
         	midiMsg.note = note
         	parseMidi(midiMsg)
         })
