@@ -1,4 +1,4 @@
-import {setSceneSlider} from './visualScenes.js';
+import {setSceneSlider, animateSliders} from './visualScenes.js';
 import {renderLaunchpad} from './launchpad_mini_controller.js';
 
 let noSound = false
@@ -23,7 +23,6 @@ let folderColors = [
     "SteelBlue"
 ]
 
-let simpleMode = false
 let mode = "slider"
 let columnNo = 4
 let sliderNosByScenes = []
@@ -121,7 +120,7 @@ export function setupAudio() {
                     Tone.Transport.start()
                 }
             }
-        }).sync().start(0);
+        }).sync();
         sounds[i].volume.value = 0
 
         let defaultGain = Tone.gainToDb(defaultReverbGain)
@@ -188,7 +187,7 @@ export function setupAudio() {
     let filesInFolder = 0
     let slidersinCurrentScene = []
     let sceneNo = -1
-    for (let i = 0; i < soundsFiles.length; i++) {
+    for (let i = 0; i < sounds.length; i++) {
 
         let folderName = soundsFiles[i].split('/')[0]
         if (folderName !== lastFolder) {
@@ -225,21 +224,17 @@ export function setupAudio() {
         sliderDomObject.addEventListener("input", () => updateSound(i));
         div.appendChild(sliderDomObject)
 
-        if (!simpleMode) {
+        reverbSlider[i] = createNewSlider(defaultReverbGain, sceneNo)
+        let reverbSliderDomObject = reverbSlider[i].slider
+        reverbSliderDomObject.addEventListener("input", (() => updateReverb(i)))
+        reverbSliderDomObject.classList.add("expert")
+        div.appendChild(reverbSliderDomObject)
 
-            reverbSlider[i] = createNewSlider(defaultReverbGain, sceneNo)
-            let reverbSliderDomObject = reverbSlider[i].slider
-            reverbSliderDomObject.addEventListener("input", (() => updateReverb(i)))
-            reverbSliderDomObject.classList.add("expert")
-            div.appendChild(reverbSliderDomObject)
-
-
-            fx2Slider[i] = createNewSlider(0, sceneNo)
-            let fxSliderDomObject = fx2Slider[i].slider
-            fxSliderDomObject.addEventListener("input", (() => updateFx2(i)))
-            fxSliderDomObject.classList.add("expert")
-            div.appendChild(fxSliderDomObject)
-        }
+        fx2Slider[i] = createNewSlider(0, sceneNo)
+        let fxSliderDomObject = fx2Slider[i].slider
+        fxSliderDomObject.addEventListener("input", (() => updateFx2(i)))
+        fxSliderDomObject.classList.add("expert")
+        div.appendChild(fxSliderDomObject)
     }
     sliderNosByScenes.push(slidersinCurrentScene)
 }
@@ -273,8 +268,9 @@ function updateFx2(i) {
 }
 
 Tone.Transport.scheduleRepeat((time) => {
-    // animateSliders(Tone.Transport.Seconds % 10)
-}, "8n");
+    animateSliders(Number(Tone.Transport.seconds % 1))
+    //console.log(Tone.Transport.seconds % 1)
+}, "16n")
 
 function toggleAudio() {
     // Resume or create the AudioContext
@@ -288,11 +284,22 @@ function toggleAudio() {
 
 function updateSound(i) {
     if (!noSound) {
-        mainGains[i].volume.value = Tone.gainToDb((audioTrack[i].slider.value * 0.5))
+
+        let gain = audioTrack[i].slider.value
+        mainGains[i].volume.value = Tone.gainToDb((gain * 0.5))
+
+        if (gain == 0) {
+            console.log("Stoping Sound " + i)
+            sounds[i].stop(0)
+        } else {
+            if ("started" !== sounds[i].state) {
+                console.log("Starting Sound " + i)
+                sounds[i].start(0)
+            }
+        }
     }
 
     updateBroadcastChannel(i)
-
     renderLaunchpad()
 }
 

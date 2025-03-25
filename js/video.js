@@ -1,20 +1,24 @@
 import {sliderNames} from './videoSliderNames.js';
 import * as p5 from '../lib/p5.min.js';
 import '../lib/p5.min.js';
+import {animVals} from './visualScenes.js';
 
-var sliders = []
+export var sliders = []
+export var animationSelects = []
+export let resultSliders = []
 export var paramVals = {}
 export var checkboxValues = {}
+
+export var sliderKeys = Object.keys(sliderNames);
 
 const mainSketch = (p5) => {
 
     let particles = [];
-    const particleArrayLength = 5000
+    const particleArrayLength = 10000
 
     let imgs = []
 
     let maxNoiseScale = 0.2
-    let curlNoiseScale
     let maxNoiseTimeScale = 0.051
     var maxSpawnRadius = 500
     var maxSpawnCirleSpeed = 0.05
@@ -27,7 +31,6 @@ const mainSketch = (p5) => {
     let lastParticleSpawned = 0
     var spawnCircleAngle = 0
     let maxSpawnRandSize
-    let curlFactor
 
     let currentSliderNo = 0
 
@@ -37,12 +40,14 @@ const mainSketch = (p5) => {
     let checkboxes = []
     let rotation = 0
 
+    let particleReducer = 1
+
 // Connection to a broadcast channel
     const bc = new BroadcastChannel("sceneValues");
 
 
 
-    var sliderKeys = Object.keys(sliderNames);
+
 
 
     p5.windowResized = function () {
@@ -76,13 +81,25 @@ const mainSketch = (p5) => {
 
     p5.draw = function () {
 
+        //make it ok for all devices
+        if (p5.frameRate() < 15) {
+            if (particleReducer > 0.05) {
+                particleReducer *= 0.95
+            }
+        } else if (p5.frameRate() < 25
+            && particleReducer > 0.05) {
+            particleReducer -= 0.0001
+        } else if (particleReducer !== 1
+            && p5.frameRate() > 40) {
+            particleReducer += 0.0001
+            if (particleReducer > 1) {
+                particleReducer = 1
+            }
+        }
+
         p5.translate(p5.width / 2, p5.height / 2)
 
-        //p5.rotate(paramVals.rotation - 0.5)
-
-        curlFactor = sliders["curlFactor"].value()
-        curlNoiseScale = sliders["curlNoiseScale"].value()
-
+        //p5.rotate(paramVals.rotation - 0
         // checkBeat()
         // if (beat) {
         //     newSeed += random(0.5)
@@ -98,14 +115,14 @@ const mainSketch = (p5) => {
         p5.background(0, paramVals.bgTransparency);
 
         let colorChange = (paramVals.colorChange - 0.5) / 5000
-        spawnRadius = sliders["spawnRadius"].value()
-        spawnCirleSpeed = (2 ** (sliders["spawnCirleSpeed"].value() * 4)) / 8
-        let stokeWeight = sliders["stokeWeight"].value()
-        let particleNo = Math.floor((particleArrayLength - 1) * sliders["particleReducer"].value()) + 1
+        spawnRadius = paramVals["spawnRadius"]
+        spawnCirleSpeed = (2 ** (paramVals["spawnCirleSpeed"] * 4)) / 8
+        let stokeWeight = paramVals["stokeWeight"]
+        let particleNo = Math.floor((particleArrayLength - 1) * particleReducer) + 1
 
         let lineModulo = Math.floor(particleNo / 200)
 
-        let spawnRate = 1 + (sliders["spawnRate"].value() * particleArrayLength / 40)
+        let spawnRate = 1 + (paramVals["spawnRate"] * particleArrayLength / 40)
 
         spawnCircleAngle += spawnCirleSpeed * maxSpawnCirleSpeed
 
@@ -160,37 +177,37 @@ const mainSketch = (p5) => {
             }
 
             let fishcount = particleNo / (particleNo / 1000)
-            if (i % fishcount == 0 && sliders["img1Alpha"].value() > 0.1) {
-                p5.tint(255, sliders["img1Alpha"].value())
+            if (i % fishcount == 0 && paramVals["img1Alpha"] > 0.1) {
+                p5.tint(255, paramVals["img1Alpha"])
                 p5.image(imgs[4], p.x, p.y, 200, 200);
             }
-            if (i % (fishcount + 80) == 0 && sliders["img2Alpha"].value() > 0.1) {
-                p5.tint(255, sliders["img2Alpha"].value())
+            if (i % (fishcount + 80) == 0 && paramVals["img2Alpha"] > 0.1) {
+                p5.tint(255, paramVals["img2Alpha"])
                 p5.image(imgs[5], p.x, p.y, 200, 200);
             }
-            if (i % (fishcount + 70) == 0 && sliders["img3Alpha"].value() > 0.1) {
-                p5.tint(255, sliders["img3Alpha"].value())
+            if (i % (fishcount + 70) == 0 && paramVals["img3Alpha"] > 0.1) {
+                p5.tint(255, paramVals["img3Alpha"])
                 p5.image(imgs[2], p.x, p.y, 200, 200);
             }
-            // if (i % (fishcount + 20) == 0 && sliders["img4Alpha"].value() > 0.1) {
-            //     tint(255, sliders["img4Alpha"].value())
+            // if (i % (fishcount + 20) == 0 && paramVals["img4Alpha"] > 0.1) {
+            //     tint(255, paramVals["img4Alpha"])
             //     image(imgs[3], p.x, p.y, 200, 200);
             // }
-            if (i % (fishcount / 2 + 100) == 0 && sliders["img4Alpha"].value() > 0.1) {
-                p5.tint(255, sliders["img4Alpha"].value())
+            if (i % (fishcount / 2 + 100) == 0 && paramVals["img4Alpha"] > 0.1) {
+                p5.tint(255, paramVals["img4Alpha"])
                 p5.image(imgs[7], p.x, p.y, 200, 200);
             }
-            if (i % (fishcount + 5) == 0 && sliders["img4Alpha"].value() > 0.1) {
-                p5.tint(255, sliders["img4Alpha"].value())
+            if (i % (fishcount + 5) == 0 && paramVals["img4Alpha"] > 0.1) {
+                p5.tint(255, paramVals["img4Alpha"])
                 p5.image(imgs[6], p.x, p.y, 200, 200);
             }
 
-            // if (i % (fishcount + 90) == 0 && sliders["img4Alpha"].value() > 0.1) {
-            //     tint(255, sliders["img4Alpha"].value())
+            // if (i % (fishcount + 90) == 0 && paramVals["img4Alpha"] > 0.1) {
+            //     tint(255, paramVals["img4Alpha"])
             //     image(imgs[4], p.x, p.y, 200, 200);
             // }
-            // if (i % (fishcount + 420) == 0 && sliders["img4Alpha"].value() > 0.1) {
-            //     tint(255, sliders["img4Alpha"].value())
+            // if (i % (fishcount + 420) == 0 && paramVals["img4Alpha"] > 0.1) {
+            //     tint(255, paramVals["img4Alpha"])
             //     image(imgs[5], p.x, p.y, 200, 200);
             // }
 
@@ -214,9 +231,9 @@ const mainSketch = (p5) => {
 
 
             //Move the Particles
-            let n = p5.noise(p.x * maxNoiseScale * curlNoiseScale, p.y * maxNoiseScale * curlNoiseScale, p5.frameCount * (sliders["noiseTimeScale"].value() * maxNoiseTimeScale));
-            let b = p5.TAU * n * (p.x / (p5.width / 2) * curlFactor);
-            let a = p5.TAU * n * ((p.y / (p5.height / 2) + 1) * curlFactor);
+            let n = p5.noise(p.x * maxNoiseScale * paramVals["curlNoiseScale"], p.y * maxNoiseScale * paramVals["curlNoiseScale"], p5.frameCount * (paramVals["noiseTimeScale"] * maxNoiseTimeScale));
+            let b = p5.TAU * n * (p.x / (p5.width / 2) * paramVals["curlFactor"]);
+            let a = p5.TAU * n * ((p.y / (p5.height / 2) + 1) * paramVals["curlFactor"]);
 
             p.x += p5.cos(a) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
             p.y += p5.sin(b) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
@@ -225,8 +242,8 @@ const mainSketch = (p5) => {
             p.y += (p.y) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
 
             //Translation
-            p.x += ((sliders["moveX"].value() - 0.5) * sliderNames.moveX.max)
-            p.y += ((sliders["moveY"].value() - 0.5) * sliderNames.moveX.max)
+            p.x += ((paramVals["moveX"] - 0.5) * sliderNames.moveX.max)
+            p.y += ((paramVals["moveY"] - 0.5) * sliderNames.moveX.max)
 
         }
     }
@@ -235,15 +252,15 @@ const mainSketch = (p5) => {
         let spawnRandSizeX = maxSpawnRandSize * paramVals.spawnRandomnessSizeX
         let spawnRandSizeY = maxSpawnRandSize * paramVals.spawnRandomnessSizeY
 
-        let spawnOffsetX = (sliders["spawnOffsetX"].value() - 0.5) * p5.width
-        let spawnOffsetY = (sliders["spawnOffsetY"].value() - 0.5) * p5.height
+        let spawnOffsetX = (paramVals["spawnOffsetX"] - 0.5) * p5.width
+        let spawnOffsetY = (paramVals["spawnOffsetY"] - 0.5) * p5.height
 
         let maxSpawnOffsetMultiplier = p5.width / spawnRate
-        let correctionX = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierX"].value()
-        let correctionY = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * sliders["spawnOffsetMultiplierY"].value()
+        let correctionX = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * paramVals["spawnOffsetMultiplierX"]
+        let correctionY = ((maxSpawnOffsetMultiplier * spawnRate) / 2) * paramVals["spawnOffsetMultiplierY"]
 
-        spawnOffsetX += (i * sliders["spawnOffsetMultiplierX"].value() * maxSpawnOffsetMultiplier) - correctionX
-        spawnOffsetY += (i * sliders["spawnOffsetMultiplierY"].value() * maxSpawnOffsetMultiplier) - correctionY
+        spawnOffsetX += (i * paramVals["spawnOffsetMultiplierX"] * maxSpawnOffsetMultiplier) - correctionX
+        spawnOffsetY += (i * paramVals["spawnOffsetMultiplierY"] * maxSpawnOffsetMultiplier) - correctionY
 
         //Just the randomness size
         p.x = p5.random(-spawnRandSizeX, spawnRandSizeX) + spawnOffsetX;
@@ -329,6 +346,11 @@ const mainSketch = (p5) => {
             checkboxes[sliderName] = p5.createCheckbox()
             checkboxes[sliderName].addClass("visualCheckboxes")
             checkboxes[sliderName].parent(divs[sliderName])
+
+            let select = createAnimationSelect()
+            animationSelects[sliderName] = select
+            divs[sliderName].elt.appendChild(select);
+
             //checkboxes[sliderName].elt.addEventListener('input', updateCheckboxValue);
 
             let sliderObj = p5.createSlider(0, 1, sliderNames[sliderName].default, 0)
@@ -338,10 +360,34 @@ const mainSketch = (p5) => {
             sliderObj.elt.addEventListener('input', updateSliderValue);
             sliders[sliderName] = sliderObj
 
+            let resSliderObj = p5.createSlider(0, 1, sliderNames[sliderName].default, 0)
+            resSliderObj.id(sliderName)
+            resSliderObj.addClass("visualSliders, resultSlider")
+            resSliderObj.attribute("disabled", "disabled")
+            resSliderObj.parent(divs[sliderName]);
+            resultSliders[sliderName] = resSliderObj
+
             i++
         }
 
     }
+
+    function createAnimationSelect(){
+
+        const array = ["---", ...Object.keys(animVals)];
+
+        let select = document.createElement("select");
+
+        //Create and append the options
+        for (var i = 0; i < array.length; i++) {
+            var option = document.createElement("option");
+            option.value = array[i];
+            option.text = array[i];
+            select.appendChild(option);
+        }
+        return select
+    }
+
 
     function updateSliderValue(evt) {
         paramVals[evt.target.id] = Number(evt.target.value)

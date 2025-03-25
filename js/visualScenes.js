@@ -1,9 +1,21 @@
 import {sliderNames} from "./videoSliderNames.js";
-import { setVisualParameter, paramVals, checkboxValues } from "./video.js";
+import { setVisualParameter, paramVals, animationSelects, sliders, resultSliders, sliderKeys} from "./video.js";
 
 let sceneSliderSum = 0.01
 let activeScene = 0
 let scenes = []
+
+let currentValueForAnimation = 0
+
+export let animVals = {
+    "Linear": (v) => v,
+    "Sine": (v) => (Math.sin(v * Math.PI) + 1) / 2,
+    "Peak": (v) => v < 0.2 ? 1 : 0,
+    "2 on the Floor": (v) => v % 0.5 < 0.1 ? 1 : 0,
+    "4 on the Floor": (v) => v % 0.25 < 0.1 ? 1 : 0,
+    "Pulse": (v) => v >= 0.5 && v <= 0.7 ? 1 : 0,
+    "Linear invert": (v) => 1 - v,
+};
 
 document.getElementById("saveSceneButton").addEventListener("click", saveScene);
 document.getElementById("deleteSceneButton").addEventListener("click", deleteScene);
@@ -66,7 +78,7 @@ function saveScene(no) {
     let newScene = {}
     newScene["description"] = `Scene ${scenes.length + 1} description`
     newScene["sliderValues"] = { ...paramVals }
-    newScene["anmiation"] = { ...checkboxValues }
+    newScene["animation"] = getAnimationStates()
     scenes.push(newScene)
     saveScenesToLocalStorage(scenes)
 
@@ -74,6 +86,25 @@ function saveScene(no) {
     console.log("Save Scene " + sceneNo)
     createSceneButton(sceneNo - 1)
     createSceneSliders(sceneNo - 1)
+}
+
+function getAnimationStates(){
+    let animationStates = {}
+    Object.keys(sliderNames).forEach(k => {
+        animationStates[k] = {}
+        if (animationSelects[k].value !== "---"){
+            animationStates[k].type = animationSelects[k].value
+        }
+    })
+    return animationStates
+}
+
+function setAnimationStates(animationStates){
+    Object.keys(sliderNames).forEach(k => {
+       if ( animationStates[k]){
+           animationSelects[k].value = animationStates[k].type
+       }
+    })
 }
 
 function saveScenesToLocalStorage(scenes){
@@ -89,7 +120,7 @@ function saveScenesToLocalStorage(scenes){
 
 function updateScene() {
     scenes[activeScene].sliderValues = {...paramVals}
-    scenes[activeScene].anmiation = {...checkboxValues}
+    scenes[activeScene].animation = getAnimationStates()
     console.log("Save Scene " + activeScene)
     saveScenesToLocalStorage(scenes)
 }
@@ -136,6 +167,12 @@ function selectScene(number) {
         }
     })
 
+    let animationStates = scenes[number].animation
+    console.log(animationStates)
+    if (animationStates){
+        setAnimationStates(animationStates)
+    }
+
     let div = document.getElementById("sceneSliderContainer")
     div.classList.add("hide")
 
@@ -177,6 +214,7 @@ function updateSceneSliders() {
 }
 
 function sceneMixer() {
+    activeScene = -1
     let div = document.getElementById("sceneSliderContainer")
     div.classList.remove("hide")
 
@@ -218,35 +256,49 @@ export function setSceneSlider(no, value) {
 // Takes a current Value and appies it to all the sliders
 // wich have the animate checkbox activates
 // in proportion to the scene slider values
-function animateSliders(currentValueFromAnimation) {
+export function animateSliders(currentValueForAnimation) {
+    //console.log(currentValueForAnimation)
 
     //get the current animation value ->  ( sine(Tone.transport.seconds)
 
     let sceneSliderValueMap = []
+    let sceneSliderSum = 0
 
     //This is too slow
     let sceneSliders = document.querySelectorAll(".sceneSlider")
 
     sceneSliders.forEach((elem, i) => {
-        sceneSliderValueMap[i] = elem.value
-        // let  totalValue += Number(elem.value)
+        sceneSliderValueMap[i] = Number(elem.value)
+        sceneSliderSum += Number(elem.value)
     })
 
     //Take the scenes and add the values of the sliders together
     for (let slider in sliderNames) {
-        // let valueFromScenes = 0
-        // sceneSliderValueMap.forEach((value, i) => {
-        //         if (checkboxes[sliderKeys[i]].checked()){
-        //             valueFromScenes += 1
-        //             console.log("checked: " + i)
-        //         }
-        //
-        // })
-        // if (valueFromScenes > 0){
-        let newValue = valueFromScenes / sceneSliderSum
-        sliders[slider].elt.value = newValue
-        sliderValues[slider] = newValue
-        console.log("Update Slider Value ".newValue)
-        // }
+        let animated = false
+        let valueFromScenes = 0
+
+        if (activeScene == -1) {
+            sceneSliderValueMap.forEach((value, i) => {
+                if (value > 0 && scenes[i].animation[slider]) {
+                    let animationStyle = scenes[i].animation[slider].type
+                    if (animationStyle != undefined && animationStyle !== "---") {
+                        animated = true;
+                        valueFromScenes += animVals[animationStyle](currentValueForAnimation) * value * scenes[i].sliderValues[slider]
+                    }
+                }
+            })
+        } else {
+            sceneSliderSum = 1
+            let animationStyle = animationSelects[slider].value
+            if (animVals[animationStyle]) {
+                animated = true
+                valueFromScenes += animVals[animationStyle](currentValueForAnimation) * Number(sliders[slider].value())
+            }
+        }
+        if (animated === true) {
+            let newValue = valueFromScenes / sceneSliderSum
+            paramVals[slider] = newValue
+            resultSliders[slider].elt.value = newValue
+        }
     }
 }

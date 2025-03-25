@@ -25,9 +25,6 @@ export const sliderNames = {
     "bgTransparency": {
         default: 0.5,
     },
-    "particleReducer": {
-        default: 1,
-    },
     "stokeWeight": {
         default: 0.05,
     },
