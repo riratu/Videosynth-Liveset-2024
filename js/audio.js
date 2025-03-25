@@ -9,21 +9,6 @@ var sliderNoInScene = 0
 
 const bc = new BroadcastChannel("sceneValues");
 
-let settings = {}
-let folderColors = [
-    "lightblue",
-    "lightgreen",
-    "LightSkyBlue",
-    "lightyellow",
-    "beige",
-    "azure",
-    "ghostWhite",
-    "lavenderBlush",
-    "Linen",
-    "SteelBlue"
-]
-
-let mode = "slider"
 let columnNo = 4
 let sliderNosByScenes = []
 let rampTime = 1
@@ -175,7 +160,6 @@ export function setupAudio() {
     let lastFolder = ""
     let containerDiv
     let offset = 0
-    let filesInFolder = 0
     let slidersinCurrentScene = []
     let sceneNo = -1
     for (let i = 0; i < sounds.length; i++) {
@@ -279,7 +263,7 @@ function updateSound(i) {
         let gain = audioTrack[i].slider.value
         mainGains[i].volume.value = Tone.gainToDb((gain * 0.5))
 
-        if (gain == 0) {
+        if (gain === 0) {
             console.log("Stoping Sound " + i)
             sounds[i].stop(0)
         } else {
@@ -418,7 +402,7 @@ function audiokeyPressed(event) {
     //console.log(event)
 
     let key = event.key
-    if (key == "Tab") {
+    if (key === "Tab") {
         toggleAudio()
     }
 
@@ -469,7 +453,7 @@ function audiokeyPressed(event) {
         return
     }
 
-    if (key == "ArrowDown") {
+    if (key === "ArrowDown") {
         if (undefined !== sliderNosByScenes[selection.scene][selection.noInSceneo + 1]) {
             selection.noInSceneo++
             highlightSliderByScene(selection.scene, selection.noInSceneo);
@@ -477,7 +461,7 @@ function audiokeyPressed(event) {
         return
     }
 
-    if (key == "ArrowUp") {
+    if (key === "ArrowUp") {
         console.log("SCIS OLD " + selection.noInSceneo)
         if (selection.noInSceneo < 1) return
         selection.noInSceneo--
@@ -486,7 +470,7 @@ function audiokeyPressed(event) {
         return
     }
 
-    if (key == "ArrowRight") {
+    if (key === "ArrowRight") {
         selection.scene++
 
         if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
@@ -497,7 +481,7 @@ function audiokeyPressed(event) {
         return
     }
 
-    if (key == "ArrowLeft") {
+    if (key === "ArrowLeft") {
         selection.scene--
         if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
             selection.noInSceneo = sliderNosByScenes[selection.scene].length - 1
@@ -525,7 +509,6 @@ function audiokeyPressed(event) {
         //Set the Slider Value
         setCurrentSliderValue(newValue / 9, selection.no);
     }
-    return
 }
 
 export function monitorChannel(connect){
