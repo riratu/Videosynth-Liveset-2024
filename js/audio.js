@@ -88,15 +88,6 @@ export function setupAudio() {
     merger.channelInterpretation = "discrete";
     merger.connect(Tone.getContext().rawContext.destination);
 
-    let settingsfromStorage = JSON.parse(localStorage.getItem("settings"))
-    if (settingsfromStorage) {
-        settings = settingsfromStorage
-    }
-
-    if (settings.expertMode) {
-        document.body.classList.add("show-expert")
-    }
-
     //Make it 1, when there is no Signal from the Drum.
     const shift = new Tone.Add(1)
     const comp = new Tone.Compressor(-30, 3);
@@ -272,7 +263,7 @@ Tone.Transport.scheduleRepeat((time) => {
     //console.log(Tone.Transport.seconds % 1)
 }, "16n")
 
-function toggleAudio() {
+export function toggleAudio() {
     // Resume or create the AudioContext
     const status = Tone.Transport.state;
     if (status === "started") {
@@ -321,7 +312,7 @@ function updateBroadcastChannel(i) {
    // }
 }
 
-function setZero() {
+export function setZero() {
     for (let i = 0; i < soundsFiles.length; i++) {
         mainGains[i].volume.value = Tone.gainToDb(0)
         audioTrack[i].slider.value = 0
@@ -535,11 +526,6 @@ function audiokeyPressed(event) {
         setCurrentSliderValue(newValue / 9, selection.no);
     }
     return
-}
-
-function toggleExpert() {
-    settings.expertMode = document.body.classList.toggle("show-expert");
-    localStorage.setItem("settings", JSON.stringify(settings))
 }
 
 export function monitorChannel(connect){

@@ -1,11 +1,9 @@
 import {sliderNames} from "./videoSliderNames.js";
-import { setVisualParameter, paramVals, animationSelects, sliders, resultSliders, sliderKeys} from "./video.js";
+import { setVisualParameter, paramVals, animationSelects, sliders, resultSliders} from "./video.js";
 
 let sceneSliderSum = 0.01
 let activeScene = 0
 let scenes = []
-
-let currentValueForAnimation = 0
 
 export let animVals = {
     "Linear": (v) => v,
@@ -15,6 +13,7 @@ export let animVals = {
     "4 on the Floor": (v) => v % 0.25 < 0.1 ? 1 : 0,
     "Pulse": (v) => v >= 0.5 && v <= 0.7 ? 1 : 0,
     "Linear invert": (v) => 1 - v,
+    "Random": (v) => Math.random(),
 };
 
 document.getElementById("saveSceneButton").addEventListener("click", saveScene);
