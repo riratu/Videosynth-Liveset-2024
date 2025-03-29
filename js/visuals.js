@@ -1,12 +1,13 @@
 import {sliderNames} from './videoSliderNames.js';
 import * as p5 from '../lib/p5.min.js';
 import '../lib/p5.min.js';
-import {animVals} from './visualScenes.js';
+import {animationCurves} from './visualScenes.js';
 
 export var sliders = []
-export var animationSelects = []
+export var animationVals = []
 export let resultSliders = []
 export var paramVals = {}
+
 export var checkboxValues = {}
 
 export var sliderKeys = Object.keys(sliderNames);
@@ -347,9 +348,9 @@ const mainSketch = (p5) => {
             checkboxes[sliderName].addClass("visualCheckboxes")
             checkboxes[sliderName].parent(divs[sliderName])
 
-            let select = createAnimationSelect()
-            animationSelects[sliderName] = select
-            divs[sliderName].elt.appendChild(select);
+
+            let animationElems = createAnimationUi(divs[sliderName].elt)
+            animationVals[sliderName] = animationElems
 
             //checkboxes[sliderName].elt.addEventListener('input', updateCheckboxValue);
 
@@ -372,20 +373,44 @@ const mainSketch = (p5) => {
 
     }
 
-    function createAnimationSelect(){
+    function createAnimationUi(div){
+        let animationElements = {}
 
-        const array = ["---", ...Object.keys(animVals)];
-
-        let select = document.createElement("select");
-
-        //Create and append the options
+        // Create select fot type
+        const array = ["---", ...Object.keys(animationCurves)];
+        let typeSelect = document.createElement("select");
         for (var i = 0; i < array.length; i++) {
             var option = document.createElement("option");
             option.value = array[i];
             option.text = array[i];
-            select.appendChild(option);
+            typeSelect.appendChild(option);
         }
-        return select
+        div.appendChild(typeSelect);
+        animationElements.type = typeSelect
+
+        // Create select for speed
+        let speedSelect = document.createElement("select");
+        for (var i = 0; i < 5; i++) {
+            var mod = 0.25 * (2 ** i); // actual modulo value
+            var speed = (1 / mod).toFixed(2); // user-facing speed multiplier
+            var option = document.createElement("option");
+            option.value = mod;
+            option.text = `${speed}× speed`;
+            if (mod === 1) option.selected = true;
+            speedSelect.appendChild(option);
+        }
+        animationElements.speed = speedSelect
+        div.appendChild(speedSelect);
+
+        //Create Slider for the amount of the animation
+        let animationAmountSlider = p5.createSlider(0, 1, 0, 0)
+        //resSliderObj.id()
+        animationAmountSlider.addClass("visualSliders")
+        animationAmountSlider.parent(div)
+    //    div.appendChild(animationAmountSlider);
+        animationElements.amount = animationAmountSlider
+
+        return animationElements
     }
 
 

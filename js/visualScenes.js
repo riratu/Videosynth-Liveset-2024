@@ -1,19 +1,40 @@
 import {sliderNames} from "./videoSliderNames.js";
-import { setVisualParameter, paramVals, animationSelects, sliders, resultSliders} from "./video.js";
+import { setVisualParameter, paramVals, animationVals, sliders, resultSliders} from "./visuals.js";
 
 let sceneSliderSum = 0.01
 let activeScene = 0
 let scenes = []
 
-export let animVals = {
-    "Linear": (v) => v,
-    "Sine": (v) => (Math.sin(v * Math.PI) + 1) / 2,
-    "Peak": (v) => v < 0.2 ? 1 : 0,
-    "2 on the Floor": (v) => v % 0.5 < 0.1 ? 1 : 0,
-    "4 on the Floor": (v) => v % 0.25 < 0.1 ? 1 : 0,
-    "Pulse": (v) => v >= 0.5 && v <= 0.7 ? 1 : 0,
-    "Linear invert": (v) => 1 - v,
-    "Random": (v) => Math.random(),
+export let animationCurves = {
+    "Linear": v => v,
+    "Linear Reverse": v => 1 - v,
+    "Sine": v => Math.sin(v * 2 * Math.PI) * 0.5 + 0.5,
+
+    "Ease In": v => v * v,
+    "Ease Out": v => 1 - (1 - v) * (1 - v),
+    "Ease InOut": v => v < 0.5
+        ? 2 * v * v
+        : 1 - Math.pow(-2 * v + 2, 2) / 2,
+
+    "Cubic In": v => v ** 3,
+    "Cubic Out": v => 1 - (1 - v) ** 3,
+    "Cubic InOut": v => v < 0.5
+        ? 4 * v ** 3
+        : 1 - Math.pow(-2 * v + 2, 3) / 2,
+
+    "Bounce Out": v => {
+        const n1 = 7.5625, d1 = 2.75;
+        if (v < 1 / d1) return n1 * v * v;
+        else if (v < 2 / d1) return n1 * (v -= 1.5 / d1) * v + 0.75;
+        else if (v < 2.5 / d1) return n1 * (v -= 2.25 / d1) * v + 0.9375;
+        else return n1 * (v -= 2.625 / d1) * v + 0.984375;
+    },
+    "Bounce In": v => 1 - animationCurves["Bounce Out"](1 - v),
+
+    "Peak": v => v < 0.2 ? 1 : 0,
+    "Pulse": v => (v >= 0.5 && v <= 0.7) ? 1 : 0,
+    "Random": _ => Math.random(),
+ //   "Noise": v => p5.noise(v * 10), // scale for detail
 };
 
 document.getElementById("saveSceneButton").addEventListener("click", saveScene);
@@ -90,19 +111,36 @@ function saveScene(no) {
 function getAnimationStates(){
     let animationStates = {}
     Object.keys(sliderNames).forEach(k => {
-        animationStates[k] = {}
-        if (animationSelects[k].value !== "---"){
-            animationStates[k].type = animationSelects[k].value
+        if (animationVals[k].type.value !== "---" ){
+            animationStates[k] = {}
+            animationStates[k].type = animationVals[k].type.value
+            animationStates[k].speed = animationVals[k].speed.value
+            console.log(animationVals[k].amount.elt.value)
+            animationStates[k].amount = animationVals[k].amount.elt.value
         }
     })
     return animationStates
 }
 
-function setAnimationStates(animationStates){
+function setAnimationStates(animationStates) {
     Object.keys(sliderNames).forEach(k => {
-       if ( animationStates[k]){
-           animationSelects[k].value = animationStates[k].type
-       }
+        let state = animationStates[k]
+        if (!state) state = {}
+
+        console.log(animationVals)
+        let type = state.type
+
+        if (!type || type === "") type  = "---"
+        animationVals[k].type.value = type
+
+        let speed = state.speed
+        if (!speed || speed === "") speed = "1"
+        animationVals[k].speed.value = speed
+
+        let amount = state.amount
+        console.log(amount)
+        if (undefined === amount) amount = 0
+        animationVals[k].amount.elt.value = amount
     })
 }
 
@@ -167,7 +205,6 @@ function selectScene(number) {
     })
 
     let animationStates = scenes[number].animation
-    console.log(animationStates)
     if (animationStates){
         setAnimationStates(animationStates)
     }
@@ -255,49 +292,44 @@ export function setSceneSlider(no, value) {
 // Takes a current Value and appies it to all the sliders
 // wich have the animate checkbox activates
 // in proportion to the scene slider values
-export function animateSliders(currentValueForAnimation) {
-    //console.log(currentValueForAnimation)
+export function animateSliders(currentTime) {
+    const sceneSliders = [...document.querySelectorAll(".sceneSlider")];
+    const sliderValues = sceneSliders.map(s => Number(s.value));
+    const totalWeight = sliderValues.reduce((sum, v) => sum + v, 0) || 1;
 
-    //get the current animation value ->  ( sine(Tone.transport.seconds)
+    const computeAnim = (animType, speed, weight, influence) => {
+        if (!animationCurves[animType] || animType === "---") return 0;
+        const pos = (currentTime % speed) / speed;
+        return animationCurves[animType](pos) * influence * weight;
+    };
 
-    let sceneSliderValueMap = []
-    let sceneSliderSum = 0
+    for (const slider in sliderNames) {
+        let sum = 0;
+        let animated = false;
+        const influence = Number(animationVals[slider].amount.elt.value);
 
-    //This is too slow
-    let sceneSliders = document.querySelectorAll(".sceneSlider")
-
-    sceneSliders.forEach((elem, i) => {
-        sceneSliderValueMap[i] = Number(elem.value)
-        sceneSliderSum += Number(elem.value)
-    })
-
-    //Take the scenes and add the values of the sliders together
-    for (let slider in sliderNames) {
-        let animated = false
-        let valueFromScenes = 0
-
-        if (activeScene == -1) {
-            sceneSliderValueMap.forEach((value, i) => {
-                if (value > 0 && scenes[i].animation[slider]) {
-                    let animationStyle = scenes[i].animation[slider].type
-                    if (animationStyle != undefined && animationStyle !== "---") {
-                        animated = true;
-                        valueFromScenes += animVals[animationStyle](currentValueForAnimation) * value * scenes[i].sliderValues[slider]
-                    }
+        if (activeScene === -1) {
+            sliderValues.forEach((weight, i) => {
+                const anim = scenes[i].animation?.[slider];
+                if (weight > 0 && anim?.type && anim.type !== "---") {
+                    sum += computeAnim(anim.type, Number(anim.speed), weight, influence);
+                    animated = true;
                 }
-            })
+            });
         } else {
-            sceneSliderSum = 1
-            let animationStyle = animationSelects[slider].value
-            if (animVals[animationStyle]) {
-                animated = true
-                valueFromScenes += animVals[animationStyle](currentValueForAnimation) * Number(sliders[slider].value())
+            const anim = animationVals[slider];
+            const animType = anim.type.value;
+            const speed = Number(anim.speed.value);
+            if (animationCurves[animType]) {
+                sum += computeAnim(animType, speed, 1, influence);
+                animated = true;
             }
         }
-        if (animated === true) {
-            let newValue = valueFromScenes / sceneSliderSum
-            paramVals[slider] = newValue
-            resultSliders[slider].elt.value = newValue
+
+        if (animated) {
+            const val = (sum / (activeScene === -1 ? totalWeight : 1)) + sliders[slider].value();
+            paramVals[slider] = val;
+            resultSliders[slider].elt.value = val;
         }
     }
 }

@@ -243,8 +243,7 @@ function updateFx2(i) {
 }
 
 Tone.Transport.scheduleRepeat((time) => {
-    animateSliders(Number(Tone.Transport.seconds % 1))
-    //console.log(Tone.Transport.seconds % 1)
+    animateSliders(Number(Tone.Transport.seconds))
 }, "16n")
 
 export function toggleAudio() {
@@ -257,7 +256,7 @@ export function toggleAudio() {
     }
 }
 
-function updateSound(i) {
+export function updateSound(i) {
     if (!noSound) {
 
         let gain = audioTrack[i].slider.value
@@ -306,16 +305,6 @@ export function setZero() {
 
         fx2Slider[i].slider.value = 0
         fx2Gains[i].volume.value = Tone.gainToDb(0)
-    }
-}
-
-function controlChange(control) {
-    // use control.type, .channel, .selection.no, .controllerName, .value
-    let controllerNo = control.controller.number
-    let currentSlider = audioTrack[controllerNo]
-    if (currentSlider) {
-        currentSlider.value = control.value
-        updateSound(controllerNo)
     }
 }
 
@@ -536,5 +525,15 @@ export function getVelFromTrack(trackNo, param = "gain"){
         return Number(fx2Slider[trackNo].getValue());
     } else if (param === "reverb"){
         return Number(reverbSlider[trackNo].getValue());
+    }
+}
+
+export function controlChange(control) {
+    // use control.type, .channel, .selection.no, .controllerName, .value
+    let controllerNo = control.controller.number
+    let currentSlider = audioTrack[controllerNo].slider
+    if (currentSlider) {
+        currentSlider.value = control.value
+        updateSound(controllerNo)
     }
 }

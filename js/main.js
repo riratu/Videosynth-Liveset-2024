@@ -1,5 +1,5 @@
 import {setupAudio, setZero, toggleAudio} from './audio.js';
-import {popStream} from './video.js';
+import {popStream} from './visuals.js';
 import {setupLaunchpad} from './launchpad_mini_controller.js';
 import {createSceneInterface} from './visualScenes.js';
 let settings= {}
