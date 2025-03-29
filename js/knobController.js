@@ -1,6 +1,6 @@
-import { controlChange } from './audio.js';
+import { updateSound, controlChange } from './audio.js';
 
-let idIn = 0;
+let idIn = "USB MIDI ADC 64";
 let midiInput
 
 setupMidi(idIn)
@@ -57,3 +57,4 @@ function setupMidi(idIn, idOut) {
         })
     })
 }
+
