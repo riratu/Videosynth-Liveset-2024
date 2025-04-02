@@ -100,7 +100,7 @@ const mainSketch = (p5) => {
 
         p5.translate(p5.width / 2, p5.height / 2)
 
-        //p5.rotate(paramVals.rotation - 0
+        p5.rotate(paramVals.rotation * p5.PI * 2)
         // checkBeat()
         // if (beat) {
         //     newSeed += random(0.5)
@@ -395,7 +395,7 @@ const mainSketch = (p5) => {
             var speed = (1 / mod).toFixed(2); // user-facing speed multiplier
             var option = document.createElement("option");
             option.value = mod;
-            option.text = `${speed}× speed`;
+            option.text = `${speed}×`;
             if (mod === 1) option.selected = true;
             speedSelect.appendChild(option);
         }

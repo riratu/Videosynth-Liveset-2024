@@ -6,8 +6,8 @@ let activeScene = 0
 let scenes = []
 
 export let animationCurves = {
-    "Linear": v => v,
-    "Linear Reverse": v => 1 - v,
+    "Ramp in": v => v,
+    "Ramp out": v => 1 - v,
     "Sine": v => Math.sin(v * 2 * Math.PI) * 0.5 + 0.5,
 
     "Ease In": v => v * v,

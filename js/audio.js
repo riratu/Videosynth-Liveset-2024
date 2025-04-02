@@ -15,6 +15,7 @@ let rampTime = 1
 let lastSlider = 0
 let intervals = []
 let maxChannelCount
+let midiConnected = true
 
 let selection = {
     scene: 0,
@@ -34,7 +35,7 @@ const highpass = new Tone.Filter(500, "highpass");
 let mainGains = []
 let reverbGains = []
 var reverbSlider = []
-var defaultReverbGain = 0.1
+var defaultReverbGain = 0.2
 const reverbFx = new Tone.Reverb(45).toDestination();
 reverbFx.wet.value = 1;
 
@@ -98,6 +99,10 @@ export function setupAudio() {
             }
         }).sync();
         sounds[i].volume.value = 0
+
+        if (midiConnected){
+            sounds[i].start(0)
+        }
 
         let defaultGain = Tone.gainToDb(defaultReverbGain)
 
@@ -262,13 +267,15 @@ export function updateSound(i) {
         let gain = audioTrack[i].slider.value
         mainGains[i].volume.value = Tone.gainToDb((gain * 0.5))
 
-        if (gain === 0) {
-            console.log("Stoping Sound " + i)
-            sounds[i].stop(0)
-        } else {
-            if ("started" !== sounds[i].state) {
-                console.log("Starting Sound " + i)
-                sounds[i].start(0)
+        if (!midiConnected){
+            if (gain === 0) {
+                console.log("Stoping Sound " + i)
+                sounds[i].stop(0)
+            } else {
+                if ("started" !== sounds[i].state) {
+                    console.log("Starting Sound " + i)
+                    sounds[i].start(0)
+                }
             }
         }
     }
