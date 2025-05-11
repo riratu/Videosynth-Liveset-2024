@@ -121,6 +121,7 @@ function mapLaunchpadSliderToGain(note, sliderNo){
 function renderOverview() {
     for (let i = 0; i < 64; i++) {
         let velocity = getVelFromTrack(i)
+        if (!velocity) velocity = 0;
 
         let row = Math.floor(i / 8) * 16;
         let col = (i % 4) + ((Math.floor(i / 4) % 2) * 4);

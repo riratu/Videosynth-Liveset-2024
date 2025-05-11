@@ -1,4 +1,4 @@
-import { updateSound, controlChange } from './audio.js';
+import {updateSound, controlChange, setSliderValue} from './audio.js';
 
 let idIn = "USB MIDI ADC 64";
 let midiInput

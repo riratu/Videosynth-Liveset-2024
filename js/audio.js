@@ -343,6 +343,8 @@ function highlightSliderByScene(newSliderNo) {
     selectSliderByNo(newSliderNo)
 }
 
+//change speed in sec
+//Value normalised
 export function setSliderValue(value, targetParameter = null, speed = null, controllerNo = null) {
 
     value = Number(value);
@@ -352,7 +354,7 @@ export function setSliderValue(value, targetParameter = null, speed = null, cont
 
     console.log("Set Controller " + sliderNumber + " param " + targetParameter + " to value " + value);
 
-// Clear existing interval for this parameter
+    // Clear existing interval for this parameter
     if (intervals[sliderNumber + targetParameter] !== undefined) {
         clearInterval(intervals[sliderNumber + targetParameter]);
     }
@@ -382,6 +384,7 @@ export function setSliderValue(value, targetParameter = null, speed = null, cont
         parameterGain = mainGains[sliderNumber];
     }
 
+    if (undefined === parameterSlider) return
     let startValue = Number(parameterSlider.getValue());
 
     intervals[sliderNumber + targetParameter] = setInterval(() => {
@@ -416,7 +419,6 @@ export function setSliderValue(value, targetParameter = null, speed = null, cont
 document.addEventListener('keydown', audiokeyPressed);
 
 function audiokeyPressed(event) {
-    console.log(event)
 
     let key = event.key
     if (key === "Tab") {
