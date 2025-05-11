@@ -32,10 +32,10 @@ function noteOn(note) {
         let column = note.number % 16;
 
         // Use 8 columns to get contiguous slider indexes.
-        selectSliderByNo(row * 8 + column);
+        let foundChannel = selectSliderByNo(row * 8 + column);
+        if (! foundChannel) return
 
         monitorChannel(true)
-
         renderFaders();
         currentMode = modes.faders;
         return;
@@ -73,7 +73,6 @@ export function renderLaunchpad(){
 
 function renderFaders(){
     let velocity = getVelFromCurrentTrack("gain")
-    console.log(velocity)
     renderSlider(0, velocity, 4)
 
     velocity = getVelFromCurrentTrack("reverb")

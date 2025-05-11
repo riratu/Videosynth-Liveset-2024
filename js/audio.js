@@ -330,12 +330,14 @@ export function setZero() {
 
 export function selectSliderByNo(newSliderNo) {
     let newSlider = audioTrack[newSliderNo]
-    if (undefined !== newSliderNo) {
-        lastSlider = audioTrack[selection.no]
-        selection.no = newSliderNo
+    if (undefined === newSlider) return false
+    lastSlider = audioTrack[selection.no]
+    if (undefined !== lastSlider){
         lastSlider.slider.parentElement.classList.remove("red");
-        newSlider.slider.parentElement.classList.add("red");
     }
+    selection.no = newSliderNo
+    newSlider.slider.parentElement.classList.add("red");
+    return true
 }
 
 function highlightSliderByScene(newSliderNo) {
