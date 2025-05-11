@@ -58,8 +58,6 @@ export async function createSceneInterface() {
         }
     }
 
-    JSON.parse( localStorage.getItem("scenes"));
-
     const parsedScenes = JSON.parse(scenesAsJson);
     scenes = parsedScenes.scenes
 

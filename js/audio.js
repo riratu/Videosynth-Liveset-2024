@@ -25,6 +25,8 @@ let selection = {
     parameter: 0
 }
 
+let lastUpdatedSliders = []
+
 let soundFileDir = "sounds/compressed/"
 
 // Audio Effects --------------------------------------------------
@@ -265,7 +267,7 @@ export function updateSound(i) {
     if (!noSound) {
 
         let gain = audioTrack[i].slider.value
-        mainGains[i].volume.value = Tone.gainToDb((gain * 0.5))
+        setSliderValue(gain, "gain", 0.1, i)
 
         if (!midiConnected){
             if (gain === 0) {
@@ -278,6 +280,17 @@ export function updateSound(i) {
                 }
             }
         }
+    }
+
+    //make only if fade to zero
+
+    selection.no = i
+
+    lastUpdatedSliders = [i, ...lastUpdatedSliders.filter(x => x !== i)];
+    if (lastUpdatedSliders.length > 5) {
+        let removed = lastUpdatedSliders.pop();
+        setSliderValue(0, "gain", 10, removed)
+        console.log(removed);
     }
 
     updateBroadcastChannel(i)
@@ -330,11 +343,14 @@ function highlightSliderByScene(newSliderNo) {
     selectSliderByNo(newSliderNo)
 }
 
-export function setCurrentSliderValue(value, targetParameter = null) {
-    value = Number(value);
-    console.log("Set Controller " + targetParameter + " to value " + value);
+export function setSliderValue(value, targetParameter = null, speed = null, controllerNo = null) {
 
-    let sliderNumber = selection.no;
+    value = Number(value);
+
+    if (null === controllerNo) controllerNo = selection.no
+    let sliderNumber = controllerNo
+
+    console.log("Set Controller " + sliderNumber + " param " + targetParameter + " to value " + value);
 
 // Clear existing interval for this parameter
     if (intervals[sliderNumber + targetParameter] !== undefined) {
@@ -342,7 +358,12 @@ export function setCurrentSliderValue(value, targetParameter = null) {
     }
 
     let endValue = value;
-    let durationMs = rampTime * 1000; // Convert seconds to milliseconds
+
+    if (null === speed) {
+        speed = rampTime
+    }
+
+    let durationMs = speed * 1000; // Convert seconds to milliseconds
     let stepTime = 10; // Interval step time in milliseconds
     let totalSteps = durationMs / stepTime;
     let currentStep = 0;
@@ -395,11 +416,13 @@ export function setCurrentSliderValue(value, targetParameter = null) {
 document.addEventListener('keydown', audiokeyPressed);
 
 function audiokeyPressed(event) {
-    //console.log(event)
+    console.log(event)
 
     let key = event.key
     if (key === "Tab") {
         toggleAudio()
+    } else if (key === "Escape"){
+        toggleAudioSliders()
     }
 
     //Select the current Ramp Time
@@ -503,7 +526,7 @@ function audiokeyPressed(event) {
     if (undefined !== newValue) {
         //console.log(newValue)
         //Set the Slider Value
-        setCurrentSliderValue(newValue / 9, selection.no);
+        setSliderValue(newValue / 9, selection.no);
     }
 }
 
@@ -543,4 +566,8 @@ export function controlChange(control) {
         currentSlider.value = control.value
         updateSound(controllerNo)
     }
+}
+
+function toggleAudioSliders(){
+    document.getElementById("audio-sliders-container").classList.toggle("hide")
 }

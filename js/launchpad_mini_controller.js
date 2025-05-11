@@ -1,4 +1,4 @@
-import { getVelFromCurrentTrack, getVelFromTrack, selectSliderByNo, setCurrentSliderValue, monitorChannel } from './audio.js';
+import { getVelFromCurrentTrack, getVelFromTrack, selectSliderByNo, setSliderValue, monitorChannel } from './audio.js';
 
 //Globals
 const launchpadDeviceName = "Launchpad Mini"
@@ -46,19 +46,19 @@ function noteOn(note) {
     if (currentMode === modes.faders){
         let slider0Vel = mapLaunchpadSliderToGain(note.number, 0)
         if (undefined !== slider0Vel){
-            setCurrentSliderValue(slider0Vel, "gain");
+            setSliderValue(slider0Vel, "gain");
             renderFaders()
         }
 
         let slider1Vel = mapLaunchpadSliderToGain(note.number, 1)
         if (undefined !== slider1Vel){
-            setCurrentSliderValue(slider1Vel, "reverb");
+            setSliderValue(slider1Vel, "reverb");
             renderFaders()
         }
 
         let slider2Vel = mapLaunchpadSliderToGain(note.number, 2)
         if (undefined !== slider2Vel){
-            setCurrentSliderValue(slider2Vel, "delay");
+            setSliderValue(slider2Vel, "delay");
             renderFaders()
         }
         return
