@@ -53,7 +53,7 @@ function setupMidi(idIn, idOut) {
 
         // controlChange
         midiInput.addListener('controlchange', "all", function(e) {
-            controlChange(e)
+            setSliderValue(e.controller.number, "gain", 0.01, e.value / 127);
         })
     })
 }

@@ -125,7 +125,6 @@ function setAnimationStates(animationStates) {
         let state = animationStates[k]
         if (!state) state = {}
 
-        console.log(animationVals)
         let type = state.type
 
         if (!type || type === "") type  = "---"
@@ -136,7 +135,6 @@ function setAnimationStates(animationStates) {
         animationVals[k].speed.value = speed
 
         let amount = state.amount
-        console.log(amount)
         if (undefined === amount) amount = 0
         animationVals[k].amount.elt.value = amount
     })
