@@ -1,4 +1,4 @@
-import { getVelFromCurrentTrack, getVelFromTrack, selectSliderByNo, setSliderValue, monitorChannel } from './audio.js';
+import { getVelFromCurrentTrack, getVelFromTrack, selectSliderByNo, setSliderValue, monitorChannel, rampTime, setRampTime } from './audio.js';
 
 //Globals
 const launchpadDeviceName = "Launchpad Mini"
@@ -11,7 +11,6 @@ let currentMode = modes.overview
 let velocitySeps = 7
 let currentNote = 0
 let launchPadSelect
-let rampTime
 let midiOutput
 let midiInput
 
@@ -177,14 +176,19 @@ function launchpadControlChange(control){
     const controllserSplitPoint = 5
     const currentControll = control.controller.number - controllerOffset
     if (currentControll >= controllserSplitPoint){
-        rampTime = Math.pow((currentControll - controllserSplitPoint), 2)
-        console.log("Set Ramp Time " + rampTime)
+        let rampeTimee = Math.pow((currentControll - controllserSplitPoint), 3  )
+        console.log("Set Ramp Time " + rampeTimee)
+        setRampTime(rampeTimee)
 
         for (let i = 0; i < 4; i++){
             WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(i + controllerOffset + controllserSplitPoint, 0);
         }
         WebMidi.getOutputByName(launchpadDeviceName).channels[1].sendControlChange(control.controller.number, 5);
     }
+
+}
+
+function circleAnimation(){
 
 }
 

@@ -11,11 +11,15 @@ const bc = new BroadcastChannel("sceneValues");
 
 let columnNo = 4
 let sliderNosByScenes = []
-let rampTime = 1
+export let rampTime = 1
 let lastSlider = 0
 let intervals = []
 let maxChannelCount
 let midiConnected = true
+
+export function setRampTime(newTime){
+    rampTime = newTime
+}
 
 let selection = {
     scene: 0,
@@ -37,8 +41,8 @@ const highpass = new Tone.Filter(500, "highpass");
 let mainGains = []
 let reverbGains = []
 var reverbSlider = []
-var defaultReverbGain = 0.2
-const reverbFx = new Tone.Reverb(45).toDestination();
+var defaultReverbGain = 0.1
+const reverbFx = new Tone.Reverb(145).toDestination();
 reverbFx.wet.value = 1;
 
 let fx2Gains = []
@@ -49,11 +53,15 @@ let fx2 = new Tone.PingPongDelay({
     wet: 1,
 }).toDestination();
 
+const multiband = createMultibandCompressor();
+multiband.output.toDestination();
+
 //Signal Loudness to Sidechain
 const drumGroup = new Tone.Gain(1.5)
 
 //This group will be ducking
-const sidechainGroup = new Tone.Gain(0.01).toDestination()
+const sidechainGroup = new Tone.Gain(0.01).connect(multiband.input)
+//const sidechainGroup = new Tone.Gain(0.01).toDestination()
 
 let sideChainRatio = 3
 let sideChainReleaseTime = 1
@@ -122,7 +130,8 @@ export function setupAudio() {
         mainGains[i].connect(reverbGains[i])
         mainGains[i].connect(fx2Gains[i])
 
-        if (i < 5) {
+        if (soundsFiles[i].includes("to_sc")) {
+            console.log("Connecting " + soundsFiles[i] + " to Sidechain")
             mainGains[i].fan(drumGroup, Tone.getDestination())
         } else {
             mainGains[i].connect(sidechainGroup)
@@ -226,8 +235,8 @@ function createNewSlider(value, folderNo) {
     slider.type = "range";
     slider.min = 0;
     slider.max = 1;
-    slider.value = value;
     slider.step = 1e-18;
+    slider.valueAsNumber = value
 
     let sliderobject = {}
     sliderobject.getValue = () => {
@@ -477,39 +486,24 @@ function audiokeyPressed(event) {
     }
 
     if (key === "ArrowDown") {
-        if (undefined !== sliderNosByScenes[selection.scene][selection.noInSceneo + 1]) {
-            selection.noInSceneo++
-            highlightSliderByScene(selection.scene, selection.noInSceneo);
-        }
+        selectSliderByNo(selection.no + 1)
         return
     }
 
     if (key === "ArrowUp") {
-        console.log("SCIS OLD " + selection.noInSceneo)
-        if (selection.noInSceneo < 1) return
-        selection.noInSceneo--
-        console.log("SCIS NEW " + selection.noInSceneo)
-        highlightSliderByScene(selection.scene, selection.noInSceneo);
+        selectSliderByNo(selection.no - 1)
         return
     }
 
     if (key === "ArrowRight") {
-        selection.scene++
-
-        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
-            selection.noInSceneo = sliderNosByScenes[selection.scene].length - 1
-        }
-
-        highlightSliderByScene(selection.scene, selection.noInSceneo);
+        let newNo = Math.floor((selection.no + 4) / 4) * 4
+        selectSliderByNo(newNo)
         return
     }
 
     if (key === "ArrowLeft") {
-        selection.scene--
-        if (undefined === sliderNosByScenes[selection.scene][selection.noInSceneo]) {
-            selection.noInSceneo = sliderNosByScenes[selection.scene].length - 1
-        }
-        highlightSliderByScene(selection.scene, selection.noInSceneo);
+        let newNo = Math.floor((selection.no - 4) / 4) * 4
+        selectSliderByNo(newNo)
         return
     }
 
@@ -574,4 +568,84 @@ export function controlChange(control) {
 
 function toggleAudioSliders(){
     document.getElementById("audio-sliders-container").classList.toggle("hide")
+}
+
+function createMultibandCompressor() {
+    // Create crossover filters
+    const lowFilter = new Tone.Filter(250, "lowpass");
+    lowFilter.rolloff = -24;
+
+    const midFilter = new Tone.Filter(250, "highpass");
+    midFilter.rolloff = -24;
+
+    const midHighFilter = new Tone.Filter(2500, "lowpass");
+    midHighFilter.rolloff = -24;
+
+    const highFilter = new Tone.Filter(2500, "highpass");
+    highFilter.rolloff = -24;
+
+    // Create compressors
+    // Gentle mastering-style compression
+    const lowCompressor = new Tone.Compressor({
+        threshold: -12,
+        ratio: 4,
+        attack: 0.01,
+        release: 0.01,
+        knee: 2
+    });
+
+    const midCompressor = new Tone.Compressor({
+        threshold: -12,
+        ratio: 4,
+        attack: 0.05,
+        release: 1,
+        knee: 4
+    });
+
+    const highCompressor = new Tone.Compressor({
+        threshold: -8,
+        ratio: 2,
+        attack: 0.001,
+        release: 0.05,
+        knee: 6
+    });
+
+
+    // Create gains
+    const lowGain = new Tone.Gain(1);
+    const midGain = new Tone.Gain(1);
+    const highGain = new Tone.Gain(1);
+
+    // Create input/output
+    const input = new Tone.Gain(1);
+    const output = new Tone.Gain(1);
+
+    // Connect everything
+    // Low band
+    input.connect(lowFilter);
+    lowFilter.connect(lowCompressor);
+    lowCompressor.connect(lowGain);
+    lowGain.connect(output);
+
+    // Mid band
+    input.connect(midFilter);
+    midFilter.connect(midHighFilter);
+    midHighFilter.connect(midCompressor);
+    midCompressor.connect(midGain);
+    midGain.connect(output);
+
+    // High band
+    input.connect(highFilter);
+    highFilter.connect(highCompressor);
+    highCompressor.connect(highGain);
+    highGain.connect(output);
+
+    // Return controls
+    return {
+        input,
+        output,
+        filters: { lowFilter, midFilter, midHighFilter, highFilter },
+        compressors: { lowCompressor, midCompressor, highCompressor },
+        gains: { lowGain, midGain, highGain }
+    };
 }
