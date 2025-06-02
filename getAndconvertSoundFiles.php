@@ -9,6 +9,8 @@ $iterator = new RecursiveIteratorIterator(
     RecursiveIteratorIterator::LEAVES_ONLY
 );
 
+$iterator->setMaxDepth(1);
+
 $jsFile = fopen("sounds/soundsFiles.js", "w");
 fwrite($jsFile, "let soundsFiles = [\n");
 

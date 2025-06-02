@@ -69,7 +69,8 @@ export async function createSceneInterface() {
         createSceneSliders(i);
     });
 
-    selectScene(0);
+    setTimeout(() => {selectScene(34);}, 500)
+
 }
 
 function createSceneSliders(i) {
@@ -213,6 +214,10 @@ function selectScene(number) {
     });
 
     document.getElementById("loadScene" + number).classList.add("active")
+
+    document.querySelectorAll('.animation-prop-div').forEach(element => {
+        element.classList.remove('hide');
+    });
 }
 
 function updateSceneSliders() {
@@ -222,6 +227,7 @@ function updateSceneSliders() {
     let sceneSliderValueMap = []
     sceneSliderSum = 0.01
 
+    //Scene Slides are audio Sliders?
     let sceneSliders = document.querySelectorAll(".sceneSlider")
 
     //caluculate this only once and not for every Slider again
@@ -245,7 +251,7 @@ function updateSceneSliders() {
     }
 }
 
-function sceneMixer() {
+export function sceneMixer() {
     activeScene = -1
     let div = document.getElementById("sceneSliderContainer")
     div.classList.remove("hide")
@@ -255,6 +261,10 @@ function sceneMixer() {
     });
 
     document.getElementById("selectSceneMixer").classList.add("active")
+
+    document.querySelectorAll('.animation-prop-div').forEach(element => {
+        element.classList.add('hide');
+    });
 }
 
 function downloadScenes() {

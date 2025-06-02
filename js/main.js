@@ -1,7 +1,7 @@
 import {setupAudio, setZero, toggleAudio} from './audio.js';
 import {popStream} from './visuals.js';
 import {setupLaunchpad} from './launchpad_mini_controller.js';
-import {createSceneInterface} from './visualScenes.js';
+import {createSceneInterface, sceneMixer} from './visualScenes.js';
 let settings= {}
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,6 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("toggleExpertModeButton").addEventListener("click", toggleExpert)
     document.getElementById("setZeroButton").addEventListener("click", setZero)
     document.getElementById("toggleAudioButton").addEventListener("click", toggleAudio)
+
+    document.getElementById("selectSceneMixer").addEventListener("click", sceneMixer)
 })
 
 function toggleExpert() {

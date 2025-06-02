@@ -373,7 +373,13 @@ const mainSketch = (p5) => {
 
     }
 
-    function createAnimationUi(div){
+    function createAnimationUi(parentDiv){
+
+        let div = document.createElement("div");
+        div.classList.add("animation-prop-div")
+
+        parentDiv.appendChild(div);
+
         let animationElements = {}
 
         // Create select fot type
