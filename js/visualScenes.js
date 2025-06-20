@@ -269,9 +269,9 @@ export function sceneMixer() {
 
 function downloadScenes() {
     const filename = 'videsynth_scenes.json';
-    const jsonStr = JSON.stringify(scenes);
+    let jsonStr = localStorage.getItem("scenes");
 
-    let file = new Blob([JSON.stringify(scenes, null, 2)], {type: "application/json"});
+    let file = new Blob([jsonStr], {type: "application/json"});
     var a = document.createElement("a"),
         url = URL.createObjectURL(file);
     a.href = url;

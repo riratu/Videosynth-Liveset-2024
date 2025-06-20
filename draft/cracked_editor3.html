@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<!--https://billorcutt.github.io/i_dropped_my_phone_the_screen_cracked/-->
+<html>
+<head>
+  <title>Cracked Screen Demo with Ace Editor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    #editor-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    #editor {
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 8px 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button.delete {
+      background-color: #f44336;
+    }
+
+    button.delete:hover {
+      background-color: #d32f2f;
+    }
+
+    #status {
+      margin-top: 10px;
+      color: #666;
+    }
+
+    .version-management {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    #version-name {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 200px;
+    }
+
+    #version-select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      min-width: 250px;
+    }
+
+    .versions-container {
+      margin-bottom: 20px;
+    }
+
+    .versions-title {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .auto-run-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .options-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+<div id="editor-container">
+  <h2>Cracked Screen Demo</h2>
+
+  <div class="versions-container">
+    <div class="versions-title">Saved Versions:</div>
+    <div class="version-management">
+      <select id="version-select">
+        <option value="default">Default Version</option>
+      </select>
+      <button id="delete-button" class="delete">Delete Selected</button>
+    </div>
+    <div class="version-management">
+      <input type="text" id="version-name" placeholder="New version name">
+      <button id="save-button">Save Current Code</button>
+    </div>
+  </div>
+
+  <div class="options-container">
+    <label class="checkbox-label">
+      <input type="checkbox" id="auto-run-checkbox" checked>
+      Auto-run code on changes
+    </label>
+    <label class="checkbox-label">
+      <input type="checkbox" id="sync-to-beat-checkbox" checked>
+      Sync changes to beat
+    </label>
+  </div>
+
+  <div class="button-container">
+    <button id="run-button">Run Code</button>
+    <button id="stop-button">Stop</button>
+    <button id="reset-button">Reset to Default</button>
+  </div>
+
+  <div id="editor"></div>
+  <div id="status">Ready</div>
+</div>
+
+<!-- Load Ace Editor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js"></script>
+<script src="../lib/cracked.min.js"></script>
+<script src="../lib/Tone.js"></script>
+<script>
+  // Store the original play function code
+  const defaultPlayCode = `function play() {
+  //sine wave w lowpass & delay
+  __().square(4).lowpass({id:"lp1",frequency:1000,q:30})
+      .delay({delay:0.01,feedback:0.9}).gain(1/12).dac();
+
+  //kick = distorted square wave click thru lowpass & ring modulator
+  // __().square(4/4).lowpass({frequency:100,q:20}).ring().gain(1/16).connect("dac");
+  //kick = distorted square wave click thru lowpass & ring modulator
+  __().sine(2/4).lowpass({frequency:10000,q:20}).ring().gain(2/16).connect("dac");
+  __().sine(8/4).connect("dac")
+
+  //modulate lowpass on the sine
+  __().lfo({gain:400,frequency:1,type:"sine"}).connect("#lp1");
+
+  //modulates the delay
+  __().lfo({modulates:"delay",gain:1/512,frequency:1/8,type:"square"}).connect("delay");
+
+  __.play();
+}`;
+
+  // Initialize Ace Editor
+  const editor = ace.edit("editor");
+  editor.setTheme("ace/theme/monokai");
+  editor.session.setMode("ace/mode/javascript");
+  editor.setValue(defaultPlayCode);
+  editor.clearSelection();
+
+  // Set editor options
+  editor.setOptions({
+    fontSize: "14px",
+    showPrintMargin: false,
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+    enableSnippets: true
+  });
+
+  // DOM elements
+  const runButton = document.getElementById('run-button');
+  const stopButton = document.getElementById('stop-button');
+  const resetButton = document.getElementById('reset-button');
+  const statusElement = document.getElementById('status');
+  const versionSelect = document.getElementById('version-select');
+  const versionNameInput = document.getElementById('version-name');
+  const saveButton = document.getElementById('save-button');
+  const deleteButton = document.getElementById('delete-button');
+  const autoRunCheckbox = document.getElementById('auto-run-checkbox');
+  const syncToBeatCheckbox = document.getElementById('sync-to-beat-checkbox');
+
+  // Version management
+  const STORAGE_KEY = 'cracked_audio_versions';
+  let savedVersions = {};
+  let isAutoRunEnabled = true;
+  let isSyncToBeatEnabled = true;
+  let debounceTimer = null;
+  const DEBOUNCE_DELAY = 1000; // 1 second debounce for editor changes
+  let isLoadingVersion = false; // Flag to prevent recursive calls
+  let isAudioPlaying = false;
+  let currentCode = '';
+  let pendingCodeUpdate = null;
+  let beatSyncTimer = null;
+
+  // Load saved versions from localStorage
+  function loadSavedVersions() {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData) {
+      savedVersions = JSON.parse(savedData);
+      updateVersionSelect();
+    }
+  }
+
+  // Save versions to localStorage
+  function saveVersionsToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(savedVersions));
+    updateVersionSelect();
+  }
+
+  // Update the version select dropdown
+  function updateVersionSelect() {
+    // Store current selection
+    const currentSelection = versionSelect.value;
+
+    // Clear existing options except default
+    while (versionSelect.options.length > 1) {
+      versionSelect.remove(1);
+    }
+
+    // Add saved versions
+    Object.keys(savedVersions).forEach(versionName => {
+      const option = document.createElement('option');
+      option.value = versionName;
+      option.textContent = versionName;
+      versionSelect.appendChild(option);
+    });
+
+    // Restore selection if it still exists
+    if (currentSelection === 'default' || savedVersions[currentSelection]) {
+      versionSelect.value = currentSelection;
+    }
+  }
+
+  // Function to update status
+  function updateStatus(message) {
+    statusElement.textContent = message;
+  }
+
+  // Function to calculate approximate time to next beat
+  function getTimeToNextBeat() {
+    // Default to 1/4 note at 120 BPM (500ms)
+    const beatDuration = 500;
+    const audioContext = __.context;
+
+    if (!audioContext) return 0;
+
+    const currentTime = audioContext.currentTime * 1000; // Convert to ms
+    const timeInBeat = currentTime % beatDuration;
+    const timeToNextBeat = beatDuration - timeInBeat;
+
+    return timeToNextBeat;
+  }
+
+  // Function to schedule code execution on the next beat
+  function scheduleOnBeat(callback) {
+    if (!isSyncToBeatEnabled || !isAudioPlaying) {
+      // If not syncing to beat or audio isn't playing, execute immediately
+      callback();
+      return;
+    }
+
+    const timeToNextBeat = getTimeToNextBeat();
+
+    // Clear any existing timer
+    if (beatSyncTimer) {
+      clearTimeout(beatSyncTimer);
+    }
+
+    // Schedule for next beat
+    beatSyncTimer = setTimeout(() => {
+      callback();
+      beatSyncTimer = null;
+    }, timeToNextBeat);
+
+    updateStatus(`Scheduled update for next beat (${Math.round(timeToNextBeat)}ms)`);
+  }
+
+  // Function to run the code with minimal disruption
+  function runCode(forceRestart = false) {
+    try {
+      const newCode = editor.getValue();
+      currentCode = newCode;
+
+      // If audio is already playing and we're not forcing a restart
+      if (isAudioPlaying && !forceRestart) {
+        // Store the pending update
+        pendingCodeUpdate = newCode;
+
+        // Schedule the update on the next beat
+        scheduleOnBeat(() => {
+          if (pendingCodeUpdate) {
+            // Stop current audio
+            __.stop();
+            __.reset();
+
+            // Evaluate the new code
+            eval(pendingCodeUpdate);
+
+            // Call the play function
+            play();
+
+            pendingCodeUpdate = null;
+            isAudioPlaying = true;
+            updateStatus('Updated audio on beat');
+          }
+        });
+      } else {
+        // First run or forced restart
+        __.stop();
+        __.reset();
+
+        // Evaluate the code
+        eval(newCode);
+
+        // Call the play function
+        play();
+
+        isAudioPlaying = true;
+        updateStatus('Playing audio...');
+      }
+    } catch (error) {
+      updateStatus('Error: ' + error.message);
+      console.error(error);
+    }
+  }
+
+  // Function to stop the audio
+  function stopAudio() {
+    __.stop();
+    isAudioPlaying = false;
+
+    // Clear any pending updates
+    if (beatSyncTimer) {
+      clearTimeout(beatSyncTimer);
+      beatSyncTimer = null;
+    }
+    pendingCodeUpdate = null;
+
+    updateStatus('Audio stopped');
+  }
+
+  // Function to reset the editor to the default code
+  function resetEditor() {
+    editor.setValue(defaultPlayCode);
+    editor.clearSelection();
+    updateStatus('Editor reset to default code');
+
+    if (isAutoRunEnabled) {
+      runCode(true); // Force restart on reset
+    }
+  }
+
+  // Function to save the current code as a new version
+  function saveVersion() {
+    const versionName = versionNameInput.value.trim();
+    if (!versionName) {
+      updateStatus('Please enter a version name');
+      return;
+    }
+
+    savedVersions[versionName] = editor.getValue();
+    saveVersionsToStorage();
+    versionNameInput.value = '';
+    updateStatus(`Version "${versionName}" saved successfully`);
+
+    // Select the newly saved version
+    isLoadingVersion = true; // Prevent auto-loading
+    versionSelect.value = versionName;
+    isLoadingVersion = false;
+  }
+
+  // Function to load a saved version
+  function loadVersion() {
+    if (isLoadingVersion) return; // Prevent recursive calls
+
+    isLoadingVersion = true;
+    const selectedVersion = versionSelect.value;
+    let codeToLoad;
+
+    if (selectedVersion === 'default') {
+      codeToLoad = defaultPlayCode;
+    } else if (savedVersions[selectedVersion]) {
+      codeToLoad = savedVersions[selectedVersion];
+    }
+
+    // Only update if code is different
+    if (codeToLoad && codeToLoad !== editor.getValue()) {
+      editor.setValue(codeToLoad);
+      editor.clearSelection();
+      updateStatus(`Loaded version: ${selectedVersion}`);
+
+      if (isAutoRunEnabled) {
+        // When loading a version, we want to run it with beat sync if enabled
+        if (isAudioPlaying && isSyncToBeatEnabled) {
+          pendingCodeUpdate = codeToLoad;
+          scheduleOnBeat(() => {
+            if (pendingCodeUpdate) {
+              __.stop();
+              __.reset();
+              eval(pendingCodeUpdate);
+              play();
+              pendingCodeUpdate = null;
+              isAudioPlaying = true;
+              updateStatus(`Version "${selectedVersion}" running`);
+            }
+          });
+        } else {
+          runCode(true); // Force restart if not currently playing
+        }
+      }
+    }
+
+    isLoadingVersion = false;
+  }
+
+  // Function to delete a saved version
+  function deleteVersion() {
+    const selectedVersion = versionSelect.value;
+    if (selectedVersion === 'default') {
+      updateStatus('Cannot delete the default version');
+      return;
+    }
+
+    if (confirm(`Are you sure you want to delete "${selectedVersion}"?`)) {
+      delete savedVersions[selectedVersion];
+      saveVersionsToStorage();
+      versionSelect.value = 'default';
+      loadVersion(); // Load default after deletion
+      updateStatus(`Version "${selectedVersion}" deleted`);
+    }
+  }
+
+  // Function to handle editor changes with debounce
+  function handleEditorChange() {
+    if (!isAutoRunEnabled) return;
+
+    // Clear previous timer
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    // Set new timer
+    debounceTimer = setTimeout(() => {
+      runCode(false); // Don't force restart on editor changes
+    }, DEBOUNCE_DELAY);
+  }
+
+  // Function to toggle auto-run
+  function toggleAutoRun() {
+    isAutoRunEnabled = autoRunCheckbox.checked;
+    updateStatus(isAutoRunEnabled ? 'Auto-run enabled' : 'Auto-run disabled');
+  }
+
+  // Function to toggle beat sync
+  function toggleBeatSync() {
+    isSyncToBeatEnabled = syncToBeatCheckbox.checked;
+    updateStatus(isSyncToBeatEnabled ? 'Beat sync enabled' : 'Beat sync disabled');
+  }
+
+  // Event listeners
+  runButton.addEventListener('click', () => runCode(true)); // Force restart on manual run
+  stopButton.addEventListener('click', stopAudio);
+  resetButton.addEventListener('click', resetEditor);
+  saveButton.addEventListener('click', saveVersion);
+  deleteButton.addEventListener('click', deleteVersion);
+  autoRunCheckbox.addEventListener('change', toggleAutoRun);
+  syncToBeatCheckbox.addEventListener('change', toggleBeatSync);
+
+  // Auto-load when version is selected
+  versionSelect.addEventListener('change', loadVersion);
+
+  // Set up editor change listener with debounce
+  editor.session.on('change', handleEditorChange);
+
+  // Initialize by loading saved versions
+  loadSavedVersions();
+
+  // Initial run
+  runCode(true);
+</script>
+</body>
+</html>

@@ -17,6 +17,8 @@ let intervals = []
 let maxChannelCount
 let midiConnected = true
 
+let maxSLidersActive = 10
+
 export function setRampTime(newTime){
     rampTime = newTime
 }
@@ -41,7 +43,7 @@ const highpass = new Tone.Filter(500, "highpass");
 let mainGains = []
 let reverbGains = []
 var reverbSlider = []
-var defaultReverbGain = 0.1
+var defaultReverbGain = 0.01
 const reverbFx = new Tone.Reverb(145).toDestination();
 reverbFx.wet.value = 1;
 
@@ -296,9 +298,9 @@ export function updateSound(i) {
     selection.no = i
 
     lastUpdatedSliders = [i, ...lastUpdatedSliders.filter(x => x !== i)];
-    if (lastUpdatedSliders.length > 5) {
+    if (lastUpdatedSliders.length > maxSLidersActive) {
         let removed = lastUpdatedSliders.pop();
-        setSliderValue(0, "gain", 10, removed)
+        setSliderValue(0, "gain", 3, removed)
         console.log(removed);
     }
 
