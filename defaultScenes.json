@@ -288,13 +288,6 @@
             }
         },
         {
-            "description" : "Scene description",
-            "sliderValues" : {},
-            "animation" : {
-                "parameters" : {}
-            }
-        },
-        {
             "description" : "Scene 35 description",
             "sliderValues" : {
                 "zoomSpeed" : 0.019902874490113354,
@@ -2180,7 +2173,13 @@
                     "amount" : "0.0725806451612903"
                 }
             }
+        },
+        {
+            "description" : "Scene description",
+            "sliderValues" : {},
+            "animation" : {
+                "parameters" : {}
+            }
         }
-
     ]
 }

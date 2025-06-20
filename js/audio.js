@@ -162,7 +162,7 @@ export function setupAudio() {
     Tone.Transport.loop = true;
     Tone.Transport.loopStart = "1m";
     Tone.Transport.bpm.value = 120;
-    Tone.Transport.loopEnd = "32m";
+    Tone.Transport.loopEnd = "33m";
 
 
     //Webmidi

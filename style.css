@@ -157,6 +157,7 @@ right: 0px;
     max-width: 815px;
     overflow: auto;
     padding-top: 20px;
+    opacity: 0.7;
 }
 
 button {
@@ -281,7 +282,7 @@ input[type=range] {
 
 #helloBackground {
     display: flex;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: center;
     position: fixed;
     width: 100%;
