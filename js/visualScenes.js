@@ -3,7 +3,7 @@ import { setVisualParameter, paramVals, animationVals, sliders, resultSliders} f
 
 let sceneSliderSum = 0.01
 let activeScene = 0
-let scenes = []
+export let scenes = []
 
 export let animationCurves = {
     "Ramp in": v => v,
@@ -40,6 +40,7 @@ export let animationCurves = {
 document.getElementById("saveSceneButton").addEventListener("click", saveScene);
 document.getElementById("deleteSceneButton").addEventListener("click", deleteScene);
 document.getElementById("updateSceneButton").addEventListener("click", updateScene);
+document.getElementById("renameSceneButton").addEventListener("click", renameScene);
 document.getElementById("saveButtonButton").addEventListener("click", downloadScenes);
 
 export async function createSceneInterface() {
@@ -61,23 +62,40 @@ export async function createSceneInterface() {
     const parsedScenes = JSON.parse(scenesAsJson);
     scenes = parsedScenes.scenes
 
+    //remove in the future when no old scenes are there.
+    let foundScenesWithoutId = false
+    scenes.forEach(function(scene) {
+        if (!scene.id) {
+            foundScenesWithoutId = true
+            scene.id = crypto.randomUUID();
+        }
+    });
+    if (foundScenesWithoutId){
+        saveScenesToLocalStorage(scenes)
+    }
+
     if (!scenes){
         throw new Error("Could not Load Scenes. Try to empty Browser Cache. All will be lost.")
     }
+
+    let sceneCont = document.getElementById("sceneLinkContainer")
+    sceneCont.innerHTML = "<button id=\"selectSceneMixer\" class=\"sceneLink\">Scene Mixer</button>"
+
     scenes.forEach((scene, i) => {
-        createSceneButton(i);
-        createSceneSliders(i);
+        createSceneButton(scene);
+        createSceneSlider(scene);
     });
 
-    setTimeout(() => {selectScene(34);}, 500)
+    setTimeout(() => {loadScene(34);}, 500)
 
 }
 
-function createSceneSliders(i) {
+function createSceneSlider(scene) {
+    //console.log("create scene slider " + scene.id )
     const sceneSliderCont = document.getElementById("sceneSliderContainer");
 
     const div = document.createElement("div");
-    div.innerHTML = `<span class="sceneSliderLabel">${i}</span>`;
+    div.innerHTML = `<span class="sceneSliderLabel">${scene.description}</span>`;
 
     const sceneSlider = document.createElement("input");
     sceneSlider.type = "range";
@@ -85,7 +103,7 @@ function createSceneSliders(i) {
     sceneSlider.max = "1";
     sceneSlider.step = 1e-18;
     sceneSlider.value = "0";
-    sceneSlider.id = "sceneSlider" + i;
+    sceneSlider.id = "sceneSlider " + scene.id
     sceneSlider.classList.add("sceneSlider");
     sceneSlider.addEventListener("input", updateSceneSliders);
 
@@ -94,8 +112,11 @@ function createSceneSliders(i) {
 }
 
 function saveScene(no) {
+    let description = prompt("Enter scene description:", `Scene ${scenes.length + 1} description`);
+    if (description === null) return; // User cancelled
+
     let newScene = {}
-    newScene["description"] = `Scene ${scenes.length + 1} description`
+    newScene["description"] = description
     newScene["sliderValues"] = { ...paramVals }
     newScene["animation"] = getAnimationStates()
     scenes.push(newScene)
@@ -103,8 +124,8 @@ function saveScene(no) {
 
     let sceneNo = scenes.length
     console.log("Save Scene " + sceneNo)
-    createSceneButton(sceneNo - 1)
-    createSceneSliders(sceneNo - 1)
+    createSceneButton(newScene)
+    createSceneSlider(newScene)
 }
 
 function getAnimationStates(){
@@ -159,18 +180,28 @@ function updateScene() {
     saveScenesToLocalStorage(scenes)
 }
 
-function createSceneButton(sceneNo) {
+function renameScene() {
+    let description = prompt("Enter scene description:", `Scene ${scenes.length + 1} description`);
+    if (description === null) return; // User cancelled
+
+    scenes[activeScene].description = description;
+
+    console.log("Rename Scene " + activeScene)
+    saveScenesToLocalStorage(scenes)
+    createSceneInterface()
+}
+
+function createSceneButton(scene) {
     let sceneCont = document.getElementById("sceneLinkContainer")
     let sceneLink = document.createElement("button")
-    sceneLink.onclick = () => selectScene(sceneNo);
-    sceneLink.innerHTML = `${sceneNo}`
+    sceneLink.onclick = () => loadScene(scene.id);
+    sceneLink.innerHTML = scene.description
     sceneLink.classList.add("sceneLink")
 
-    if (sceneNo === activeScene) {
+    if (scene === activeScene) {
         sceneLink.classList.add("active")
     }
-    sceneLink.id = "loadScene" + sceneNo
-    //sceneLink.innerHTML = `<button onclick="loadScene(${sceneNo})">Scene ${sceneNo}</button>`
+    sceneLink.id = "loadScene" + scene.description
     sceneCont.appendChild(sceneLink)
 }
 
@@ -181,27 +212,30 @@ function deleteScene() {
     saveScenesToLocalStorage(scenes)
 
     document.querySelectorAll('.sceneLink').forEach(e => e.remove());
-    scenes.forEach((scene, i) => {
-        createSceneButton(i)
-        createSceneSliders(i)
-    })
+    createSceneInterface()
 }
 
-function selectScene(number) {
+export function loadScene(id) {
 
-    console.log("Load Scene " + number)
-    activeScene = number
-    if (!scenes[number]) {
+    console.log("Load Scene " + id)
+    activeScene = id
+
+    console.log(scenes)
+
+    const scene = scenes.find(s => s.id === id);
+
+    if (!scene) {
+        console.log("scene not found")
         return
     }
-    let sliderValues = scenes[number].sliderValues
+    let sliderValues = scene.sliderValues
     Object.keys(sliderNames).forEach(k => {
         if (sliderValues[k] !== null && sliderValues[k] !== undefined) {
             setVisualParameter(k, sliderValues[k])
         }
     })
 
-    let animationStates = scenes[number].animation
+    let animationStates = scene.animation
     if (animationStates){
         setAnimationStates(animationStates)
     }
@@ -213,7 +247,7 @@ function selectScene(number) {
         element.classList.remove("active");
     });
 
-    document.getElementById("loadScene" + number).classList.add("active")
+    document.getElementById("loadScene" + scene.description).classList.add("active")
 
     document.querySelectorAll('.animation-prop-div').forEach(element => {
         element.classList.remove('hide');
@@ -230,14 +264,13 @@ function updateSceneSliders() {
     //Scene Slides are audio Sliders?
     let sceneSliders = document.querySelectorAll(".sceneSlider")
 
-    //caluculate this only once and not for every Slider again
+    //caluculate the slider proportions only once and not for every Slider again
     sceneSliders.forEach((elem, i) => {
         sceneSliderValueMap[i] = Number(elem.value)
         sceneSliderSum += Number(elem.value)
     })
 
     //Take the scenes and add the values of the sliders together
-
     for (let slider in sliderNames) {
         let valueFromScenes = 0
 
@@ -285,13 +318,15 @@ function downloadScenes() {
 
 }
 
-export function setSceneSlider(no, value) {
-    const slider = document.getElementById("sceneSlider" + no);
+export function setSceneSlider(sceneId, value) {
+    console.log("set scene name")
+    console.log(sceneId)
+    const slider = document.getElementById("sceneSlider " + sceneId);
     if (slider) {
         slider.value = value;
         updateSceneSliders()
     } else {
-        console.log("no scene no " + no);
+        console.log("no scene no " + sceneId);
     }
 }
 

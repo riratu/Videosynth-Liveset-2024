@@ -2,6 +2,7 @@ import {sliderNames} from './videoSliderNames.js';
 import * as p5 from '../lib/p5.min.js';
 import '../lib/p5.min.js';
 import {animationCurves} from './visualScenes.js';
+import {toggleExpert} from "./main.js";
 
 export var sliders = []
 export var animationVals = []
@@ -15,7 +16,7 @@ export var sliderKeys = Object.keys(sliderNames);
 const mainSketch = (p5) => {
 
     let particles = [];
-    const particleArrayLength = 10000
+    const particleArrayLength = 1000
 
     let imgs = []
 
@@ -306,6 +307,7 @@ const mainSketch = (p5) => {
         if (key === "m") {
             console.log("Toggle Menu")
             document.getElementById('visualsMenuContainer').classList.toggle("hide")
+            toggleExpert()
             // document.getElementById('audio-sliders-container').classList.toggle("hide")
         }
 

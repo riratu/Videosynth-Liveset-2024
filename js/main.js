@@ -15,12 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.classList.add("show-expert")
     }
 
+    console.log("settings")
+    console.log(settings.load)
+
+    if (settings.load){
+        startAll()
+    }
+
     document.getElementById("helloClick").addEventListener("click", () => {
-            setupAudio()
-            setupLaunchpad()
-            createSceneInterface()
-            document.getElementById("helloContainer").classList.add("hide")
-            document.getElementById("audio-sliders-container").classList.remove("hide")
+            saveSetting("load", true)
+            startAll
         }
     );
 
@@ -34,11 +38,30 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("toggleExpertModeButton").addEventListener("click", toggleExpert)
     document.getElementById("setZeroButton").addEventListener("click", setZero)
     document.getElementById("toggleAudioButton").addEventListener("click", toggleAudio)
-
-    document.getElementById("selectSceneMixer").addEventListener("click", sceneMixer)
 })
 
-function toggleExpert() {
+function startAll(){
+    createSceneInterface()
+    setupAudio()
+    setupLaunchpad()
+    document.getElementById("helloContainer").classList.add("hide")
+    document.getElementById("audio-sliders-container").classList.remove("hide")
+    document.getElementById("selectSceneMixer").addEventListener("click", sceneMixer)
+}
+
+export function toggleExpert() {
     settings.expertMode = document.body.classList.toggle("show-expert");
+    saveSetting("expert", true)
+}
+
+function saveSetting(name, value){
+    let settings = JSON.parse(localStorage.getItem("settings"))
+
+    if (!settings){
+        settings = {}
+    }
+    settings[name] = value
+    console.log("save setting")
+    console.log(settings)
     localStorage.setItem("settings", JSON.stringify(settings))
 }

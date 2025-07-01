@@ -1,5 +1,6 @@
 import {setSceneSlider, animateSliders} from './visualScenes.js';
 import {renderLaunchpad} from './launchpad_mini_controller.js';
+import {loadScene, scenes as visualScenes} from './visualScenes.js';
 
 let noSound = false
 let sounds = []
@@ -18,6 +19,8 @@ let maxChannelCount
 let midiConnected = true
 
 let maxSLidersActive = 10
+
+var sceneMapping
 
 export function setRampTime(newTime){
     rampTime = newTime
@@ -74,7 +77,39 @@ const follower = new Tone.Follower(sideChainReleaseTime)
 
 let merger
 
+function createSceneMappingSelect(folderName) {
+    let visualSceneSelect = document.createElement("select")
+    visualSceneSelect.classList.add("expert")
+
+    const opt = document.createElement('option');
+    opt.value = null;
+    opt.textContent = "----------";
+    visualSceneSelect.appendChild(opt);
+
+    visualScenes.forEach(scene => {
+        const opt = document.createElement('option');
+        opt.value = scene.id;
+        opt.textContent = scene.description;
+
+        if (sceneMapping[folderName] === scene.id) {
+            opt.selected = true;
+        }
+
+        visualSceneSelect.appendChild(opt);
+    });
+
+    visualSceneSelect.addEventListener('change', () => {
+        //console.log(opt)
+        console.log(visualSceneSelect.value);
+        saveSceneMapping(folderName, visualSceneSelect.value)
+        loadScene(visualSceneSelect.value)
+    });
+    return visualSceneSelect;
+}
+
 export function setupAudio() {
+    getSceneMapping()
+
     maxChannelCount = Tone.getContext().rawContext.destination.maxChannelCount;
     Tone.getContext().rawContext.destination.channelCount = maxChannelCount;
     Tone.getContext().rawContext.destination.channelCountMode = "explicit";
@@ -180,9 +215,12 @@ export function setupAudio() {
     let offset = 0
     let slidersinCurrentScene = []
     let sceneNo = -1
+
     for (let i = 0; i < sounds.length; i++) {
 
         let folderName = soundsFiles[i].split('/')[0]
+
+        //Create a new section
         if (folderName !== lastFolder) {
             sceneNo++
 
@@ -194,8 +232,11 @@ export function setupAudio() {
             lastFolder = folderName
             containerDiv = document.createElement("div")
             containerDiv.innerHTML = "<h3 class='expert'>" + folderName + "</h3>";
-
             containerDiv.classList.add("scene");
+
+            let visualSceneSelect = createSceneMappingSelect(folderName);
+
+            containerDiv.appendChild(visualSceneSelect)
 
             const sliderContainer = document.getElementById("audio-sliders-container");
             sliderContainer.appendChild(containerDiv);
@@ -213,6 +254,7 @@ export function setupAudio() {
         slidersinCurrentScene.push(i)
 
         audioTrack[i] = createNewSlider(0, sceneNo)
+        audioTrack[i].sceneName = folderName
         let sliderDomObject = audioTrack[i].slider
         sliderDomObject.addEventListener("input", () => updateSound(i));
         div.appendChild(sliderDomObject)
@@ -293,10 +335,8 @@ export function updateSound(i) {
         }
     }
 
-    //make only if fade to zero
-
+    //move sliders down, when to many are active
     selection.no = i
-
     lastUpdatedSliders = [i, ...lastUpdatedSliders.filter(x => x !== i)];
     if (lastUpdatedSliders.length > maxSLidersActive) {
         let removed = lastUpdatedSliders.pop();
@@ -304,11 +344,11 @@ export function updateSound(i) {
         console.log(removed);
     }
 
-    updateBroadcastChannel(i)
+    updateVisualMixer(i)
     renderLaunchpad()
 }
 
-function updateBroadcastChannel(i) {
+function updateVisualMixer(i) {
    // if (audioTrack[i].scene > 1) {
         let sum = 0;
         let count = 0;
@@ -322,7 +362,9 @@ function updateBroadcastChannel(i) {
 
         // Broadcast the Values to the visual thingie
         bc.postMessage(audioTrack[i].scene + ":" + avg);
-        setSceneSlider(audioTrack[i].scene, avg);
+
+        let sceneId = sceneMapping[audioTrack[i].sceneName]
+        setSceneSlider(sceneId, avg);
    // }
 }
 
@@ -407,7 +449,7 @@ export function setSliderValue(value, targetParameter = null, speed = null, cont
         if (currentStep < totalSteps) {
             parameterSlider.slider.value = currentValue;
             parameterGain.volume.value = Tone.gainToDb(currentValue);
-            updateBroadcastChannel(sliderNumber);
+            updateVisualMixer(sliderNumber);
         } else {
             parameterSlider.slider.value = endValue;
             parameterGain.volume.value = Tone.gainToDb(endValue);
@@ -650,4 +692,21 @@ function createMultibandCompressor() {
         compressors: { lowCompressor, midCompressor, highCompressor },
         gains: { lowGain, midGain, highGain }
     };
+}
+
+function getSceneMapping(){
+    sceneMapping = JSON.parse(localStorage.getItem("sceneMapping"))
+
+    if (!sceneMapping){
+        console.log("no scene maping")
+        sceneMapping = {}
+    }
+
+    console.log("load Scene Mapping")
+    console.log(sceneMapping)
+}
+
+function saveSceneMapping(folderName, scene){
+    sceneMapping[folderName] = scene;
+    localStorage.setItem("sceneMapping", JSON.stringify(sceneMapping))
 }
