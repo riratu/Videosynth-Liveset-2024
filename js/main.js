@@ -61,7 +61,5 @@ function saveSetting(name, value){
         settings = {}
     }
     settings[name] = value
-    console.log("save setting")
-    console.log(settings)
     localStorage.setItem("settings", JSON.stringify(settings))
 }

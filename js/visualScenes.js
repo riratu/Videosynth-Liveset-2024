@@ -79,7 +79,7 @@ export async function createSceneInterface() {
     }
 
     let sceneCont = document.getElementById("sceneLinkContainer")
-    sceneCont.innerHTML = "<button id=\"selectSceneMixer\" class=\"sceneLink\">Scene Mixer</button>"
+    sceneCont.innerHTML = ""
 
     scenes.forEach((scene, i) => {
         createSceneButton(scene);
@@ -193,7 +193,7 @@ function renameScene() {
 
 function createSceneButton(scene) {
     let sceneCont = document.getElementById("sceneLinkContainer")
-    let sceneLink = document.createElement("button")
+    let sceneLink = document.createElement("a")
     sceneLink.onclick = () => loadScene(scene.id);
     sceneLink.innerHTML = scene.description
     sceneLink.classList.add("sceneLink")
@@ -219,8 +219,6 @@ export function loadScene(id) {
 
     console.log("Load Scene " + id)
     activeScene = id
-
-    console.log(scenes)
 
     const scene = scenes.find(s => s.id === id);
 
@@ -319,8 +317,6 @@ function downloadScenes() {
 }
 
 export function setSceneSlider(sceneId, value) {
-    console.log("set scene name")
-    console.log(sceneId)
     const slider = document.getElementById("sceneSlider " + sceneId);
     if (slider) {
         slider.value = value;

@@ -1,9 +1,15 @@
+:root {
+    --color1: lightgrey;
+    --color2: rgb(25,30,35);
+    --color3: aqua;
+}
+
 body {
     padding: 0;
     margin: 0;
     background-color: black;
     font-family: Caprasimo;
-    color: lightgrey;
+    color: var(--color1);
     overflow: hidden;
     font-family: "Helvetica Neue";
 }
@@ -19,10 +25,19 @@ p {
     width: 100%;
 }
 
+#selectSceneMixer {
+    display: block;
+    margin-top: 10px;
+}
 
+.sceneLink {
+    text-decoration: underline;
+    width: 146px;
+    cursor: pointer;
+}
 
 .sceneLink.active {
-    background-color: aqua;
+    background-color: var(--color3);
 }
 #sliderContainer > * {
 }
@@ -35,15 +50,16 @@ h3 {
     flex-direction: row;
     flex-wrap: wrap;
     width: 100%;
-    background: darkgray;
+    /*background: var(--color2);*/
     padding-top: 8px;
-    opacity: 80%;
-    padding-left: 5px;
+    border-bottom: var(--color1) 2px solid;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 #sceneSliderContainer > div {
     /*background: red;*/
-    width: 100px;
+    width: 150px;
 }
 
 #sceneLinkContainer, #sceneMetaButtons {
@@ -56,6 +72,9 @@ h3 {
     flex-wrap: wrap;
     gap: 5px;
     width: 100%;
+    border-bottom: var(--color1) 2px solid;
+    padding-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .hide {
@@ -67,14 +86,12 @@ h3 {
     margin-top: -5px;
 }
 
-input[type="range"].sceneSlider {
-    width: 71px;
-}
 .sceneSliderLabel {
-    width: 18px;
+    width: 100%;
+    overflow: hidden;
+    text-wrap: nowrap;
     display: inline-block;
     position: relative;
-    top: -5px;
 }
 
 /*@font-face {*/
@@ -157,14 +174,29 @@ right: 0px;
     max-width: 815px;
     overflow: auto;
     padding-top: 20px;
-    opacity: 0.7;
+    opacity: 40;
+    transition: opacity 1s;
 }
 
-button {
+body.show-expert .many-sliders-container {
+    min-width: 800px;
+}
+
+.many-sliders-container:hover {
+    opacity: 100%;
+}
+
+button, select {
     background: none;
     border-radius: 4px;
-    border: 1px solid #333;
-    color: lightgray;
+    border: 1px solid var(--color1);
+    color: var(--color1);
+    cursor: pointer;
+}
+
+select.scene-mapping {
+    width: 150px;
+    margin-bottom: 5px;
 }
 
 #visualsMenuContainer {
@@ -175,16 +207,14 @@ button {
     padding: 5px;
     width: 100%;
     max-height: 100%;
-    max-width: 750px;
-    padding-top: 20px;
+    max-width: 450px;
+    min-width: 310px;
     background: black;
     opacity: 85%;
-    border: 1px dotted white;
-    border: 1px dotted white;
+    /*border: 1px dotted var(--color1);*/
     border-radius:10px;
     padding: 10px;
     overflow-y: auto;
-    background: rgba(0, 0, 0, 0.6);
     /*flex-shrink: 2;*/
 }
 
@@ -205,7 +235,7 @@ button {
     padding: 5px;
     background: rgba(0, 0, 0, 0.3);
     /*background: linear-gradient(to bottom right, #aaccff, #ffe6f2);*/
-    border: 1px dotted white;
+    /*border: 1px dotted white;*/
     margin-left: -1px;
     margin-top: -1px;
     box-sizing: border-box;
@@ -217,7 +247,7 @@ button {
 
 body.show-expert .scene {
     /*background: linear-gradient(to bottom right, #aaccff, #ffe6f2);*/
-    background: rgba(0, 0, 0, 0.8);
+    /*background: var(--color2);*/
 }
 
 /*.slider-entity :not(.show-expert) {*/
@@ -282,9 +312,9 @@ input[type=range] {
 
 #helloBackground {
     display: flex;
-    /*justify-content: center;*/
-    justify-content: right;
+    justify-content: center;
     align-items: center;
+    /*justify-content: right;*/
     /* align-items: end;   */
     position: fixed;
     width: 100%;
@@ -296,6 +326,8 @@ input[type=range] {
 
 body.show-expert #helloBackground {
     padding-top: 40px;
+    align-items: start;
+    justify-content: start;
 }
 
 #helloContainer {
@@ -322,5 +354,5 @@ body.show-expert #helloBackground {
     border-radius: 5px;
     padding: 1px;
     box-sizing: border-box;
-    background: dimgray;
+    background: var(--color2);
 }

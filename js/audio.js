@@ -80,6 +80,7 @@ let merger
 function createSceneMappingSelect(folderName) {
     let visualSceneSelect = document.createElement("select")
     visualSceneSelect.classList.add("expert")
+    visualSceneSelect.classList.add("scene-mapping")
 
     const opt = document.createElement('option');
     opt.value = null;
@@ -701,9 +702,6 @@ function getSceneMapping(){
         console.log("no scene maping")
         sceneMapping = {}
     }
-
-    console.log("load Scene Mapping")
-    console.log(sceneMapping)
 }
 
 function saveSceneMapping(folderName, scene){
