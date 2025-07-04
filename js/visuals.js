@@ -13,6 +13,76 @@ export var checkboxValues = {}
 
 export var sliderKeys = Object.keys(sliderNames);
 
+function moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale) {
+    let n = p5.noise(p.x * maxNoiseScale * paramVals["curlNoiseScale"], p.y * maxNoiseScale * paramVals["curlNoiseScale"], p5.frameCount * (paramVals["noiseTimeScale"] * maxNoiseTimeScale));
+    let b = p5.TAU * n * (p.x / (p5.width / 2) * paramVals["curlFactor"]);
+    let a = p5.TAU * n * ((p.y / (p5.height / 2) + 1) * paramVals["curlFactor"]);
+
+    p.x += p5.cos(a) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
+    p.y += p5.sin(b) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
+
+    p.x += (p.x) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
+    p.y += (p.y) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
+
+    //Translation
+    p.x += ((paramVals["moveX"] - 0.5) * sliderNames.moveX.max)
+    p.y += ((paramVals["moveY"] - 0.5) * sliderNames.moveX.max)
+}
+
+function drawImages(particleNo, i, p5, imgs, p) {
+    let fishcount = particleNo / (particleNo / 1000)
+    if (i % fishcount == 0 && paramVals["img1Alpha"] > 0.1) {
+        p5.tint(255, paramVals["img1Alpha"])
+        p5.image(imgs[4], p.x, p.y, 200, 200);
+    }
+    if (i % (fishcount + 80) == 0 && paramVals["img2Alpha"] > 0.1) {
+        p5.tint(255, paramVals["img2Alpha"])
+        p5.image(imgs[5], p.x, p.y, 200, 200);
+    }
+    if (i % (fishcount + 70) == 0 && paramVals["img3Alpha"] > 0.1) {
+        p5.tint(255, paramVals["img3Alpha"])
+        p5.image(imgs[2], p.x, p.y, 200, 200);
+    }
+    // if (i % (fishcount + 20) == 0 && paramVals["img4Alpha"] > 0.1) {
+    //     tint(255, paramVals["img4Alpha"])
+    //     image(imgs[3], p.x, p.y, 200, 200);
+    // }
+    if (i % (fishcount / 2 + 100) == 0 && paramVals["img4Alpha"] > 0.1) {
+        p5.tint(255, paramVals["img4Alpha"])
+        p5.image(imgs[7], p.x, p.y, 200, 200);
+    }
+    if (i % (fishcount + 5) == 0 && paramVals["img4Alpha"] > 0.1) {
+        p5.tint(255, paramVals["img4Alpha"])
+        p5.image(imgs[6], p.x, p.y, 200, 200);
+    }
+}
+
+function drawLines2(i, lineModulo, p5, hue, sat, particleNo, particles, p) {
+    if (paramVals.linesTransparency > 0.05) {
+        if (i % lineModulo === 0) {
+            p5.stroke(hue, sat, 1, paramVals.linesTransparency)
+
+            let lineDist = 50
+            let foundLines = 0
+
+            for (let ii = 1; 1 < 20; ii++) {
+
+                let otherIndex = (i + ii) % particleNo
+
+                if (p5.abs(particles[otherIndex].x - p.x) < lineDist
+                    && p5.abs(particles[otherIndex].y - p.y) < lineDist) {
+                    p5.line(p.x, p.y, particles[otherIndex].x, particles[otherIndex].y)
+
+                    foundLines += 1
+                    if (foundLines > 5) {
+                        break
+                    }
+                }
+            }
+        }
+    }
+}
+
 const mainSketch = (p5) => {
 
     let particles = [];
@@ -29,7 +99,6 @@ const mainSketch = (p5) => {
 
 //Technicalities
     var spawnCirleSpeed = 0.1
-    var spawnRadius
     let lastParticleSpawned = 0
     var spawnCircleAngle = 0
     let maxSpawnRandSize
@@ -44,13 +113,8 @@ const mainSketch = (p5) => {
 
     let particleReducer = 1
 
-// Connection to a broadcast channel
+    // Connection to a broadcast channel
     const bc = new BroadcastChannel("sceneValues");
-
-
-
-
-
 
     p5.windowResized = function () {
         p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
@@ -77,13 +141,13 @@ const mainSketch = (p5) => {
         p5.clear();
 
         //let usbMidiKnobInterface = "USB MIDI ADC 64"// [ID] or "device name"
-        // let midiInput, midiOutput, midiMsg = {}
+        //let midiInput, midiOutput, midiMsg = {}
         //setupMidi(usbMidiKnobInterface, null) // deviceIn, deviceOut
     }
 
     p5.draw = function () {
 
-        //make it ok for all devices
+        //make it ok for slower devices
         if (p5.frameRate() < 15) {
             if (particleReducer > 0.05) {
                 particleReducer *= 0.95
@@ -117,7 +181,6 @@ const mainSketch = (p5) => {
         p5.background(0, paramVals.bgTransparency);
 
         let colorChange = (paramVals.colorChange - 0.5) / 5000
-        spawnRadius = paramVals["spawnRadius"]
         spawnCirleSpeed = (2 ** (paramVals["spawnCirleSpeed"] * 4)) / 8
         let stokeWeight = paramVals["stokeWeight"]
         let particleNo = Math.floor((particleArrayLength - 1) * particleReducer) + 1
@@ -128,10 +191,12 @@ const mainSketch = (p5) => {
 
         spawnCircleAngle += spawnCirleSpeed * maxSpawnCirleSpeed
 
+        //Span new Particles
         for (let i = 0; i < spawnRate; i++) {
             lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
             spawnParticle(particles[lastParticleSpawned], i, spawnRate)
         }
+
         for (let i = 0; i < particleNo; i++) {
             let currentP = i + lastParticleSpawned % particleNo
 
@@ -154,55 +219,7 @@ const mainSketch = (p5) => {
                 }
             }
 
-            if (paramVals.linesTransparency > 0.05) {
-                if (i % lineModulo === 0) {
-                    p5.stroke(hue, sat, 1, paramVals.linesTransparency)
-
-                    let lineDist = 50
-                    let foundLines = 0
-
-                    for (let ii = 1; 1 < 20; ii++) {
-
-                        let otherIndex = (i + ii) % particleNo
-
-                        if (p5.abs(particles[otherIndex].x - p.x) < lineDist
-                            && p5.abs(particles[otherIndex].y - p.y) < lineDist) {
-                            p5.line(p.x, p.y, particles[otherIndex].x, particles[otherIndex].y)
-
-                            foundLines += 1
-                            if (foundLines > 5) {
-                                break
-                            }
-                        }
-                    }
-                }
-            }
-
-            let fishcount = particleNo / (particleNo / 1000)
-            if (i % fishcount == 0 && paramVals["img1Alpha"] > 0.1) {
-                p5.tint(255, paramVals["img1Alpha"])
-                p5.image(imgs[4], p.x, p.y, 200, 200);
-            }
-            if (i % (fishcount + 80) == 0 && paramVals["img2Alpha"] > 0.1) {
-                p5.tint(255, paramVals["img2Alpha"])
-                p5.image(imgs[5], p.x, p.y, 200, 200);
-            }
-            if (i % (fishcount + 70) == 0 && paramVals["img3Alpha"] > 0.1) {
-                p5.tint(255, paramVals["img3Alpha"])
-                p5.image(imgs[2], p.x, p.y, 200, 200);
-            }
-            // if (i % (fishcount + 20) == 0 && paramVals["img4Alpha"] > 0.1) {
-            //     tint(255, paramVals["img4Alpha"])
-            //     image(imgs[3], p.x, p.y, 200, 200);
-            // }
-            if (i % (fishcount / 2 + 100) == 0 && paramVals["img4Alpha"] > 0.1) {
-                p5.tint(255, paramVals["img4Alpha"])
-                p5.image(imgs[7], p.x, p.y, 200, 200);
-            }
-            if (i % (fishcount + 5) == 0 && paramVals["img4Alpha"] > 0.1) {
-                p5.tint(255, paramVals["img4Alpha"])
-                p5.image(imgs[6], p.x, p.y, 200, 200);
-            }
+            drawImages(particleNo, i, p5, imgs, p);
 
             // if (i % (fishcount + 90) == 0 && paramVals["img4Alpha"] > 0.1) {
             //     tint(255, paramVals["img4Alpha"])
@@ -212,6 +229,8 @@ const mainSketch = (p5) => {
             //     tint(255, paramVals["img4Alpha"])
             //     image(imgs[5], p.x, p.y, 200, 200);
             // }
+
+            drawLines2(i, lineModulo, p5, hue, sat, particleNo, particles, p);
 
             if (paramVals.line2Alpha
                 && i % 10 == 0
@@ -231,22 +250,7 @@ const mainSketch = (p5) => {
                 p5.line(p.x, p.y, particles[otherP2].x, particles[otherP2].y)
             }
 
-
-            //Move the Particles
-            let n = p5.noise(p.x * maxNoiseScale * paramVals["curlNoiseScale"], p.y * maxNoiseScale * paramVals["curlNoiseScale"], p5.frameCount * (paramVals["noiseTimeScale"] * maxNoiseTimeScale));
-            let b = p5.TAU * n * (p.x / (p5.width / 2) * paramVals["curlFactor"]);
-            let a = p5.TAU * n * ((p.y / (p5.height / 2) + 1) * paramVals["curlFactor"]);
-
-            p.x += p5.cos(a) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
-            p.y += p5.sin(b) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
-
-            p.x += (p.x) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
-            p.y += (p.y) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
-
-            //Translation
-            p.x += ((paramVals["moveX"] - 0.5) * sliderNames.moveX.max)
-            p.y += ((paramVals["moveY"] - 0.5) * sliderNames.moveX.max)
-
+            moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale);
         }
     }
 
@@ -270,8 +274,8 @@ const mainSketch = (p5) => {
 
         //Add some circular movement
         let iOffset = paramVals.spawnOffsetMultiplierCircle * i * maxSpawnOffsetMultiplier
-        p.x += p5.cos(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOffset)
-        p.y += p5.sin(spawnCircleAngle) * spawnRadius * (maxSpawnRadius + iOffset)
+        p.x += p5.cos(spawnCircleAngle) * paramVals["spawnRadius"] * (maxSpawnRadius + iOffset)
+        p.y += p5.sin(spawnCircleAngle) * paramVals["spawnRadius"] * (maxSpawnRadius + iOffset)
     }
 
      p5.preload = function () {
