@@ -23,8 +23,8 @@ function moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale) {
     p.x += p5.cos(a) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
     p.y += p5.sin(b) * sliderNames.particleMoveSpeed.max * paramVals["particleMoveSpeed"]
 
-    p.x += (p.x) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
-    p.y += (p.y) * ((sliderNames.zoomSpeed.max * paramVals["zoomSpeed"]) - (sliderNames.zoomSpeed.max / 2))
+    p.x += (p.x) * (( paramVals["zoomSpeed"]))
+    p.y += (p.y) * ((paramVals["zoomSpeed"]))
 
     //Translation
     p.x += ((paramVals["moveX"] - 0.5) * sliderNames.moveX.max)
@@ -96,8 +96,6 @@ const mainSketch = (p5) => {
     let maxNoiseTimeScale = 0.051
     var maxSpawnRadius = 500
     var maxSpawnCirleSpeed = 0.05
-    let maxStokeWeight = 40
-//var maxSpawnOffsetMultiplier = 10
 
 //Technicalities
     var spawnCirleSpeed = 0.1
@@ -111,9 +109,11 @@ const mainSketch = (p5) => {
     let bgColor = "lightgray"
     let divs = []
     let checkboxes = []
-    let rotation = 0
 
     let particleReducer = 1
+    let particleNo
+
+    let gl
 
     // Connection to a broadcast channel
     const bc = new BroadcastChannel("sceneValues");
@@ -124,7 +124,11 @@ const mainSketch = (p5) => {
 
     p5.setup = function () {
         p5.noFill()
+
         p5.createCanvas(p5.windowWidth, p5.windowHeight);
+
+        gl = p5.createGraphics(p5.windowWidth, p5.windowHeight, p5.WEBGL);
+        gl.setAttributes({ alpha: true });
 
         p5.colorMode(p5.HSB, 1)
 
@@ -167,7 +171,9 @@ const mainSketch = (p5) => {
 
         p5.translate(p5.width / 2, p5.height / 2)
 
-        p5.rotate(paramVals.rotation * p5.PI * 2)
+        //Todo: Make rotation better for the 3d stuff
+        //p5.rotate(paramVals.rotation * p5.PI * 2)
+
         // checkBeat()
         // if (beat) {
         //     newSeed += random(0.5)
@@ -185,29 +191,41 @@ const mainSketch = (p5) => {
         let colorChange = (paramVals.colorChange - 0.5) / 5000
         spawnCirleSpeed = (2 ** (paramVals["spawnCirleSpeed"] * 4)) / 8
         let stokeWeight = paramVals["stokeWeight"]
-        let particleNo = Math.floor((particleArrayLength - 1) * particleReducer) + 1
+        particleNo = Math.floor((particleArrayLength - 1) * particleReducer) + 1
+
+        let sphereNumberModulo =  Math.floor(particleNo / paramVals["sphereCount"])
+        let boxNumberModulo =  Math.floor(particleNo / paramVals["boxCount"])
 
         let lineModulo = Math.floor(particleNo / 200)
 
-        let spawnRate = 1 + (paramVals["spawnRate"] * particleArrayLength / 40)
+        let spawnRate = 1 + (paramVals["spawnRate"] * particleArrayLength / 20)
 
         spawnCircleAngle += spawnCirleSpeed * maxSpawnCirleSpeed
 
-        //Span new Particles
-        for (let i = 0; i < spawnRate; i++) {
-            lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
-            spawnParticle(particles[lastParticleSpawned], i, spawnRate)
-        }
+        gl.background(0, 10);
+        gl.noFill();
 
         for (let i = 0; i < particleNo; i++) {
-            let currentP = i + lastParticleSpawned % particleNo
+            //part no 1000
+            //last spawned = 500
+            //i = 100
+            //result 700 / 1000 = 0.7
+            // last spawned - i = 400
+            //
+            let p = particles[i];
+            moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale);
 
-            let hue = (paramVals.color + (colorChange * currentP)) % 1
+            const currentP = i > lastParticleSpawned
+                ? i - lastParticleSpawned
+                : particleNo - lastParticleSpawned + i;
+            const age = currentP / particleNo
+
+            let hue = (paramVals.color + (colorChange * age)) % 1
             let sat = (paramVals.saturation)
 
-            p5.strokeWeight(0.3 + stokeWeight * maxStokeWeight)
+            p5.strokeWeight(0.3 + stokeWeight)
 
-            let p = particles[i];
+
             if (paramVals.pointAlpha > 0.05) {
                 let alpha = paramVals.pointAlpha
                 p5.stroke(hue, sat, 1, alpha)
@@ -217,9 +235,12 @@ const mainSketch = (p5) => {
             if (paramVals.ellipseSize > 0.02) {
                 if (i % 5 == 0) {
                     p5.stroke(hue, sat, 1, paramVals.ellipseAlpha)
-                    p5.ellipse(p.x, p.y, sliderNames.ellipseSize.max * paramVals.ellipseSize)
+                    p5.ellipse(p.x, p.y, paramVals.ellipseSize)
                 }
             }
+
+            //
+            //
 
             drawImages(particleNo, i, p5, imgs, p);
 
@@ -252,7 +273,39 @@ const mainSketch = (p5) => {
                 p5.line(p.x, p.y, particles[otherP2].x, particles[otherP2].y)
             }
 
-            moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale);
+            p5.translate(0, 0)
+            //gl.orbitControl();
+            if (i % sphereNumberModulo === 0) {
+                // gl.translate(-300, -300)
+                gl.stroke(255);
+                gl.push();
+                gl.translate(p.x, p.y);
+                gl.rotateY(p5.frameCount / paramVals["rotation"])
+                gl.sphere(paramVals["sphereSize"] - (age * (paramVals["sphereSize"])), 10, 5);
+                gl.pop();
+            }
+            if (i % boxNumberModulo === 0) {
+                // gl.translate(-300, -300)
+                gl.stroke(255);
+                gl.push();
+                gl.translate(p.x, p.y);
+                gl.rotateY(p5.frameCount / paramVals["rotation"])
+                gl.box(paramVals["boxSize"] - (age * (paramVals["boxSize"])));
+                gl.pop();
+            }
+
+            // if (i % 157 === 0) {
+            //     // gl.translate(-300, -300)
+            //     gl.stroke(255);
+            //     gl.push();
+            //     const newX = (p.x + p5.width / 2) % p5.width
+            //     const newY = (p.x + p5.height / 2) % p5.height
+            //     gl.translate(newX, newY);
+            //     gl.rotateY(p5.frameCount / 60)
+            //     gl.box(200 - (age * 200));
+            //     gl.pop();
+            // }
+
         }
 
 
@@ -366,11 +419,22 @@ const mainSketch = (p5) => {
         // Create sliders for all controls in the list
         let sliderContaier = document.getElementById("sliderContainer")
 
+        let sectionDiv
         for (let slider in sliderNames) {
+
+            if (sliderNames[slider].type && sliderNames[slider].type === "section"){
+                let titleDiv = p5.createDiv(`<h1>${slider}</h1>`)
+                titleDiv.parent(sliderContaier)
+                sectionDiv = p5.createDiv()
+                sectionDiv.addClass("visual-slider-sections")
+                sectionDiv.parent(sliderContaier)
+                continue
+            }
+
             let sliderName = slider;
             divs[sliderName] = p5.createDiv(`<span class="visual-labels">${i} ${sliderName}</span>`)
             divs[sliderName].addClass("visual-slider-entity")
-            divs[sliderName].parent(sliderContaier)
+            divs[sliderName].parent(sectionDiv)
 
             checkboxes[sliderName] = p5.createCheckbox()
             checkboxes[sliderName].addClass("visualCheckboxes")
@@ -382,7 +446,9 @@ const mainSketch = (p5) => {
 
             //checkboxes[sliderName].elt.addEventListener('input', updateCheckboxValue);
 
-            let sliderObj = p5.createSlider(0, 1, sliderNames[sliderName].default, 0)
+            let max = sliderNames[sliderName].max !== undefined ? sliderNames[sliderName].max : 1;
+            let min = sliderNames[sliderName].min !== undefined ? sliderNames[sliderName].min : 0;
+            let sliderObj = p5.createSlider(min, max, sliderNames[sliderName].default, 0)
             sliderObj.id(sliderName)
             sliderObj.addClass("visualSliders")
             sliderObj.parent(divs[sliderName]);

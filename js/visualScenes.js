@@ -131,7 +131,7 @@ function saveScene(no) {
 function getAnimationStates(){
     let animationStates = {}
     Object.keys(sliderNames).forEach(k => {
-        if (animationVals[k].type.value !== "---" ){
+        if (animationVals[k] && animationVals[k].type.value !== "---" ){
             animationStates[k] = {}
             animationStates[k].type = animationVals[k].type.value
             animationStates[k].speed = animationVals[k].speed.value
@@ -144,6 +144,10 @@ function getAnimationStates(){
 
 function setAnimationStates(animationStates) {
     Object.keys(sliderNames).forEach(k => {
+        if (sliderNames[k].type && sliderNames[k].type === "section") {
+            return; // Skips to next iteration
+        }
+
         let state = animationStates[k]
         if (!state) state = {}
 
@@ -174,17 +178,27 @@ function saveScenesToLocalStorage(scenes){
 }
 
 function updateScene() {
-    scenes[activeScene].sliderValues = {...paramVals}
-    scenes[activeScene].animation = getAnimationStates()
-    console.log("Save Scene " + activeScene)
-    saveScenesToLocalStorage(scenes)
+    const sceneIndex = scenes.findIndex(s => s.id === activeScene);
+    if (sceneIndex !== -1) {
+        scenes[sceneIndex].sliderValues = { ...paramVals };
+        scenes[sceneIndex].animation = getAnimationStates();
+        console.log("Save Scene " + scenes[sceneIndex].description);
+        saveScenesToLocalStorage(scenes);
+    } else {
+        console.warn("Scene not found for id:", id);
+    }
 }
 
 function renameScene() {
     let description = prompt("Enter scene description:", `Scene ${scenes.length + 1} description`);
     if (description === null) return; // User cancelled
 
-    scenes[activeScene].description = description;
+    const sceneIndex = scenes.findIndex(s => s.id === activeScene);
+    if (sceneIndex == -1) {
+        console.error("scene not found")
+        return;
+    }
+    scenes[sceneIndex].description = description;
 
     console.log("Rename Scene " + activeScene)
     saveScenesToLocalStorage(scenes)
@@ -228,7 +242,10 @@ export function loadScene(id) {
     }
     let sliderValues = scene.sliderValues
     Object.keys(sliderNames).forEach(k => {
-        if (sliderValues[k] !== null && sliderValues[k] !== undefined) {
+        if (sliderValues[k] !== null
+            && sliderValues[k] !== undefined
+        ) {
+            console.log(k.type)
             setVisualParameter(k, sliderValues[k])
         }
     })
@@ -270,6 +287,10 @@ function updateSceneSliders() {
 
     //Take the scenes and add the values of the sliders together
     for (let slider in sliderNames) {
+        if (sliderNames[slider].type && sliderNames[slider].type === "section"){
+            continue
+        }
+
         let valueFromScenes = 0
 
         sceneSliderValueMap.forEach((value, i) => {
@@ -330,6 +351,8 @@ export function setSceneSlider(sceneId, value) {
 // wich have the animate checkbox activates
 // in proportion to the scene slider values
 export function animateSliders(currentTime) {
+
+    let measureStartTime = Date.now()
     const sceneSliders = [...document.querySelectorAll(".sceneSlider")];
     const sliderValues = sceneSliders.map(s => Number(s.value));
     const totalWeight = sliderValues.reduce((sum, v) => sum + v, 0) || 1;
@@ -341,11 +364,15 @@ export function animateSliders(currentTime) {
     };
 
     for (const slider in sliderNames) {
+        if (sliderNames[slider].type && sliderNames[slider].type === "section"){
+            return
+        }
         let sum = 0;
         let animated = false;
         const influence = Number(animationVals[slider].amount.elt.value);
 
         if (activeScene === -1) {
+            //If we are in the scene mixer, add the animation values and weights together.
             sliderValues.forEach((weight, i) => {
                 const anim = scenes[i].animation?.[slider];
                 if (weight > 0 && anim?.type && anim.type !== "---") {
@@ -354,6 +381,7 @@ export function animateSliders(currentTime) {
                 }
             });
         } else {
+            //If we selected a scene, just take the value from the animation slider.
             const anim = animationVals[slider];
             const animType = anim.type.value;
             const speed = Number(anim.speed.value);
@@ -369,4 +397,6 @@ export function animateSliders(currentTime) {
             resultSliders[slider].elt.value = val;
         }
     }
+
+    console.log("Animation Time: " + Date.now() - measureStartTime)
 }
