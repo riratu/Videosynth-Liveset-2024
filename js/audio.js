@@ -1,6 +1,7 @@
 import {setSceneSlider, animateSliders} from './visualScenes.js';
 import {renderLaunchpad} from './launchpad_mini_controller.js';
 import {loadScene, scenes as visualScenes} from './visualScenes.js';
+import {setBeat} from "./visuals.js";
 
 let noSound = false
 let sounds = []
@@ -306,6 +307,10 @@ function updateFx2(i) {
 Tone.Transport.scheduleRepeat((time) => {
     animateSliders(Number(Tone.Transport.seconds))
 }, "16n")
+
+Tone.Transport.scheduleRepeat((time) => {
+        setBeat()
+}, "4n")
 
 export function toggleAudio() {
     // Resume or create the AudioContext

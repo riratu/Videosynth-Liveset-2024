@@ -9,6 +9,8 @@ export var animationVals = []
 export let resultSliders = []
 export var paramVals = {}
 
+let beat
+
 export var checkboxValues = {}
 
 export var sliderKeys = Object.keys(sliderNames);
@@ -252,9 +254,29 @@ const mainSketch = (p5) => {
 
             moveParticle(p5, p, maxNoiseScale, maxNoiseTimeScale);
         }
+
+
+        for (let i = 0; i < spawnRate; i++) {
+            lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
+            spawnParticle(i, spawnRate)
+        }
+
+        //Span new Particles
+        if (beat) {
+            let spawnNo = paramVals["spawnRateOnBeat"]
+            console.log("spawn " + spawnNo + " on beat ")
+            for (let i = 0; i <spawnNo; i++) {
+                lastParticleSpawned = (lastParticleSpawned + 1) % particleNo
+                spawnParticle(i, spawnNo)
+            }
+        }
+
+        p5.image(gl, -p5.width / 2, -p5.height / 2)
+        beat = false
     }
 
-    function spawnParticle(p, i, spawnRate) {
+    function spawnParticle(i, spawnRate) {
+        let p = particles[lastParticleSpawned]
         let spawnRandSizeX = maxSpawnRandSize * paramVals.spawnRandomnessSizeX
         let spawnRandSizeY = maxSpawnRandSize * paramVals.spawnRandomnessSizeY
 
@@ -518,3 +540,9 @@ export function setVisualParameter(parameterName, value) {
     sliders[parameterName].elt.value = value
     paramVals[parameterName] = value
 }
+
+export function setBeat(){
+    beat = true
+}
+
+
