@@ -16,6 +16,10 @@ input[type="range"] {
     overflow: hidden;
 }
 
+input[type="range"].disabled {
+    background: #4CAF50;
+}
+
 /* Track: webkit browsers */
 input[type="range"]::-webkit-slider-runnable-track {
     height: 15px;
@@ -55,4 +59,10 @@ input[type="range"]::-moz-range-thumb {
     /*border-radius: 0px;*/
     border: none;
     box-shadow: -407px 0 0 400px #555;
+}
+
+/* Thumb: Firefox */
+input[type="range"]:disabled::-moz-range-thumb {
+    opacity: 30%;
+    background: #999;
 }
