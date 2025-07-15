@@ -69,7 +69,7 @@ const drumGroup = new Tone.Gain(1.5)
 const sidechainGroup = new Tone.Gain(0.01).connect(multiband.input)
 //const sidechainGroup = new Tone.Gain(0.01).toDestination()
 
-let sideChainRatio = 3
+let sideChainRatio = 1
 let sideChainReleaseTime = 1
 
 // Invert Signal for Sidechain
