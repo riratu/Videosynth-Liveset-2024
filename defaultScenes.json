@@ -1,9 +1,9 @@
 {
     "schemaVersion" : "0.1",
-    "date" : "2025-06-02T06:42:50.835Z",
+    "date" : "2025-07-18T09:44:02.449Z",
     "scenes" : [
         {
-            "description" : "Scene description",
+            "description" : "Star Strokes",
             "sliderValues" : {
                 "zoomSpeed" : 0.357142857142857,
                 "moveX" : 0.5,
@@ -12,7 +12,6 @@
                 "color" : 0.8,
                 "colorChange" : 0.671428571428571,
                 "bgTransparency" : 0.0571428571428571,
-                "particleReducer" : 1,
                 "stokeWeight" : 0.05,
                 "pointAlpha" : 0.628571428571429,
                 "particleMoveSpeed" : 0.857142857142857,
@@ -40,12 +39,11 @@
                 "line3Alpha" : 0,
                 "rotation" : 0
             },
-            "animation" : {
-                "parameters" : {}
-            }
+            "animation" : {},
+            "id" : "a9224d82-71ad-4060-86d0-29fc68c62d50"
         },
         {
-            "description" : "Scene description",
+            "description" : "Zitterhübbel",
             "sliderValues" : {
                 "zoomSpeed" : 0.635714285714286,
                 "moveX" : 0.5,
@@ -61,7 +59,7 @@
                 "spawnRate" : 0.15,
                 "linesTransparency" : 0,
                 "curlNoiseScale" : 0.0214285714285714,
-                "ellipseSize" : 0.02112988887744306,
+                "ellipseSize" : 0.04347380966872989,
                 "noiseTimeScale" : 0.0357142857142857,
                 "spawnRandomnessSizeX" : 0.935714285714286,
                 "spawnRadius" : 0.25,
@@ -87,10 +85,11 @@
                     "speed" : "0.5",
                     "amount" : "0.126923076923077"
                 }
-            }
+            },
+            "id" : "638aa0e7-4825-44dd-a590-5390981a9e98"
         },
         {
-            "description" : "Scene description",
+            "description" : "Band",
             "sliderValues" : {
                 "zoomSpeed" : 0.6,
                 "moveX" : 0.492857142857143,
@@ -99,7 +98,7 @@
                 "color" : 0.11950286601425375,
                 "colorChange" : 0.621428571428571,
                 "bgTransparency" : 0.11950286601425375,
-                "stokeWeight" : 0.10118662102731757,
+                "stokeWeight" : 0.17479779091970565,
                 "pointAlpha" : 0.7,
                 "particleMoveSpeed" : 0.121428571428571,
                 "ellipseAlpha" : 0.507142857142857,
@@ -167,48 +166,52 @@
                 "line2Alpha" : "---",
                 "line3Alpha" : "---",
                 "rotation" : "---"
-            }
+            },
+            "id" : "7b122349-74c1-4417-b8b5-0c28eef4f24e"
         },
         {
-            "description" : "Scene description",
+            "description" : "linksrechts",
             "sliderValues" : {
-                "zoomSpeed" : 0.492857142857143,
+                "zoomSpeed" : -0.00592592592592593,
+                "particleMoveSpeed" : 0.764285714285714,
                 "moveX" : 0.45,
                 "moveY" : 0.435714285714286,
+                "curlNoiseScale" : 0.642857142857143,
+                "noiseTimeScale" : 0,
+                "curlFactor" : 0.5,
                 "saturation" : 0.35,
                 "color" : 0.8,
                 "colorChange" : 0.671428571428571,
                 "bgTransparency" : 0.7077840857279101,
-                "stokeWeight" : 0.0730769230769231,
-                "pointAlpha" : 0.628571428571429,
-                "particleMoveSpeed" : 0.764285714285714,
-                "ellipseAlpha" : 0,
                 "spawnRate" : 0.814285714285714,
-                "linesTransparency" : 0.1364172335601097,
-                "curlNoiseScale" : 0.642857142857143,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 1,
                 "spawnCirleSpeed" : 0.630769230769231,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.478571428571429,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.507692307692308,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.478571428571429,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0.138461538461538,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.87037037037037,
+                "pointAlpha" : 0.628571428571429,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0.1364172335601097,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0
+                "rotation" : 0,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
-            "animation" : {
-                "parameters" : {}
-            },
+            "animation" : {},
             "anmiation" : {
                 "zoomSpeed" : "",
                 "moveX" : "",
@@ -243,86 +246,95 @@
                 "line2Alpha" : "Pulse",
                 "line3Alpha" : "---",
                 "rotation" : ""
-            }
+            },
+            "id" : "c4d34c58-2073-4838-9a9e-13a9161fb713"
         },
         {
-            "description" : "Scene description",
+            "description" : "Band2",
             "sliderValues" : {
                 "zoomSpeed" : 0.717857142857143,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.5,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.671428571428571,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.0607142857142857,
-                "particleReducer" : 1,
-                "stokeWeight" : 0.246428571428571,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
+                "bgTransparency" : 0.0148148148148148,
                 "spawnRate" : 0.0357142857142857,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.0428571428571429,
                 "spawnCirleSpeed" : 0.310714285714286,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.502619047619048,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.516904761904762,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.502619047619048,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.184761904761905,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0.501071428571429,
+                "stokeWeight" : 2.87037037037037,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
-            "animation" : {
-                "parameters" : {}
-            }
+            "animation" : {},
+            "id" : "8777a054-7972-43e3-9e95-40d7c1f2ba7b"
         },
         {
-            "description" : "Scene 12 description",
+            "description" : "starfield schwach",
             "sliderValues" : {
-                "zoomSpeed" : 0.760714285714286,
+                "zoomSpeed" : -0.00481481481481481,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.5,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.503571428571429,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.857142857142857,
                 "bgTransparency" : 0.0357142857142857,
-                "stokeWeight" : 0.05,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.1,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 1,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0.1,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1.31481481481481,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "anmiation" : {
                 "zoomSpeed" : "Sine",
@@ -358,307 +370,139 @@
                 "line2Alpha" : "---",
                 "line3Alpha" : "---",
                 "rotation" : "---"
-            }
-        },
-        {
-            "description" : "Scene 13 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.7383389054013493,
-                "moveX" : 0.492857142857143,
-                "moveY" : 0.6684870590922303,
-                "saturation" : 0.235714285714286,
-                "color" : 0.6684870590922303,
-                "colorChange" : 0.621428571428571,
-                "bgTransparency" : 0.6684870590922303,
-                "stokeWeight" : 0.15,
-                "pointAlpha" : 0.7,
-                "particleMoveSpeed" : 0.121428571428571,
-                "ellipseAlpha" : 0.507142857142857,
-                "spawnRate" : 0.05,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.157142857142857,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0,
-                "spawnRandomnessSizeX" : 0,
-                "spawnRadius" : 0.25,
-                "spawnCirleSpeed" : 0.0214285714285714,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.478571428571429,
-                "img2Alpha" : 0,
-                "spawnOffsetX" : 0.469880952380952,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0,
-                "spawnOffsetMultiplierY" : 0,
-                "spawnOffsetMultiplierCircle" : 0.248452380952381,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.412738095238095
             },
-            "anmiation" : {
-                "zoomSpeed" : "Sine",
-                "moveX" : "---",
-                "moveY" : "---",
-                "saturation" : "---",
-                "color" : "Linear",
-                "colorChange" : "---",
-                "bgTransparency" : "Linear",
-                "stokeWeight" : "---",
-                "pointAlpha" : "---",
-                "particleMoveSpeed" : "---",
-                "ellipseAlpha" : "---",
-                "spawnRate" : "---",
-                "linesTransparency" : "---",
-                "curlNoiseScale" : "---",
-                "ellipseSize" : "---",
-                "noiseTimeScale" : "---",
-                "spawnRandomnessSizeX" : "---",
-                "spawnRadius" : "---",
-                "spawnCirleSpeed" : "---",
-                "curlFactor" : "---",
-                "spawnRandomnessSizeY" : "---",
-                "img1Alpha" : "---",
-                "spawnOffsetY" : "---",
-                "img2Alpha" : "---",
-                "spawnOffsetX" : "---",
-                "img3Alpha" : "---",
-                "img4Alpha" : "---",
-                "spawnOffsetMultiplierX" : "---",
-                "spawnOffsetMultiplierY" : "---",
-                "spawnOffsetMultiplierCircle" : "---",
-                "line2Alpha" : "---",
-                "line3Alpha" : "---",
-                "rotation" : "---"
-            }
+            "animation" : {},
+            "id" : "a2dee083-0165-4fa8-a774-3ed742132150"
         },
         {
-            "description" : "Scene 14 description",
+            "description" : "wackel",
             "sliderValues" : {
-                "zoomSpeed" : 0.3540900618519701,
+                "zoomSpeed" : -0.0114814814814815,
+                "particleMoveSpeed" : 0.121428571428571,
                 "moveX" : 0.1548078738884129,
                 "moveY" : 0.09512578666088616,
+                "curlNoiseScale" : 0.157142857142857,
+                "noiseTimeScale" : 0,
+                "curlFactor" : 0.5,
                 "saturation" : 0.09706839453368242,
                 "color" : 0.11950286601425375,
                 "colorChange" : 0.621428571428571,
                 "bgTransparency" : 0.05805164183431057,
-                "stokeWeight" : 0.004219780219780585,
-                "pointAlpha" : 0.0007926049729876877,
-                "particleMoveSpeed" : 0.121428571428571,
-                "ellipseAlpha" : 0.507142857142857,
                 "spawnRate" : 0.05,
-                "linesTransparency" : 0.853846153846154,
-                "curlNoiseScale" : 0.157142857142857,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.25,
-                "spawnCirleSpeed" : 0.006053608772086159,
-                "curlFactor" : 0.5,
+                "spawnCirleSpeed" : 0.818518518518519,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0.592307692307692,
-                "spawnOffsetY" : 0.11215437790595463,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.469880952380952,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.11215437790595463,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0.248452380952381,
+                "stokeWeight" : 1.98148148148148,
+                "pointAlpha" : 0.551851851851852,
+                "ellipseAlpha" : 0.537037037037037,
+                "linesTransparency" : 0.662962962962963,
+                "ellipseSize" : 5.55555555555556,
+                "rotation" : 5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.412738095238095
+                "line3Alpha" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
-                    "type" : "Random"
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "moveX" : {
-                    "type" : "Random"
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "moveY" : {
-                    "type" : "Random"
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "saturation" : {
-                    "type" : "Random"
-                },
-                "color" : {
-                    "type" : ""
-                },
-                "colorChange" : {
-                    "type" : ""
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "bgTransparency" : {
-                    "type" : "Random"
-                },
-                "stokeWeight" : {
-                    "type" : "Linear"
-                },
-                "pointAlpha" : {
-                    "type" : "Random"
-                },
-                "particleMoveSpeed" : {
-                    "type" : ""
-                },
-                "ellipseAlpha" : {
-                    "type" : ""
-                },
-                "spawnRate" : {
-                    "type" : ""
-                },
-                "linesTransparency" : {
-                    "type" : ""
-                },
-                "curlNoiseScale" : {
-                    "type" : ""
-                },
-                "ellipseSize" : {
-                    "type" : ""
-                },
-                "noiseTimeScale" : {
-                    "type" : ""
-                },
-                "spawnRandomnessSizeX" : {
-                    "type" : ""
-                },
-                "spawnRadius" : {
-                    "type" : ""
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "spawnCirleSpeed" : {
-                    "type" : "Random"
-                },
-                "curlFactor" : {
-                    "type" : ""
-                },
-                "spawnRandomnessSizeY" : {
-                    "type" : ""
-                },
-                "img1Alpha" : {
-                    "type" : ""
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
                 "spawnOffsetY" : {
-                    "type" : "Random"
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 },
-                "img2Alpha" : {
-                    "type" : ""
-                },
-                "spawnOffsetX" : {
-                    "type" : ""
-                },
-                "img3Alpha" : {
-                    "type" : ""
-                },
-                "img4Alpha" : {
-                    "type" : ""
-                },
-                "spawnOffsetMultiplierX" : {
-                    "type" : ""
-                },
-                "spawnOffsetMultiplierY" : {
-                    "type" : ""
-                },
-                "spawnOffsetMultiplierCircle" : {
-                    "type" : ""
-                },
-                "line2Alpha" : {
-                    "type" : ""
-                },
-                "line3Alpha" : {
-                    "type" : ""
-                },
-                "rotation" : {
-                    "type" : ""
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
-        },
-        {
-            "description" : "Scene 15 description",
-            "sliderValues" : {
-                "zoomSpeed" : 30.821128553985698,
-                "moveX" : 0.48891149216315993,
-                "moveY" : 0.5711442507148065,
-                "saturation" : 0.0100012814454705,
-                "color" : 0.07334273060011691,
-                "colorChange" : 0.45323124484418403,
-                "bgTransparency" : 0.06895778438078154,
-                "stokeWeight" : 0.05155815760177481,
-                "pointAlpha" : 0.5768807214538002,
-                "particleMoveSpeed" : 0.292307692307692,
-                "ellipseAlpha" : 0.16622750462521724,
-                "spawnRate" : 0.16376472661161803,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.14312144098543164,
-                "ellipseSize" : 0.06667520963647006,
-                "noiseTimeScale" : 0.5772010828214227,
-                "spawnRandomnessSizeX" : 0.9807763156840917,
-                "spawnRadius" : 0.20778438078152153,
-                "spawnCirleSpeed" : 0.08708823552967752,
-                "curlFactor" : 0.45001761987521915,
-                "spawnRandomnessSizeY" : 0.9867130122778494,
-                "img1Alpha" : 0.016668802409117476,
-                "spawnOffsetY" : 0.4666563884061225,
-                "img2Alpha" : 0.025318058770292872,
-                "spawnOffsetX" : 0.45287551024221984,
-                "img3Alpha" : 0.016428030818763564,
-                "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0.10421705684011567,
-                "spawnOffsetMultiplierY" : 0.038653100697586915,
-                "spawnOffsetMultiplierCircle" : 0,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.41046083899305075
             },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Linear",
-                    "speed" : "2"
-                }
-            }
+            "id" : "4d8c5405-cdc1-4a3c-97ff-6eadd9a596c8"
         },
         {
-            "description" : "Scene 16 description",
+            "description" : "spirale",
             "sliderValues" : {
-                "zoomSpeed" : 0.257692307692308,
+                "zoomSpeed" : -0.00518518518518519,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.48891149216315993,
                 "moveY" : 0.496153846153846,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
                 "saturation" : 0.0100012814454705,
                 "color" : 0.07334273060011691,
                 "colorChange" : 0.45323124484418403,
                 "bgTransparency" : 0.06895778438078154,
-                "stokeWeight" : 0.07895900924472174,
-                "pointAlpha" : 0.5768807214538002,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 0.00037212064712827814,
-                "spawnRate" : 0.16376472661161803,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.14312144098543164,
-                "ellipseSize" : 0.0680974215285779,
-                "noiseTimeScale" : 0.5772010828214227,
+                "spawnRate" : 0.0407407407407407,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.615384615384615,
                 "spawnCirleSpeed" : 0.730769230769231,
-                "curlFactor" : 0.45001761987521915,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0.016668802409117476,
-                "spawnOffsetY" : 0.492307692307692,
-                "img2Alpha" : 0.025318058770292872,
                 "spawnOffsetX" : 0.503846153846154,
-                "img3Alpha" : 0.016428030818763564,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.492307692307692,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0.038653100697586915,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 3.46296296296296,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.00037212064712827814,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.0680974215285779,
+                "rotation" : 0.41046083899305075,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.41046083899305075
+                "line3Alpha" : 0
             },
             "animation" : {
-                "stokeWeight" : {
-                    "type" : "Linear Rev",
-                    "speed" : "2",
-                    "amount" : "0.676923076923077"
-                },
                 "ellipseAlpha" : {
                     "type" : "Cubic In",
                     "speed" : "0.5",
@@ -669,44 +513,50 @@
                     "speed" : "1",
                     "amount" : "0"
                 }
-            }
+            },
+            "id" : "6733f093-ef3b-4371-875c-14d9cd9145ae"
         },
         {
-            "description" : "Scene 17 description",
+            "description" : "zoomworms",
             "sliderValues" : {
-                "zoomSpeed" : 0.7896426202765633,
+                "zoomSpeed" : -0.00407407407407407,
+                "particleMoveSpeed" : 1,
                 "moveX" : 0.48769283363958804,
                 "moveY" : 0.48769283363958804,
+                "curlNoiseScale" : 0.07253963505833085,
+                "noiseTimeScale" : 0.09218165279872044,
+                "curlFactor" : 0.48769283363958804,
                 "saturation" : 0,
                 "color" : 0.44351737105251937,
                 "colorChange" : 0.7896182702814896,
                 "bgTransparency" : 0.017530053700531553,
-                "stokeWeight" : 0.173076923076923,
-                "pointAlpha" : 0.8825324925064254,
-                "particleMoveSpeed" : 1,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.06340541002521258,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.07253963505833085,
-                "ellipseSize" : 0.0009099903213743948,
-                "noiseTimeScale" : 0.09218165279872044,
                 "spawnRandomnessSizeX" : 0.24998931669586766,
                 "spawnRadius" : 0.06858681252937911,
                 "spawnCirleSpeed" : 0.25396121655362724,
-                "curlFactor" : 0.48769283363958804,
                 "spawnRandomnessSizeY" : 0.24998931669586766,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.4842357672952523,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.49599732205176433,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.4842357672952523,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.2943461410888018,
                 "spawnOffsetMultiplierY" : 0.14603542583650275,
                 "spawnOffsetMultiplierCircle" : 0.4791549659049982,
+                "stokeWeight" : 1.94444444444444,
+                "pointAlpha" : 0.8825324925064254,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.0009099903213743948,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.3626981752916542
+                "rotation" : 0.3626981752916542,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "bgTransparency" : {
@@ -719,44 +569,50 @@
                     "speed" : "1",
                     "amount" : "0"
                 }
-            }
+            },
+            "id" : "eec4e00f-3fed-4da9-a82f-a44a66750382"
         },
         {
-            "description" : "Scene 18 description",
+            "description" : "baum",
             "sliderValues" : {
-                "zoomSpeed" : 0.257692307692308,
+                "zoomSpeed" : -0.0388888888888889,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.48891149216315993,
                 "moveY" : 0.496153846153846,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
                 "saturation" : 0.0100012814454705,
                 "color" : 0.07334273060011691,
                 "colorChange" : 0.45323124484418403,
                 "bgTransparency" : 0.06895778438078154,
-                "stokeWeight" : 0.010230825798189375,
-                "pointAlpha" : 0.5768807214538002,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 0.00037212064712827814,
                 "spawnRate" : 0.16376472661161803,
-                "linesTransparency" : 0.588461538461538,
-                "curlNoiseScale" : 0.14312144098543164,
-                "ellipseSize" : 0.0680974215285779,
-                "noiseTimeScale" : 0.5772010828214227,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.615384615384615,
-                "spawnCirleSpeed" : 0.730769230769231,
-                "curlFactor" : 0.45001761987521915,
+                "spawnCirleSpeed" : 0.3,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0.016668802409117476,
-                "spawnOffsetY" : 0.492307692307692,
-                "img2Alpha" : 0.025318058770292872,
                 "spawnOffsetX" : 0.503846153846154,
-                "img3Alpha" : 0.016428030818763564,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.492307692307692,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0.7,
                 "spawnOffsetMultiplierCircle" : 0.503846153846154,
+                "stokeWeight" : 0.010230825798189375,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.00037212064712827814,
+                "linesTransparency" : 0.588461538461538,
+                "ellipseSize" : 0.0680974215285779,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0.738461538461538,
                 "line3Alpha" : 0.480769230769231,
-                "rotation" : 0.41046083899305075
+                "rotation" : 0.41046083899305075,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "stokeWeight" : {
@@ -779,44 +635,50 @@
                     "speed" : "1",
                     "amount" : "0.507692307692308"
                 }
-            }
+            },
+            "id" : "9b139cac-8c39-4ab7-af1c-3dacaf7520e2"
         },
         {
-            "description" : "Scene 19 description",
+            "description" : "schweachschieb",
             "sliderValues" : {
-                "zoomSpeed" : 0.503846153846154,
+                "zoomSpeed" : 0.00518518518518519,
+                "particleMoveSpeed" : 0,
                 "moveX" : 1,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.119230769230769,
                 "color" : 0.873076923076923,
                 "colorChange" : 1,
                 "bgTransparency" : 0.111538461538462,
-                "stokeWeight" : 0.411538461538462,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.1,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 1,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0.1,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -844,16 +706,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "stokeWeight" : {
-                    "type" : "",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -863,45 +715,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "5df3757f-c5bb-4c46-9cd4-af4c8cb178e7"
         },
         {
-            "description" : "Scene 20 description",
+            "description" : "farbböppel",
             "sliderValues" : {
-                "zoomSpeed" : 0.534615384615385,
+                "zoomSpeed" : -0.00222222222222222,
+                "particleMoveSpeed" : 0.588461538461538,
                 "moveX" : 0.880769230769231,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.773076923076923,
+                "curlFactor" : 0.5,
                 "saturation" : 0.434615384615385,
                 "color" : 0.873076923076923,
                 "colorChange" : 1,
                 "bgTransparency" : 0.111538461538462,
-                "stokeWeight" : 0.411538461538462,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0.588461538461538,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.1,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.773076923076923,
                 "spawnRandomnessSizeX" : 0.303846153846154,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1.77777777777778,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -929,11 +792,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -943,45 +801,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "d930b0ab-17ce-496e-b4a6-dae130a20a75"
         },
         {
-            "description" : "Scene 21 description",
+            "description" : "dicke farblinien",
             "sliderValues" : {
-                "zoomSpeed" : 0.534615384615385,
+                "zoomSpeed" : -0.00518518518518519,
+                "particleMoveSpeed" : 0.588461538461538,
                 "moveX" : 0.880769230769231,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.773076923076923,
+                "curlFactor" : 0.5,
                 "saturation" : 0.434615384615385,
                 "color" : 0.873076923076923,
                 "colorChange" : 1,
                 "bgTransparency" : 0.111538461538462,
-                "stokeWeight" : 0.411538461538462,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0.588461538461538,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.1,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.773076923076923,
                 "spawnRandomnessSizeX" : 0.303846153846154,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.411538461538462,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0.711538461538462,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1009,11 +878,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -1023,45 +887,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "4fb95f91-54b3-405e-8590-7b448e74550c"
         },
         {
-            "description" : "Scene 22 description",
+            "description" : "mixed",
             "sliderValues" : {
-                "zoomSpeed" : 0.515384615384615,
+                "zoomSpeed" : -0.00259259259259259,
+                "particleMoveSpeed" : 0.565384615384615,
                 "moveX" : 0.75,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.857142857142857,
                 "bgTransparency" : 0.0357142857142857,
-                "stokeWeight" : 0.0576923076923077,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0.565384615384615,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.588461538461538,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 1,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0.1,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 5,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.0269230769230769,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1089,11 +964,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -1103,45 +973,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "90cd68b0-e91f-4c7d-b3e2-146a17710428"
         },
         {
-            "description" : "Scene 23 description",
+            "description" : "confetti",
             "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
+                "zoomSpeed" : -0.00222222222222222,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.75,
                 "moveY" : 0.5,
-                "saturation" : 0.503571428571429,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
-                "spawnRate" : 0.1,
-                "linesTransparency" : 0,
                 "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
                 "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.503571428571429,
+                "color" : 0.614814814814815,
+                "colorChange" : 0.0777777777777778,
+                "bgTransparency" : 0.403846153846154,
+                "spawnRate" : 0.1,
                 "spawnRandomnessSizeX" : 1,
                 "spawnRadius" : 0,
                 "spawnCirleSpeed" : 0.1,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.5,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.331190476190476,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 4.12962962962963,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.0269230769230769,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1169,11 +1050,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -1183,125 +1059,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "89d74be7-b3ee-470e-bcf0-713400461145"
         },
         {
-            "description" : "Scene 24 description",
+            "description" : "zaun",
             "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
+                "zoomSpeed" : -0.00740740740740741,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.95,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.503571428571429,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.857142857142857,
                 "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.1,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.480769230769231,
                 "spawnCirleSpeed" : 0.465384615384615,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.488461538461538,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.488461538461538,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.503846153846154,
                 "spawnOffsetMultiplierY" : 0.203846153846154,
                 "spawnOffsetMultiplierCircle" : 0.35,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.5
-            },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveX" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "saturation" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "bgTransparency" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnCirleSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnOffsetY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                }
-            }
-        },
-        {
-            "description" : "Scene 25 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 0.95,
-                "moveY" : 0.5,
-                "saturation" : 0.503571428571429,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
+                "stokeWeight" : 1.72222222222222,
                 "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
                 "ellipseAlpha" : 1,
-                "spawnRate" : 0.1,
                 "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
                 "ellipseSize" : 0.0269230769230769,
-                "noiseTimeScale" : 0.1,
-                "spawnRandomnessSizeX" : 0.465384615384615,
-                "spawnRadius" : 0.480769230769231,
-                "spawnCirleSpeed" : 0.465384615384615,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0,
                 "img1Alpha" : 0,
-                "spawnOffsetY" : 0.488461538461538,
                 "img2Alpha" : 0,
-                "spawnOffsetX" : 0.5,
                 "img3Alpha" : 0,
                 "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0.503846153846154,
-                "spawnOffsetMultiplierY" : 0,
-                "spawnOffsetMultiplierCircle" : 0.35,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1329,11 +1136,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnCirleSpeed" : {
                     "type" : "Random",
                     "speed" : "1",
@@ -1343,205 +1145,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
-        },
-        {
-            "description" : "Scene 26 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 0.526923076923077,
-                "moveY" : 0.5,
-                "saturation" : 0.503571428571429,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
-                "spawnRate" : 0.680769230769231,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
-                "noiseTimeScale" : 0.1,
-                "spawnRandomnessSizeX" : 0.465384615384615,
-                "spawnRadius" : 0.742307692307692,
-                "spawnCirleSpeed" : 0.488461538461538,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.519230769230769,
-                "img2Alpha" : 0,
-                "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0.503846153846154,
-                "spawnOffsetMultiplierY" : 0,
-                "spawnOffsetMultiplierCircle" : 0.35,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.5
             },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveX" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "saturation" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "bgTransparency" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnCirleSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnOffsetY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                }
-            }
+            "id" : "ea7b1a4d-4a6e-4558-971e-05fa791f9ffe"
         },
         {
-            "description" : "Scene 27 description",
+            "description" : "zaun2",
             "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 0.526923076923077,
-                "moveY" : 0.5,
-                "saturation" : 0.25,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
-                "spawnRate" : 0.680769230769231,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
-                "noiseTimeScale" : 0.1,
-                "spawnRandomnessSizeX" : 0.465384615384615,
-                "spawnRadius" : 0.742307692307692,
-                "spawnCirleSpeed" : 0.488461538461538,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.519230769230769,
-                "img2Alpha" : 0,
-                "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0,
-                "spawnOffsetMultiplierY" : 0,
-                "spawnOffsetMultiplierCircle" : 0.773076923076923,
-                "line2Alpha" : 0.580769230769231,
-                "line3Alpha" : 0,
-                "rotation" : 0
-            },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveX" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "saturation" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "bgTransparency" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnCirleSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnOffsetY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                }
-            }
-        },
-        {
-            "description" : "Scene 28 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 0.526923076923077,
-                "moveY" : 0.5,
-                "saturation" : 0.25,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.857142857142857,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.242307692307692,
-                "pointAlpha" : 1,
+                "zoomSpeed" : -0.00666666666666667,
                 "particleMoveSpeed" : 0.173076923076923,
-                "ellipseAlpha" : 1,
-                "spawnRate" : 0.0692307692307692,
-                "linesTransparency" : 0,
+                "moveX" : 0.388888888888889,
+                "moveY" : 0.5,
                 "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.0269230769230769,
                 "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.657692307692308,
+                "saturation" : 0.25,
+                "color" : 0.335714285714286,
+                "colorChange" : 0.857142857142857,
+                "bgTransparency" : 0,
+                "spawnRate" : 0.0333333333333333,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.334615384615385,
-                "spawnCirleSpeed" : 0.55,
-                "curlFactor" : 0.657692307692308,
+                "spawnCirleSpeed" : 0.692592592592593,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.519230769230769,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.519230769230769,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 1,
+                "stokeWeight" : 0.759259259259259,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.0269230769230769,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0.580769230769231,
                 "line3Alpha" : 0,
-                "rotation" : 0
+                "rotation" : 0,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1569,11 +1222,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnRate" : {
                     "type" : "Sine",
                     "speed" : "1",
@@ -1588,45 +1236,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "6876c9ae-5018-4a93-a9b3-e04dc4a264e3"
         },
         {
-            "description" : "Scene 29 description",
+            "description" : "wandteppich",
             "sliderValues" : {
-                "zoomSpeed" : 0.619230769230769,
+                "zoomSpeed" : -0.0103703703703704,
+                "particleMoveSpeed" : 0,
                 "moveX" : 0.526923076923077,
                 "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.25,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.857142857142857,
                 "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.0576923076923077,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.0730769230769231,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0.173076923076923,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.319230769230769,
                 "spawnCirleSpeed" : 0.95,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.519230769230769,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.5,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.519230769230769,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0.526923076923077,
+                "stokeWeight" : 0.037037037037037,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 366.666666666667,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0.580769230769231,
                 "line3Alpha" : 0,
-                "rotation" : 0
+                "rotation" : 0,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1654,11 +1313,6 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
                 "spawnRate" : {
                     "type" : "Sine",
                     "speed" : "1",
@@ -1673,45 +1327,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "cf6a8081-d2b6-4696-b7b1-4af5b9dd9be3"
         },
         {
-            "description" : "Scene 30 description",
+            "description" : "zitterzeugs",
             "sliderValues" : {
-                "zoomSpeed" : 0.4941895441593506,
+                "zoomSpeed" : -0.00962962962962963,
+                "particleMoveSpeed" : 0.857142857142857,
                 "moveX" : 0.5,
                 "moveY" : 0.742857142857143,
+                "curlNoiseScale" : 0.0214285714285714,
+                "noiseTimeScale" : 0.0357142857142857,
+                "curlFactor" : 0.5,
                 "saturation" : 0,
                 "color" : 0.414285714285714,
                 "colorChange" : 0.596153846153846,
                 "bgTransparency" : 0.673076923076923,
-                "stokeWeight" : 0.365384615384615,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0.857142857142857,
-                "ellipseAlpha" : 0.235714285714286,
                 "spawnRate" : 0.15,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.0214285714285714,
-                "ellipseSize" : 0.02225759444782049,
-                "noiseTimeScale" : 0.0357142857142857,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.45,
                 "spawnCirleSpeed" : 0.414285714285714,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 1,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.478571428571429,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.484166666666667,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.478571428571429,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.365384615384615,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0.235714285714286,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.02225759444782049,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.741309523809524
+                "rotation" : 0.741309523809524,
+                "boxCount" : 10,
+                "boxSize" : 1,
+                "sphereCount" : 10,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1724,214 +1389,50 @@
                     "speed" : "0.5",
                     "amount" : "0.32258064516129"
                 }
-            }
+            },
+            "id" : "c4e1a1c8-2f40-4241-b235-9490d337e79c"
         },
         {
-            "description" : "Scene 31 description",
+            "description" : "unscharf",
             "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
+                "zoomSpeed" : -0.00333333333333333,
+                "particleMoveSpeed" : 0.338461538461538,
                 "moveX" : 1,
                 "moveY" : 0.607692307692308,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
                 "saturation" : 0.503571428571429,
                 "color" : 0.335714285714286,
                 "colorChange" : 0.703846153846154,
                 "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.638461538461538,
-                "pointAlpha" : 0.5,
-                "particleMoveSpeed" : 0.338461538461538,
-                "ellipseAlpha" : 1,
                 "spawnRate" : 0.05,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.480769230769231,
                 "spawnCirleSpeed" : 0.465384615384615,
-                "curlFactor" : 0.5,
                 "spawnRandomnessSizeY" : 0.1403315722551579,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.534615384615385,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.0653846153846154,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.534615384615385,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0.426923076923077,
                 "spawnOffsetMultiplierCircle" : 0,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.5
-            },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveX" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "saturation" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "bgTransparency" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnCirleSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnRandomnessSizeY" : {
-                    "type" : "Sine",
-                    "speed" : "4",
-                    "amount" : "0.294354838709677"
-                },
-                "spawnOffsetY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                }
-            }
-        },
-        {
-            "description" : "Scene 32 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 1,
-                "moveY" : 0.5,
-                "saturation" : 0.503571428571429,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.703846153846154,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.0807692307692308,
-                "pointAlpha" : 1,
-                "particleMoveSpeed" : 0.173076923076923,
-                "ellipseAlpha" : 1,
-                "spawnRate" : 0.05,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.1,
-                "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
-                "spawnRandomnessSizeX" : 0,
-                "spawnRadius" : 0.480769230769231,
-                "spawnCirleSpeed" : 0.465384615384615,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0.2635635925348863,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.534615384615385,
-                "img2Alpha" : 0,
-                "spawnOffsetX" : 0.0653846153846154,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0,
-                "spawnOffsetMultiplierY" : 0.426923076923077,
-                "spawnOffsetMultiplierCircle" : 0,
-                "line2Alpha" : 0,
-                "line3Alpha" : 0,
-                "rotation" : 0.5
-            },
-            "animation" : {
-                "zoomSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveX" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "moveY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "saturation" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "bgTransparency" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "pointAlpha" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnCirleSpeed" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                },
-                "spawnRandomnessSizeY" : {
-                    "type" : "Sine",
-                    "speed" : "4",
-                    "amount" : "0.294354838709677"
-                },
-                "spawnOffsetY" : {
-                    "type" : "Random",
-                    "speed" : "1",
-                    "amount" : "0"
-                }
-            }
-        },
-        {
-            "description" : "Scene 33 description",
-            "sliderValues" : {
-                "zoomSpeed" : 0.488461538461538,
-                "moveX" : 1,
-                "moveY" : 0.5,
-                "saturation" : 0.503571428571429,
-                "color" : 0.335714285714286,
-                "colorChange" : 0.703846153846154,
-                "bgTransparency" : 0.403846153846154,
-                "stokeWeight" : 0.638461538461538,
+                "stokeWeight" : 3.2962962962963,
                 "pointAlpha" : 0.5,
-                "particleMoveSpeed" : 0.173076923076923,
                 "ellipseAlpha" : 1,
-                "spawnRate" : 0.05,
                 "linesTransparency" : 0,
-                "curlNoiseScale" : 0.188461538461538,
                 "ellipseSize" : 0,
-                "noiseTimeScale" : 0.1,
-                "spawnRandomnessSizeX" : 0,
-                "spawnRadius" : 0.480769230769231,
-                "spawnCirleSpeed" : 0.465384615384615,
-                "curlFactor" : 0.5,
-                "spawnRandomnessSizeY" : 0.0006295918522618594,
                 "img1Alpha" : 0,
-                "spawnOffsetY" : 0.534615384615385,
                 "img2Alpha" : 0,
-                "spawnOffsetX" : 0.0653846153846154,
                 "img3Alpha" : 0,
                 "img4Alpha" : 0,
-                "spawnOffsetMultiplierX" : 0,
-                "spawnOffsetMultiplierY" : 0.426923076923077,
-                "spawnOffsetMultiplierCircle" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.5
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -1959,7 +1460,93 @@
                     "speed" : "1",
                     "amount" : "0"
                 },
+                "spawnCirleSpeed" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "spawnRandomnessSizeY" : {
+                    "type" : "Sine",
+                    "speed" : "4",
+                    "amount" : "0.294354838709677"
+                },
+                "spawnOffsetY" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
                 "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "74b6a721-df1f-4f74-b3aa-69e6344b55d0"
+        },
+        {
+            "description" : "starwellen",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00148148148148148,
+                "particleMoveSpeed" : 0.173076923076923,
+                "moveX" : 1,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.503571428571429,
+                "color" : 0.335714285714286,
+                "colorChange" : 0.703846153846154,
+                "bgTransparency" : 0.403846153846154,
+                "spawnRate" : 0.05,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0.480769230769231,
+                "spawnCirleSpeed" : 0.465384615384615,
+                "spawnRandomnessSizeY" : 0.2635635925348863,
+                "spawnOffsetX" : 0.0653846153846154,
+                "spawnOffsetY" : 0.534615384615385,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0.426923076923077,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1.88888888888889,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
+            },
+            "animation" : {
+                "zoomSpeed" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "moveX" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "moveY" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "saturation" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "bgTransparency" : {
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
@@ -1970,7 +1557,7 @@
                     "amount" : "0"
                 },
                 "spawnRandomnessSizeY" : {
-                    "type" : "Cubic In",
+                    "type" : "Sine",
                     "speed" : "4",
                     "amount" : "0.294354838709677"
                 },
@@ -1978,45 +1565,56 @@
                     "type" : "Random",
                     "speed" : "1",
                     "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
                 }
-            }
+            },
+            "id" : "1095fdae-0fb1-4401-9ca3-7c8dd6ae7459"
         },
         {
-            "description" : "Scene 34 description",
+            "description" : "weisnicht",
             "sliderValues" : {
-                "zoomSpeed" : 0.4349571755270728,
+                "zoomSpeed" : -0.00666666666666667,
+                "particleMoveSpeed" : 0.242307692307692,
                 "moveX" : 0,
                 "moveY" : 0.288461538461538,
+                "curlNoiseScale" : 0.157142857142857,
+                "noiseTimeScale" : 0,
+                "curlFactor" : 0.430769230769231,
                 "saturation" : 0.235714285714286,
                 "color" : 0.11950286601425375,
                 "colorChange" : 0.621428571428571,
                 "bgTransparency" : 0.11950286601425375,
-                "stokeWeight" : 0.4155652871486872,
-                "pointAlpha" : 0.334615384615385,
-                "particleMoveSpeed" : 0.242307692307692,
-                "ellipseAlpha" : 0.507142857142857,
                 "spawnRate" : 0.05,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.157142857142857,
-                "ellipseSize" : 0.013930091572723555,
-                "noiseTimeScale" : 0,
                 "spawnRandomnessSizeX" : 0,
                 "spawnRadius" : 0.253846153846154,
                 "spawnCirleSpeed" : 0.0214285714285714,
-                "curlFactor" : 0.430769230769231,
                 "spawnRandomnessSizeY" : 0,
-                "img1Alpha" : 0,
-                "spawnOffsetY" : 0.478571428571429,
-                "img2Alpha" : 0,
                 "spawnOffsetX" : 0.896153846153846,
-                "img3Alpha" : 0,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.478571428571429,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0,
                 "spawnOffsetMultiplierY" : 0.596153846153846,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.40740740740741,
+                "pointAlpha" : 0.334615384615385,
+                "ellipseAlpha" : 0.507142857142857,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.013930091572723555,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0
+                "rotation" : 0,
+                "boxCount" : 10,
+                "boxSize" : 1,
+                "sphereCount" : 10,
+                "sphereSize" : 0
             },
             "animation" : {
                 "zoomSpeed" : {
@@ -2034,51 +1632,50 @@
                     "speed" : "2",
                     "amount" : "0.0725806451612903"
                 }
-            }
+            },
+            "id" : "50e9888c-634f-4804-ad94-3623fa4c064c"
         },
         {
-            "description" : "Scene description",
-            "sliderValues" : {},
-            "animation" : {
-                "parameters" : {}
-            }
-        },
-        {
-            "description" : "Scene 11 description",
+            "description" : "swkreise",
             "sliderValues" : {
-                "zoomSpeed" : 0.5126582785381913,
+                "zoomSpeed" : -0.0111111111111111,
+                "particleMoveSpeed" : 0.74018492859946,
                 "moveX" : 0.48891149216315993,
                 "moveY" : 0.5711442507148065,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
                 "saturation" : 0.0100012814454705,
                 "color" : 0.07334273060011691,
                 "colorChange" : 0.45323124484418403,
                 "bgTransparency" : 0.06895778438078154,
-                "stokeWeight" : 0.05155815760177481,
-                "pointAlpha" : 0.5768807214538002,
-                "particleMoveSpeed" : 0.74018492859946,
-                "ellipseAlpha" : 0.16622750462521724,
                 "spawnRate" : 0.16376472661161803,
-                "linesTransparency" : 0,
-                "curlNoiseScale" : 0.14312144098543164,
-                "ellipseSize" : 0.06667520963647006,
-                "noiseTimeScale" : 0.5772010828214227,
                 "spawnRandomnessSizeX" : 0.9807763156840917,
                 "spawnRadius" : 0.20778438078152153,
                 "spawnCirleSpeed" : 0.08708823552967752,
-                "curlFactor" : 0.45001761987521915,
                 "spawnRandomnessSizeY" : 0.9867130122778494,
-                "img1Alpha" : 0.016668802409117476,
-                "spawnOffsetY" : 0.4666563884061225,
-                "img2Alpha" : 0.025318058770292872,
                 "spawnOffsetX" : 0.45287551024221984,
-                "img3Alpha" : 0.016428030818763564,
-                "img4Alpha" : 0,
+                "spawnOffsetY" : 0.4666563884061225,
+                "spawnRateOnBeat" : 0,
                 "spawnOffsetMultiplierX" : 0.10421705684011567,
                 "spawnOffsetMultiplierY" : 0.038653100697586915,
                 "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.27777777777778,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.16622750462521724,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.06667520963647006,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
                 "line2Alpha" : 0,
                 "line3Alpha" : 0,
-                "rotation" : 0.41046083899305075
+                "rotation" : 0.41046083899305075,
+                "boxCount" : 0,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 0,
+                "sphereSize" : 18.5185185185185
             },
             "anmiation" : {
                 "zoomSpeed" : "Linear",
@@ -2114,7 +1711,1251 @@
                 "line2Alpha" : "---",
                 "line3Alpha" : "---",
                 "rotation" : "---"
+            },
+            "id" : "88f779e0-dfc7-4c69-b2da-8ba0e84a6028",
+            "animation" : {
+                "zoomSpeed" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "moveX" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "moveY" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "saturation" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "bgTransparency" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "spawnCirleSpeed" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "spawnRandomnessSizeY" : {
+                    "type" : "Sine",
+                    "speed" : "4",
+                    "amount" : "0.294354838709677"
+                },
+                "spawnOffsetY" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "pointAlpha" : {
+                    "type" : "Random",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
             }
+        },
+        {
+            "id" : "256e4226-176b-47b5-a2b2-9d06ee363fee",
+            "description" : "linienschneck",
+            "sliderValues" : {
+                "zoomSpeed" : -0.0111111111111111,
+                "particleMoveSpeed" : 0,
+                "moveX" : 0.48891149216315993,
+                "moveY" : 0.496153846153846,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
+                "saturation" : 0.0100012814454705,
+                "color" : 0.07334273060011691,
+                "colorChange" : 0.45323124484418403,
+                "bgTransparency" : 0.06895778438078154,
+                "spawnRate" : 0.16376472661161803,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0.615384615384615,
+                "spawnCirleSpeed" : 0.730769230769231,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.503846153846154,
+                "spawnOffsetY" : 0.492307692307692,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0.7,
+                "spawnOffsetMultiplierCircle" : 0.503846153846154,
+                "stokeWeight" : 0.011868157870346932,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.00037212064712827814,
+                "linesTransparency" : 0.588461538461538,
+                "ellipseSize" : 0.0680974215285779,
+                "rotation" : 0.41046083899305075,
+                "boxCount" : 10,
+                "boxSize" : 1,
+                "sphereCount" : 10,
+                "sphereSize" : 0,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.738461538461538,
+                "line3Alpha" : 0.480769230769231
+            },
+            "animation" : {
+                "stokeWeight" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0.403846153846154"
+                },
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "line3Alpha" : {
+                    "type" : "Pulse",
+                    "speed" : "1",
+                    "amount" : "0.507692307692308"
+                }
+            }
+        },
+        {
+            "description" : "3d",
+            "sliderValues" : {
+                "zoomSpeed" : 0.692592592592593,
+                "moveX" : 0.48769283363958804,
+                "moveY" : 0.48769283363958804,
+                "saturation" : 0,
+                "color" : 0.44351737105251937,
+                "colorChange" : 0.7896182702814896,
+                "bgTransparency" : 0.822222222222222,
+                "stokeWeight" : 0.0518518518518519,
+                "pointAlpha" : 0.644444444444444,
+                "particleMoveSpeed" : 0,
+                "ellipseAlpha" : 1,
+                "spawnRate" : 0.06340541002521258,
+                "linesTransparency" : 0,
+                "curlNoiseScale" : 0.07253963505833085,
+                "ellipseSize" : 0.0009099903213743948,
+                "noiseTimeScale" : 0.09218165279872044,
+                "spawnRandomnessSizeX" : 0.24998931669586766,
+                "spawnRadius" : 0.06858681252937911,
+                "spawnCirleSpeed" : 0.25396121655362724,
+                "curlFactor" : 0.48769283363958804,
+                "spawnRandomnessSizeY" : 0.24998931669586766,
+                "img1Alpha" : 0,
+                "spawnOffsetY" : 0.4842357672952523,
+                "img2Alpha" : 0,
+                "spawnOffsetX" : 0.49599732205176433,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "spawnOffsetMultiplierX" : 0.2943461410888018,
+                "spawnOffsetMultiplierY" : 0.14603542583650275,
+                "spawnOffsetMultiplierCircle" : 0.4791549659049982,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0
+            },
+            "animation" : {
+                "bgTransparency" : {
+                    "type" : "Cubic In",
+                    "speed" : "2",
+                    "amount" : "0"
+                },
+                "img3Alpha" : {
+                    "type" : "Pulse",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "ff07a9fa-1eef-4834-a617-bee0f4d7a0a0"
+        },
+        {
+            "description" : "3d flycubes",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00148148148148148,
+                "particleMoveSpeed" : 0.48826379415776827,
+                "moveX" : 0.4782680276588739,
+                "moveY" : 0.6166094360035751,
+                "curlNoiseScale" : 0.05089609106731267,
+                "noiseTimeScale" : 0.05903382096994214,
+                "curlFactor" : 0.4782680276588739,
+                "saturation" : 0.19482924878874852,
+                "color" : 0.3658803330354202,
+                "colorChange" : 0.6712179818864047,
+                "bgTransparency" : 0.3972299514775642,
+                "spawnRate" : 0,
+                "spawnRandomnessSizeX" : 0.3868949621336847,
+                "spawnRadius" : 0.2563384919328284,
+                "spawnCirleSpeed" : 0.274683663389623,
+                "spawnRandomnessSizeY" : 0.9565360553177478,
+                "spawnOffsetX" : 0.46924871035012644,
+                "spawnOffsetY" : 0.46606143280492984,
+                "spawnRateOnBeat" : 0.562962962962963,
+                "spawnOffsetMultiplierX" : 0.1281359267447512,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.09259259259259,
+                "pointAlpha" : 0.9565360553177478,
+                "ellipseAlpha" : 0.5211675055270711,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.012678840432904,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.6157278485974568,
+                "boxCount" : 10,
+                "boxSize" : 1,
+                "sphereCount" : 10,
+                "sphereSize" : 0
+            },
+            "animation" : {},
+            "id" : "6e81b9a0-5f04-48b0-9003-8a844832c82d"
+        },
+        {
+            "description" : "ghjk",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00222222222222222,
+                "particleMoveSpeed" : 0.5,
+                "moveX" : 0.5,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0,
+                "color" : 0.5,
+                "colorChange" : 0.5,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0.0777777777777778,
+                "spawnCirleSpeed" : 0.574074074074074,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0.5,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.53703703703704,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.1,
+                "rotation" : 0.5,
+                "boxCount" : 4.17557796109583,
+                "boxSize" : 10,
+                "sphereCount" : 5.219472451369796,
+                "sphereSize" : 10,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {},
+            "id" : "dd482455-21c0-4b55-a43f-b062b976dda0"
+        },
+        {
+            "description" : "grosse strichkreis",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0125925925925926,
+                "particleMoveSpeed" : 0.240740740740741,
+                "moveX" : 0.5,
+                "moveY" : 0.685185185185185,
+                "curlNoiseScale" : 0.0851851851851852,
+                "noiseTimeScale" : 0.0925925925925926,
+                "curlFactor" : 0.5,
+                "saturation" : 0.766666666666667,
+                "color" : 0.588888888888889,
+                "colorChange" : 0.803703703703704,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0407407407407407,
+                "spawnRandomnessSizeX" : 0.174074074074074,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0,
+                "spawnRandomnessSizeY" : 0.151851851851852,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.7962962962963,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0.381481481481481,
+                "linesTransparency" : 0,
+                "ellipseSize" : 16.6666666666667,
+                "rotation" : 66.5740740740741,
+                "boxCount" : 87.7777777777778,
+                "boxSize" : 166.666666666667,
+                "sphereCount" : 8.51851851851852,
+                "sphereSize" : 292.592592592593,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {
+                "particleMoveSpeed" : {
+                    "type" : "Ramp out",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "e2391658-d394-4c4d-9f0b-183037dd8b1e"
+        },
+        {
+            "description" : "grosse_strichkreise_2",
+            "sliderValues" : {
+                "zoomSpeed" : -0.0207407407407407,
+                "particleMoveSpeed" : 0.5,
+                "moveX" : 0.5,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0,
+                "color" : 0.174074074074074,
+                "colorChange" : 0.5,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0481481481481481,
+                "spawnRandomnessSizeX" : 0.32962962962963,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.403703703703704,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 0,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0,
+                "rotation" : 97.7777777777778,
+                "boxCount" : 4.17557796109583,
+                "boxSize" : 722.222222222222,
+                "sphereCount" : 5.219472451369796,
+                "sphereSize" : 411.111111111111,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {},
+            "id" : "37471636-ffb4-4fcf-beaf-86d25ead1fe0"
+        },
+        {
+            "description" : "othing centered",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0231481481481481,
+                "particleMoveSpeed" : 0,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0,
+                "color" : 0.5,
+                "colorChange" : 0.5,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0481481481481481,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxSize" : 1,
+                "sphereSize" : 1
+            },
+            "animation" : {},
+            "id" : "9c60edca-08d5-4285-8cc6-c2b647c7a11c"
+        },
+        {
+            "description" : "nothing centered 2",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0231481481481481,
+                "particleMoveSpeed" : 0,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0,
+                "color" : 0.5,
+                "colorChange" : 0.5,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0481481481481481,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxSize" : 100,
+                "sphereSize" : 348.148148148148
+            },
+            "animation" : {},
+            "id" : "07394ff4-4af6-4b17-84f8-444f92ad5e92"
+        },
+        {
+            "description" : "nix_oins",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0314814814814815,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.392592592592593,
+                "spawnRandomnessSizeX" : 0.562962962962963,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxSize" : 8.88888888888889,
+                "sphereSize" : 18.5185185185185
+            },
+            "animation" : {},
+            "id" : "9d8c3251-241a-4b61-b758-90ec06b06505"
+        },
+        {
+            "description" : "baum2",
+            "sliderValues" : {
+                "zoomSpeed" : 0.000740740740740741,
+                "particleMoveSpeed" : 0,
+                "moveX" : 0.48891149216315993,
+                "moveY" : 0.496153846153846,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
+                "saturation" : 0.0100012814454705,
+                "color" : 0.07334273060011691,
+                "colorChange" : 0.45323124484418403,
+                "bgTransparency" : 0.06895778438078154,
+                "spawnRate" : 0.16376472661161803,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0.615384615384615,
+                "spawnCirleSpeed" : 0.730769230769231,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.503846153846154,
+                "spawnOffsetY" : 0.492307692307692,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0.7,
+                "spawnOffsetMultiplierCircle" : 0.503846153846154,
+                "stokeWeight" : 0.010230825798189375,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.00037212064712827814,
+                "linesTransparency" : 0.588461538461538,
+                "ellipseSize" : 0.0680974215285779,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.738461538461538,
+                "line3Alpha" : 0.480769230769231,
+                "rotation" : 0.41046083899305075,
+                "boxSize" : 1,
+                "sphereSize" : 1
+            },
+            "animation" : {
+                "stokeWeight" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0.403846153846154"
+                },
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "line3Alpha" : {
+                    "type" : "Pulse",
+                    "speed" : "1",
+                    "amount" : "0.507692307692308"
+                }
+            },
+            "id" : "ae8d7786-7955-4c6e-8719-d971244bd53b"
+        },
+        {
+            "description" : "oik 2",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0222222222222222,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxSize" : 8.88888888888889,
+                "sphereSize" : 18.5185185185185
+            },
+            "animation" : {},
+            "id" : "bcf9977a-b26a-4525-ab58-f3f6eab1a896"
+        },
+        {
+            "description" : "neue spheres",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0222222222222222,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 1,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 0.5,
+                "boxCount" : 10,
+                "boxSize" : 8.88888888888889,
+                "sphereCount" : 100,
+                "sphereSize" : 18.5185185185185
+            },
+            "animation" : {},
+            "id" : "db7f5d65-805f-405a-bfaa-c5b86d4c9982"
+        },
+        {
+            "description" : "sdkfjsdf",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0222222222222222,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0.237037037037037,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.507407407407407,
+                "line3Alpha" : 0,
+                "rotation" : 200.314814814815,
+                "boxCount" : 4.44444444444444,
+                "boxSize" : 100,
+                "sphereCount" : 5.55555555555556,
+                "sphereSize" : 81.4814814814815
+            },
+            "animation" : {},
+            "id" : "54aa60fb-f189-46b1-b977-9ead9a2850da"
+        },
+        {
+            "description" : "dlkfjdwf",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0222222222222222,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0.207407407407407,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.507407407407407,
+                "line3Alpha" : 0,
+                "rotation" : 200.314814814815,
+                "boxCount" : 4.44444444444444,
+                "boxSize" : 100,
+                "sphereCount" : 5.55555555555556,
+                "sphereSize" : 81.4814814814815
+            },
+            "animation" : {},
+            "id" : "1a6268d8-75c6-4e0a-9a8a-c07a46c452f9"
+        },
+        {
+            "description" : "srichzoom",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0185185185185185,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0.207407407407407,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.507407407407407,
+                "line3Alpha" : 0,
+                "rotation" : 200.314814814815,
+                "boxCount" : 4.44444444444444,
+                "boxSize" : 100,
+                "sphereCount" : 5.55555555555556,
+                "sphereSize" : 81.4814814814815
+            },
+            "animation" : {},
+            "id" : "28778e58-bbde-46ae-82ea-4b14d88f7c34"
+        },
+        {
+            "description" : "fass",
+            "sliderValues" : {
+                "zoomSpeed" : 0.00777777777777778,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0,
+                "spawnRandomnessSizeX" : 0.0925925925925926,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.1,
+                "spawnRandomnessSizeY" : 0.0518518518518519,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 71.8518518518519,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0.207407407407407,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.507407407407407,
+                "line3Alpha" : 0,
+                "rotation" : 200.314814814815,
+                "boxCount" : 4.44444444444444,
+                "boxSize" : 507.407407407407,
+                "sphereCount" : 5.55555555555556,
+                "sphereSize" : 81.4814814814815
+            },
+            "animation" : {},
+            "id" : "e4c7c492-e004-4011-8360-5e50c73195bc"
+        },
+        {
+            "description" : "bloink middle",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0188888888888889,
+                "particleMoveSpeed" : 0.111111111111111,
+                "moveX" : 0.481481481481481,
+                "moveY" : 0.5,
+                "curlNoiseScale" : 0.1,
+                "noiseTimeScale" : 0.1,
+                "curlFactor" : 0.5,
+                "saturation" : 0.77037037037037,
+                "color" : 0.5,
+                "colorChange" : 0.855555555555556,
+                "bgTransparency" : 0,
+                "spawnRate" : 0,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 23.7037037037037,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0.207407407407407,
+                "ellipseSize" : 150,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.507407407407407,
+                "line3Alpha" : 0,
+                "rotation" : 24,
+                "boxCount" : 11.1111111111111,
+                "boxSize" : 507.407407407407,
+                "sphereCount" : 11.4814814814815,
+                "sphereSize" : 81.4814814814815
+            },
+            "animation" : {
+                "rotation" : {
+                    "type" : "Ease Out",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "89cdd2d6-d9f6-4cc5-9ab9-ce8cf4cba11b"
+        },
+        {
+            "description" : "circlemove",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00407407407407407,
+                "particleMoveSpeed" : 2.31481481481481,
+                "moveX" : 0,
+                "moveY" : 0.37109374999999983,
+                "curlNoiseScale" : 0.07421874999999997,
+                "noiseTimeScale" : 0.07421874999999997,
+                "curlFactor" : 0.37109374999999983,
+                "saturation" : 0,
+                "color" : 0.24916294642857154,
+                "colorChange" : 0.6361607142857139,
+                "bgTransparency" : 0.0222222222222222,
+                "spawnRate" : 0.4367487980769226,
+                "spawnRandomnessSizeX" : 0.7421874999999997,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.07421874999999997,
+                "spawnRandomnessSizeY" : 0.7421874999999997,
+                "spawnOffsetX" : 0.485185185185185,
+                "spawnOffsetY" : 0.37109374999999983,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0.2458054315476188,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.64814814814815,
+                "pointAlpha" : 0.7421874999999997,
+                "ellipseAlpha" : 0.7421874999999997,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.019981971153846128,
+                "rotation" : 0.37109374999999983,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "7d52de5f-8fb5-4eba-99e4-47261d23c1d3"
+        },
+        {
+            "description" : "boxthings",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00407407407407407,
+                "particleMoveSpeed" : 2.31481481481481,
+                "moveX" : 0,
+                "moveY" : 0.37109374999999983,
+                "curlNoiseScale" : 0.07421874999999997,
+                "noiseTimeScale" : 0.07421874999999997,
+                "curlFactor" : 0.37109374999999983,
+                "saturation" : 0,
+                "color" : 0.24916294642857154,
+                "colorChange" : 0.6361607142857139,
+                "bgTransparency" : 0.0222222222222222,
+                "spawnRate" : 0.4367487980769226,
+                "spawnRandomnessSizeX" : 0.655555555555556,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.07421874999999997,
+                "spawnRandomnessSizeY" : 0.7421874999999997,
+                "spawnOffsetX" : 0.485185185185185,
+                "spawnOffsetY" : 0.37109374999999983,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0.2458054315476188,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.64814814814815,
+                "pointAlpha" : 0.7421874999999997,
+                "ellipseAlpha" : 0.7421874999999997,
+                "linesTransparency" : 0,
+                "ellipseSize" : 0.019981971153846128,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0,
+                "rotation" : 86.2777777777778,
+                "boxCount" : 8.51851851851852,
+                "boxSize" : 92.5925925925926,
+                "sphereCount" : 15.9259259259259,
+                "sphereSize" : 33.3333333333333
+            },
+            "animation" : {
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "3a556a90-42f5-4a4e-a0e7-e78a0b7cb59f"
+        },
+        {
+            "description" : "strichmove",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00407407407407407,
+                "particleMoveSpeed" : 2.31481481481481,
+                "moveX" : 0,
+                "moveY" : 0.37109374999999983,
+                "curlNoiseScale" : 0.07421874999999997,
+                "noiseTimeScale" : 0.07421874999999997,
+                "curlFactor" : 0.37109374999999983,
+                "saturation" : 0,
+                "color" : 0.24916294642857154,
+                "colorChange" : 0.6361607142857139,
+                "bgTransparency" : 0.1,
+                "spawnRate" : 0.4367487980769226,
+                "spawnRandomnessSizeX" : 0.7421874999999997,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0.07421874999999997,
+                "spawnRandomnessSizeY" : 0.7421874999999997,
+                "spawnOffsetX" : 0.485185185185185,
+                "spawnOffsetY" : 0.37109374999999983,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0.2458054315476188,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 2.64814814814815,
+                "pointAlpha" : 0.7421874999999997,
+                "ellipseAlpha" : 0.7421874999999997,
+                "linesTransparency" : 0.262962962962963,
+                "ellipseSize" : 0.019981971153846128,
+                "rotation" : 0.37109374999999983,
+                "boxCount" : 0,
+                "boxSize" : 0,
+                "sphereCount" : 0,
+                "sphereSize" : 0,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "348a9b6c-10c5-4a5a-8f04-2d38adc783ba"
+        },
+        {
+            "description" : "3d geos",
+            "sliderValues" : {
+                "zoomSpeed" : -0.00962962962962963,
+                "particleMoveSpeed" : 0.685185185185185,
+                "moveX" : 0.5,
+                "moveY" : 0.314814814814815,
+                "curlNoiseScale" : 0.0851851851851852,
+                "noiseTimeScale" : 0.0925925925925926,
+                "curlFactor" : 0.5,
+                "saturation" : 0.766666666666667,
+                "color" : 0.5,
+                "colorChange" : 0.803703703703704,
+                "bgTransparency" : 0.5,
+                "spawnRate" : 0.0407407407407407,
+                "spawnRandomnessSizeX" : 0.285185185185185,
+                "spawnRadius" : 0.3,
+                "spawnCirleSpeed" : 0.344444444444444,
+                "spawnRandomnessSizeY" : 0.685185185185185,
+                "spawnOffsetX" : 0.551851851851852,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0.5,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 0.05,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0,
+                "linesTransparency" : 0,
+                "ellipseSize" : 61.1111111111111,
+                "rotation" : 100,
+                "boxCount" : 4.44444444444444,
+                "boxSize" : 0,
+                "sphereCount" : 5.55555555555556,
+                "sphereSize" : 292.592592592593,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0,
+                "line3Alpha" : 0
+            },
+            "animation" : {},
+            "id" : "2028c9c8-4216-4ceb-979b-5e7f7a176da5"
+        },
+        {
+            "description" : "3d forms 2",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0103703703703704,
+                "particleMoveSpeed" : 0.240740740740741,
+                "moveX" : 0.5,
+                "moveY" : 0.685185185185185,
+                "curlNoiseScale" : 0.0851851851851852,
+                "noiseTimeScale" : 0.0925925925925926,
+                "curlFactor" : 0.5,
+                "saturation" : 0.766666666666667,
+                "color" : 0.588888888888889,
+                "colorChange" : 0.803703703703704,
+                "bgTransparency" : 0.159259259259259,
+                "spawnRate" : 0.0185185185185185,
+                "spawnRandomnessSizeX" : 0.174074074074074,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0,
+                "spawnRandomnessSizeY" : 0.151851851851852,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1.2037037037037,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0.381481481481481,
+                "linesTransparency" : 0.181481481481481,
+                "ellipseSize" : 16.6666666666667,
+                "rotation" : 66.5740740740741,
+                "boxCount" : 87.7777777777778,
+                "boxSize" : 166.666666666667,
+                "sphereCount" : 8.51851851851852,
+                "sphereSize" : 292.592592592593,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.114814814814815,
+                "line3Alpha" : 0
+            },
+            "animation" : {
+                "particleMoveSpeed" : {
+                    "type" : "Ramp out",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "8d13b093-8f73-488c-a8a5-19906cd85bd8"
+        },
+        {
+            "description" : "grosseboxen",
+            "sliderValues" : {
+                "zoomSpeed" : 0.0103703703703704,
+                "particleMoveSpeed" : 0.240740740740741,
+                "moveX" : 0.5,
+                "moveY" : 0.685185185185185,
+                "curlNoiseScale" : 0.0851851851851852,
+                "noiseTimeScale" : 0.0925925925925926,
+                "curlFactor" : 0.5,
+                "saturation" : 0.766666666666667,
+                "color" : 0.588888888888889,
+                "colorChange" : 0.803703703703704,
+                "bgTransparency" : 0.159259259259259,
+                "spawnRate" : 0.0185185185185185,
+                "spawnRandomnessSizeX" : 0.174074074074074,
+                "spawnRadius" : 0,
+                "spawnCirleSpeed" : 0,
+                "spawnRandomnessSizeY" : 0.151851851851852,
+                "spawnOffsetX" : 0.5,
+                "spawnOffsetY" : 0.5,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0,
+                "stokeWeight" : 1.2037037037037,
+                "pointAlpha" : 1,
+                "ellipseAlpha" : 0.381481481481481,
+                "linesTransparency" : 0.181481481481481,
+                "ellipseSize" : 16.6666666666667,
+                "rotation" : 66.5740740740741,
+                "boxCount" : 87.7777777777778,
+                "boxSize" : 1018.51851851852,
+                "sphereCount" : 58.1481481481481,
+                "sphereSize" : 255.555555555556,
+                "img1Alpha" : 0,
+                "img2Alpha" : 0,
+                "img3Alpha" : 0,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.114814814814815,
+                "line3Alpha" : 0
+            },
+            "animation" : {
+                "particleMoveSpeed" : {
+                    "type" : "Ramp out",
+                    "speed" : "1",
+                    "amount" : "0"
+                }
+            },
+            "id" : "5f6c6eba-c065-4196-85f6-08e799945e16"
+        },
+        {
+            "description" : "guter kreis",
+            "sliderValues" : {
+                "zoomSpeed" : 0.000740740740740741,
+                "particleMoveSpeed" : 0,
+                "moveX" : 0.48891149216315993,
+                "moveY" : 0.496153846153846,
+                "curlNoiseScale" : 0.14312144098543164,
+                "noiseTimeScale" : 0.5772010828214227,
+                "curlFactor" : 0.45001761987521915,
+                "saturation" : 0.0100012814454705,
+                "color" : 0.07334273060011691,
+                "colorChange" : 0.45323124484418403,
+                "bgTransparency" : 0.06895778438078154,
+                "spawnRate" : 0.16376472661161803,
+                "spawnRandomnessSizeX" : 0,
+                "spawnRadius" : 0.322222222222222,
+                "spawnCirleSpeed" : 0.730769230769231,
+                "spawnRandomnessSizeY" : 0,
+                "spawnOffsetX" : 0.503846153846154,
+                "spawnOffsetY" : 0.433333333333333,
+                "spawnRateOnBeat" : 0,
+                "spawnOffsetMultiplierX" : 0,
+                "spawnOffsetMultiplierY" : 0,
+                "spawnOffsetMultiplierCircle" : 0.503846153846154,
+                "stokeWeight" : 0.010230825798189375,
+                "pointAlpha" : 0.5768807214538002,
+                "ellipseAlpha" : 0.00037212064712827814,
+                "linesTransparency" : 0.588461538461538,
+                "ellipseSize" : 0.0680974215285779,
+                "rotation" : 0.41046083899305075,
+                "boxCount" : 10,
+                "boxSize" : 1,
+                "sphereCount" : 100,
+                "sphereSize" : 1,
+                "img1Alpha" : 0.016668802409117476,
+                "img2Alpha" : 0.025318058770292872,
+                "img3Alpha" : 0.016428030818763564,
+                "img4Alpha" : 0,
+                "line2Alpha" : 0.738461538461538,
+                "line3Alpha" : 0.480769230769231
+            },
+            "animation" : {
+                "stokeWeight" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0.403846153846154"
+                },
+                "ellipseAlpha" : {
+                    "type" : "Cubic In",
+                    "speed" : "0.5",
+                    "amount" : "0"
+                },
+                "ellipseSize" : {
+                    "type" : "Cubic In",
+                    "speed" : "1",
+                    "amount" : "0"
+                },
+                "line3Alpha" : {
+                    "type" : "Pulse",
+                    "speed" : "1",
+                    "amount" : "0.507692307692308"
+                }
+            },
+            "id" : "8d4f3f22-69fd-4f0a-91ea-5faae0fb8dcd"
         }
     ]
 }

@@ -204,6 +204,10 @@ const mainSketch = (p5) => {
 
         gl.background(0, 10);
         gl.noFill();
+        gl.pointLight(55, 55, 50, 30, -40, 30);
+       // gl.specularMaterial(255);
+        //gl.shininess(50);
+        //gl.ambientLight(30, 20, 20)
 
         for (let i = 0; i < particleNo; i++) {
             //part no 1000
@@ -287,6 +291,7 @@ const mainSketch = (p5) => {
             if (i % boxNumberModulo === 0) {
                 // gl.translate(-300, -300)
                 gl.stroke(255);
+                gl.fill(155)
                 gl.push();
                 gl.translate(p.x, p.y);
                 gl.rotateY(p5.frameCount / paramVals["rotation"])
@@ -324,6 +329,7 @@ const mainSketch = (p5) => {
             }
         }
 
+        p5.tint(255, 1);
         p5.image(gl, -p5.width / 2, -p5.height / 2)
         beat = false
     }

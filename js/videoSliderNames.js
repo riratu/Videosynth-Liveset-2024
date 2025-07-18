@@ -101,24 +101,6 @@ export const sliderNames = {
         default: 0.1,
         max: 1500
     },
-    "img1Alpha": {
-        default: 0,
-    },
-    "img2Alpha": {
-        default: 0,
-    },
-    "img3Alpha": {
-        default: 0,
-    },
-    "img4Alpha": {
-        default: 0,
-    },
-    "line2Alpha": {
-        default: 0,
-    },
-    "line3Alpha": {
-        default: 0,
-    },
     "rotation": {
         default: 100,
         min: 5,
@@ -141,5 +123,26 @@ export const sliderNames = {
     "sphereSize": {
         default: 1,
         max:1000
+    },
+    "Images": {
+        "type": "section"
+    },
+    "img1Alpha": {
+        default: 0,
+    },
+    "img2Alpha": {
+        default: 0,
+    },
+    "img3Alpha": {
+        default: 0,
+    },
+    "img4Alpha": {
+        default: 0,
+    },
+    "line2Alpha": {
+        default: 0,
+    },
+    "line3Alpha": {
+        default: 0,
     },
 };
