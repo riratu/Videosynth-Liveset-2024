@@ -284,7 +284,7 @@ const mainSketch = (p5) => {
                 gl.stroke(255);
                 gl.push();
                 gl.translate(p.x, p.y);
-                gl.rotateY(p5.frameCount / paramVals["rotation"])
+                gl.rotateY(p5.frameCount / (paramVals.rotation.max - paramVals["rotation"]))
                 gl.sphere(paramVals["sphereSize"] - (age * (paramVals["sphereSize"])), 10, 5);
                 gl.pop();
             }

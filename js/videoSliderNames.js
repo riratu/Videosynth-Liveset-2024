@@ -13,12 +13,12 @@ export const sliderNames = {
         max: 5
     },
     "moveX": {
-        default: 2.5,
-        max: 5
+        default: 1,
+        max: 2
     },
     "moveY": {
-        default: 2.5,
-        max: 5
+        default: 1,
+        max: 2
     },
     "curlNoiseScale": {
         default: 0.1,
