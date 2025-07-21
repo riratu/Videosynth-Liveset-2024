@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function startAll(){
     createSceneInterface()
-    setupAudio()
+    setTimeout(setupAudio, 100)
     setupLaunchpad()
     document.getElementById("helloContainer").classList.add("hide")
     document.getElementById("audio-sliders-container").classList.remove("hide")

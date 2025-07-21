@@ -1,6 +1,6 @@
 import {setSceneSlider, animateSliders} from './visualScenes.js';
 import {renderLaunchpad} from './launchpad_mini_controller.js';
-import {loadScene, scenes as visualScenes} from './visualScenes.js';
+import {loadScene, saveSceneMapping, sceneMapping, scenes as visualScenes} from './visualScenes.js';
 import {setBeat} from "./visuals.js";
 
 let noSound = false
@@ -20,8 +20,6 @@ let maxChannelCount
 let midiConnected = true
 
 let maxSLidersActive = 10
-
-var sceneMapping
 
 export function setRampTime(newTime){
     rampTime = newTime
@@ -101,16 +99,14 @@ function createSceneMappingSelect(folderName) {
     });
 
     visualSceneSelect.addEventListener('change', () => {
-        //console.log(opt)
-        console.log(visualSceneSelect.value);
         saveSceneMapping(folderName, visualSceneSelect.value)
         loadScene(visualSceneSelect.value)
+        console.log("Saved Scene mapping for " + folderName + " " + visualSceneSelect.value);
     });
     return visualSceneSelect;
 }
 
 export function setupAudio() {
-    getSceneMapping()
 
     maxChannelCount = Tone.getContext().rawContext.destination.maxChannelCount;
     Tone.getContext().rawContext.destination.channelCount = maxChannelCount;
@@ -369,8 +365,7 @@ function updateVisualMixer(i) {
         // Broadcast the Values to the visual thingie
         bc.postMessage(audioTrack[i].scene + ":" + avg);
 
-        let sceneId = sceneMapping[audioTrack[i].sceneName]
-        setSceneSlider(sceneId, avg);
+        setSceneSlider(audioTrack[i].sceneName, avg);
    // }
 }
 
@@ -698,18 +693,4 @@ function createMultibandCompressor() {
         compressors: { lowCompressor, midCompressor, highCompressor },
         gains: { lowGain, midGain, highGain }
     };
-}
-
-function getSceneMapping(){
-    sceneMapping = JSON.parse(localStorage.getItem("sceneMapping"))
-
-    if (!sceneMapping){
-        console.log("no scene maping")
-        sceneMapping = {}
-    }
-}
-
-function saveSceneMapping(folderName, scene){
-    sceneMapping[folderName] = scene;
-    localStorage.setItem("sceneMapping", JSON.stringify(sceneMapping))
 }

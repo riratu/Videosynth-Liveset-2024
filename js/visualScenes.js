@@ -4,6 +4,7 @@ import { setVisualParameter, paramVals, animationVals, sliders, resultSliders} f
 let sceneSliderSum = 0.01
 let activeScene = 0
 export let scenes = []
+export let sceneMapping = {}
 
 export let animationCurves = {
     "Ramp in": v => v,
@@ -61,6 +62,9 @@ export async function createSceneInterface() {
 
     const parsedScenes = JSON.parse(scenesAsJson);
     scenes = parsedScenes.scenes
+
+    sceneMapping = parsedScenes.mapping
+    console.log(sceneMapping)
 
     //remove in the future when no old scenes are there.
     let foundScenesWithoutId = false
@@ -170,7 +174,20 @@ function saveScenesToLocalStorage(scenes){
     let scenesForSaving = {
         schemaVersion: "0.1",
         date: new Date().toISOString(),
-        scenes: scenes
+        scenes: scenes,
+        mapping: sceneMapping
+    }
+
+    let string = JSON.stringify(scenesForSaving)
+    localStorage.setItem("scenes", string)
+}
+
+function saveMappingToLocalStorage(mapping){
+    let scenesForSaving = {
+        schemaVersion: "0.1",
+        date: new Date().toISOString(),
+        scenes: scenes,
+        mapping: mapping
     }
 
     let string = JSON.stringify(scenesForSaving)
@@ -220,9 +237,12 @@ function createSceneButton(scene) {
 }
 
 function deleteScene() {
-    document.getElementById("loadScene" + activeScene).remove()
-    scenes.splice(activeScene, 1);
-    console.log("Delete Scene " + activeScene)
+    const scene = scenes.find(s => s.id === activeScene);
+    document.getElementById("loadScene" + scene.description).remove()
+
+    const sceneIndex = scenes.findIndex(s => s.id === activeScene);
+    scenes.splice(sceneIndex, 1);
+    console.log("Delete Scene " + scene.description)
     saveScenesToLocalStorage(scenes)
 
     document.querySelectorAll('.sceneLink').forEach(e => e.remove());
@@ -337,7 +357,8 @@ function downloadScenes() {
 
 }
 
-export function setSceneSlider(sceneId, value) {
+export function setSceneSlider(audioSceneName, value) {
+    let sceneId = sceneMapping[audioSceneName]
     const slider = document.getElementById("sceneSlider " + sceneId);
     if (slider) {
         slider.value = value;
@@ -399,4 +420,10 @@ export function animateSliders(currentTime) {
     }
 
     console.log("Animation Time: " + Date.now() - measureStartTime)
+}
+
+export function saveSceneMapping(folderName, sceneId){
+    sceneMapping[folderName] = sceneId;
+    console.log(scenes)
+    saveMappingToLocalStorage(sceneMapping)
 }

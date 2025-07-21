@@ -40,6 +40,7 @@ export const sliderNames = {
     },
     "colorChange": {
         default: 0.5,
+        max: 10
     },
     "bgTransparency": {
         default: 0.5,

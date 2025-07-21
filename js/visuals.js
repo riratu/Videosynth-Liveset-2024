@@ -188,7 +188,7 @@ const mainSketch = (p5) => {
 
         p5.background(0, paramVals.bgTransparency);
 
-        let colorChange = (paramVals.colorChange - 0.5) / 5000
+        let colorChange = (paramVals.colorChange - 0.5)
         spawnCirleSpeed = (2 ** (paramVals["spawnCirleSpeed"] * 4)) / 8
         let stokeWeight = paramVals["stokeWeight"]
         particleNo = Math.floor((particleArrayLength - 1) * particleReducer) + 1
@@ -225,7 +225,7 @@ const mainSketch = (p5) => {
             const age = currentP / particleNo
 
             let hue = (paramVals.color + (colorChange * age)) % 1
-            let sat = (paramVals.saturation)
+            let sat = paramVals.saturation
 
             p5.strokeWeight(0.3 + stokeWeight)
 
@@ -291,7 +291,7 @@ const mainSketch = (p5) => {
             if (i % boxNumberModulo === 0) {
                 // gl.translate(-300, -300)
                 gl.stroke(255);
-                gl.fill(155)
+                //gl.fill(155)
                 gl.push();
                 gl.translate(p.x, p.y);
                 gl.rotateY(p5.frameCount / paramVals["rotation"])
